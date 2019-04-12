@@ -1,28 +1,29 @@
 <template>
   <div class="console">
-    <nav class="console-nav">
-      <div class="console-nav-logo">
-        <img src="../assets/英文LOGO白色.png"/>
-      </div>
-      <div class="console-nav-title">东诚数字看板后台</div>
-      <div class="console-nav-date">
-        {{nowDate}}
-      </div>
-    </nav>
+    <console-nav></console-nav>
+
   </div>
 </template>
 
 <script>
+import ConsoleNav from '../components/ConsoleNav'
 export default {
   name: 'Console',
+  components: {
+    ConsoleNav
+  },
   data () {
-    return {
-      nowDate: this.dayjs.format('YYYY-MM-DD')
-    }
+    return {}
   }
 }
 </script>
 
 <style lang="less">
-
+  .console {
+    position: relative;
+    display: flex;
+    min-width: 1300px;
+    min-height: 600px;
+    height: 100%;
+  }
 </style>
