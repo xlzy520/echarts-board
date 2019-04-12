@@ -1,7 +1,7 @@
 <template>
   <nav class="console-nav">
     <div class="console-nav-logo">
-      <img src="../assets/英文LOGO白色.png"/>
+      <img src="../assets/logo.png"/>
     </div>
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
