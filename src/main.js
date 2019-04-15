@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Checkbox, DatePicker, LocaleProvider, Tabs } from 'ant-design-vue'
+import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Modal } from 'ant-design-vue'
 
 import moment from 'moment'
 
@@ -14,6 +14,9 @@ Vue.use(Checkbox)
 Vue.use(DatePicker)
 Vue.use(LocaleProvider)
 Vue.use(Tabs)
+Vue.use(Table)
+Vue.use(Button)
+Vue.use(Modal)
 
 Vue.config.productionTip = false
 
