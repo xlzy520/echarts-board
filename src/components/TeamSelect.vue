@@ -68,7 +68,7 @@ export default {
 <style lang="less">
 .console-team{
   width: 100%;
-  padding: 40px 20%;
+  padding: 40px 20% 0;
   &-name{
     display: inline-block;
     position: relative;
@@ -96,6 +96,9 @@ export default {
     height: 40px;
     line-height: 40px;
     margin-bottom: 40px;
+    &:nth-child(3), &:nth-child(4){
+      margin-bottom: 0;
+    }
   }
   .ant-checkbox-wrapper + .ant-checkbox-wrapper{
     margin-left: 0;
@@ -106,7 +109,7 @@ export default {
 }
 @media screen and (max-width: 1367px){
   .console-team{
-    padding: 40px 12%;
+    padding: 40px 12% 0;
   }
 }
 </style>
