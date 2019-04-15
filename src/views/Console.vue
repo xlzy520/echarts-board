@@ -1,18 +1,25 @@
 <template>
   <div class="console">
-    <console-nav></console-nav>
-    <team-select></team-select>
+    <header>
+      <console-nav></console-nav>
+    </header>
+    <main>
+      <team-select></team-select>
+      <team-tabs></team-tabs>
+    </main>
   </div>
 </template>
 
 <script>
 import ConsoleNav from '../components/ConsoleNav'
 import TeamSelect from '../components/TeamSelect'
+import TeamTabs from '../components/TeamTabs'
 export default {
   name: 'Console',
   components: {
     ConsoleNav,
-    TeamSelect
+    TeamSelect,
+    TeamTabs
   },
   data () {
     return {}
