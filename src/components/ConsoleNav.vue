@@ -26,23 +26,23 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 90px;
-    font-size: 24px;
+    height: 90*2px;
+    font-size: 24*2px;
     color: #fff;
     background-color: #333;
     &-logo {
-      padding: 26px 10px 26px 40px;
+      padding: 26*2px 10*2px 26*2px 40*2px;
       img {
-        height: 38px;
+        height: 38*2px;
       }
     }
     &-title {
-      padding: 41px 0 27px 0;
+      padding: 41*2px 0 27*2px 0;
     }
     &-date {
       flex-grow: 1;
       text-align: right;
-      padding-right: 48px;
+      padding-right: 48*2px;
     }
   }
 </style>

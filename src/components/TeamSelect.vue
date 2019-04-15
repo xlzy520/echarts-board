@@ -4,7 +4,6 @@
       <a-checkbox v-for="option in team" :value="option.name" :key="option.name">
         <span class="console-team-name">{{option.name}}</span>
         <a-range-picker
-          size="large"
           :allowClear="false"
           :defaultValue="defaultDateTime"
           :showTime="{ format: 'HH:mm' }"
@@ -66,50 +65,44 @@ export default {
 </script>
 
 <style lang="less">
-.console-team{
-  width: 100%;
-  padding: 40px 20% 0;
-  &-name{
-    display: inline-block;
-    position: relative;
-    width: 40px;
-    font-size: 40px;
-    vertical-align: middle;
-    color: #333;
-    bottom: 5px;
-    margin: 0 21px;
-  }
+  @import "../styles/ant-calendar";
+  .console-team {
+    width: 55%;
+    margin: 80px auto 0;
+    &-name {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      font-size: 80px;
+      vertical-align: middle;
+      color: #333;
+      bottom: 10px;
+      margin: 0 42px;
+    }
 
-  // 改变组件的样式
-
-  .ant-checkbox-inner{
-    width: 33px;
-    height: 33px;
-    border-radius: 50%;
-  }
-  .ant-checkbox-inner:after{
-    transform: rotate(45deg) scale(2);
-    left: 13.571429px;
-    top: 9.142857px;
-  }
-  .ant-checkbox-wrapper{
-    height: 40px;
-    line-height: 40px;
-    margin-bottom: 40px;
-    &:nth-child(3), &:nth-child(4){
-      margin-bottom: 0;
+    .ant-checkbox-inner {
+      width: 33*2px;
+      height: 33*2px;
+      border-radius: 50%;
+      &:after{
+        transform: rotate(45deg) scale(4);
+        left: 30.142858px;
+        top: 24.285714px;
+      }
+    }
+    .ant-checkbox-wrapper {
+      height: 40*2px;
+      line-height: 40*2px;
+      margin-bottom: 40*2px;
+      &:nth-child(3), &:nth-child(4) {
+        margin-bottom: 0;
+      }
+      &:nth-child(n+1) {
+        margin-left: 0;
+      }
+      &:nth-child(2n) {
+        margin-left: 69*2px;
+      }
     }
   }
-  .ant-checkbox-wrapper + .ant-checkbox-wrapper{
-    margin-left: 0;
-  }
-  .ant-checkbox-wrapper:nth-child(2n){
-    margin-left: 69px;
-  }
-}
-@media screen and (max-width: 1367px){
-  .console-team{
-    padding: 40px 12% 0;
-  }
-}
 </style>
