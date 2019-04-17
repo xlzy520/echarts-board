@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { message } from 'ant-design-vue'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: '/',
+  baseURL: 'http://192.168.23.4:3000/mock/5caed9dac07efa4fd83ae692/',
   timeout: 10000 // 请求超时时间
 })
 
@@ -12,11 +12,7 @@ service.interceptors.response.use(
   response => {
     const res = response.data
     if (!res.success) {
-      Message({
-        message: res.msg,
-        type: 'error',
-        duration: 1500
-      })
+      message.error(res.msg, 1.5)
       return Promise.reject(res)
     } else {
       return res
@@ -24,11 +20,7 @@ service.interceptors.response.use(
   },
   error => {
     error.message = error.message === 'timeout of 10000ms exceeded' ? '连接服务器超时！' : error.message
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 1500
-    })
+    message.error(error.msg, 1.5)
     return Promise.reject(error)
   }
 )
