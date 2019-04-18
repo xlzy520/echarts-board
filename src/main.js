@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Select, Radio, Spin, message } from 'ant-design-vue'
+import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Select, Radio, Spin, message, Input } from 'ant-design-vue'
 
 import moment from 'moment'
 
@@ -21,6 +21,7 @@ Vue.use(Button)
 Vue.use(Select)
 Vue.use(Radio)
 Vue.use(Spin)
+Vue.use(Input)
 
 message.config({
   top: `80px`,
