@@ -5,7 +5,12 @@
     </div>
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
-      {{nowDate}}
+      <a-date-picker
+        :defaultValue="moment(new Date(), 'YYYY-MM-DD')"
+        suffixIcon=" "
+        :disabledDate="disabledDate"
+        :allowClear="false">
+      </a-date-picker>
     </div>
   </nav>
 </template>
@@ -16,6 +21,11 @@ export default {
   data () {
     return {
       nowDate: this.moment().format('YYYY-MM-DD')
+    }
+  },
+  methods: {
+    disabledDate (current) {
+      return current && current > this.moment().endOf('day')
     }
   }
 }
@@ -43,6 +53,12 @@ export default {
       flex-grow: 1;
       text-align: right;
       padding-right: 48*2px;
+    }
+    .ant-calendar-picker{
+      width: 210px!important;
+    }
+    .ant-calendar-body .ant-calendar-cell .ant-calendar-date {
+      width: auto;
     }
   }
 </style>
