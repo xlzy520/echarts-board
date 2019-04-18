@@ -23,6 +23,9 @@ export default {
 
   getBoardData (data) {
     return request.post(`${baseUrl}/getBoardData`, data)
+  },
+  addBoardData (data) {
+    return request.post(`${baseUrl}/addBoardData`, data)
   }
 
 }
