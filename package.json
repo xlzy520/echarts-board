@@ -16,6 +16,7 @@
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "@vue/babel-plugin-transform-vue-jsx": "^0.1.0",
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",
     "@vue/cli-service": "^3.5.0",
