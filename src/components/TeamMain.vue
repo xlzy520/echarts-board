@@ -9,7 +9,8 @@
             :showTime="{ format: 'HH:mm' }"
             format="YYYY-MM-DD HH:mm"
             :placeholder="['开始时间', '结束时间']"
-            :disabledDate="disabledDate"
+            :disabledDate="(current)=>{return disabledDate(current, time.teamName)}"
+            :disabledTime="(current, type)=>{return disabledTime(current,type, time.teamName)}"
             :value="[moment(range[index][0]),moment(range[index][1])]"
             @change="onChange(...arguments, index)"
             @ok="cacheRange(index)"
@@ -59,7 +60,7 @@
       <a-button type="primary" class="save" @click="save">保存</a-button>
     </div>
     <modal title="换班" :visible="teamVisible" @close="close">
-      <switch-team @close="close"></switch-team>
+      <switch-team @close="close" ref="switchTeam"></switch-team>
     </modal>
   </div>
 </template>
@@ -124,7 +125,8 @@ export default {
         timeData: []
       },
 
-      tableLoading: false
+      tableLoading: false,
+      disabledHour: ''
     }
   },
   components: {
@@ -142,8 +144,32 @@ export default {
       this.range[index] = dateString
       this.$forceUpdate()
     },
-    disabledDate (current) {
-      return current < this.moment().subtract(2, 'days') || current > this.moment()
+    disabledDate (current, name) {
+      const { dayTime } = this.$refs.switchTeam
+      if (dayTime.includes(name)) {
+        return current < this.moment().subtract(1, 'days') || current > this.moment()
+      }
+      return current > this.moment().add(2, 'days') || current < this.moment()
+    },
+    rangeM (start, end) {
+      const result = []
+      for (let i = start; i < end; i++) {
+        result.push(i)
+      }
+      return result
+    },
+    disabledTime (current, type, name) {
+      const { dayTime } = this.$refs.switchTeam
+      if (dayTime.includes(name)) {
+        if (type === 'start' && this.moment(current).hour() > 0) {
+          this.disabledHour = this.moment(current).hour()
+        }
+        if (type === 'end') {
+          return {
+            disabledHours: () => this.rangeM(0, 24).splice(this.disabledHour, 1)
+          }
+        }
+      }
     },
     // 只读和编辑
     filterDisabled (record, index) {
