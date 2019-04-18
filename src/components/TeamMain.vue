@@ -12,7 +12,7 @@
             :disabledDate="(current)=>{return disabledDate(current, time.teamName)}"
             :disabledTime="(current, type)=>{return disabledTime(current,type, time.teamName)}"
             :value="[moment(range[index][0]),moment(range[index][1])]"
-            @change="onChange(...arguments, index)"
+            @change="timeRangeChange(...arguments, index)"
             @ok="cacheRange(index)"
             @blur="cacheRange(index)"
           >
@@ -40,17 +40,17 @@
           :pagination="false"
           :rowKey="record => record.name"
           :loading="tableLoading">
-          <template v-for="col in ['day', 'month', 'monthGoal']"
+          <template v-for="(col,indexColumn) in ['day', 'month', 'monthGoal']"
                     :slot="col"
                     slot-scope="text, record, index">
             <a-input
               class="table-input"
-              v-if="filterDisabled(record, index)"
+              v-if="filterDisabled(record, index, indexColumn)"
               :value="text"
               maxLength="10"
               @change="e => inputChange(e.target.value, record, col)"
             />
-            <div v-else class="readOnly">{{text}}</div>
+            <div v-else>{{text}}</div>
           </template>
         </a-table>
       </div>
@@ -103,13 +103,33 @@ export default {
           width: '20%',
           dataIndex: 'day',
           align: 'center',
-          scopedSlots: { customRender: 'day' }
+          scopedSlots: { customRender: 'day' },
+          customCell: function (record, index) {
+            if (this.activeTab !== 3) {
+              if ([0, 1, 4, 5].includes(index)) {
+                return {
+                  class: {
+                    readOnly: true
+                  }
+                }
+              }
+            }
+          }
         }, {
           title: '月累计(总数)',
           width: '20%',
           dataIndex: 'month',
           align: 'center',
-          scopedSlots: { customRender: 'month' }
+          scopedSlots: { customRender: 'month' },
+          customCell: function (record, index) {
+            if (this.activeTab !== 3) {
+              return {
+                class: {
+                  readOnly: true
+                }
+              }
+            }
+          }
         }, {
           title: '月目标',
           width: '20%',
@@ -140,10 +160,11 @@ export default {
       this.range[index] = this.cacheTimeRange[index]
       this.$forceUpdate()
     },
-    onChange (value, dateString, index) {
+    timeRangeChange (value, dateString, index) {
       this.range[index] = dateString
       this.$forceUpdate()
     },
+    // 禁用日期
     disabledDate (current, name) {
       const { dayTime } = this.$refs.switchTeam
       if (dayTime.includes(name)) {
@@ -158,6 +179,7 @@ export default {
       }
       return result
     },
+    // 禁用同一天的同一小时
     disabledTime (current, type, name) {
       const { dayTime } = this.$refs.switchTeam
       if (dayTime.includes(name)) {
@@ -172,14 +194,17 @@ export default {
       }
     },
     // 只读和编辑
-    filterDisabled (record, index) {
+    filterDisabled (record, index, indexColumn) {
       const disabledRows = [3, 4, 6, 7]
+      if (indexColumn === 1) {
+        return false
+      }
       if (this.activeTab !== 4) {
         if (disabledRows.includes(record.number)) {
           return true
         }
       } else {
-        if (index === 10 && record.number === 7) {
+        if (record.number === 7 && index > 10 && indexColumn < 1) {
           return true
         }
       }
@@ -195,9 +220,7 @@ export default {
     close () {
       this.teamVisible = false
     },
-    /**
-     * 累加ABCD到总线
-     */
+    // 累加ABCD到总线
     count () {
       this.data.teamBoardData[4].boardData.map((v, index) => {
         if (index > 10) {
@@ -220,7 +243,7 @@ export default {
       }
       return total
     },
-    // 获取页面所欲数据
+    // 获取页面所需数据
     getConsoleData () {
       backStage.getBoardData({
 
@@ -329,6 +352,9 @@ export default {
     &-content {
       .ant-table-thead > tr > th{
         background: #f3f7fb;
+      }
+      .ant-table-body table,.ant-table-tbody > tr > td,.ant-table-thead > tr > th{
+        border-color: #ddd;
       }
       .ant-table-bordered .ant-table-thead > tr > th, .ant-table-bordered .ant-table-tbody > tr > td {
         font-size: 30*2px;
