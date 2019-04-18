@@ -1,5 +1,5 @@
 <template>
-  <div v-if="visible">
+  <div v-show="visible">
     <div class="modal-mask"></div>
     <div class="modal-wrap">
       <div class="modal-content">
