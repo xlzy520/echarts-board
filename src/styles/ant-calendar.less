@@ -1,3 +1,65 @@
+.ant-calendar{
+    width: 280*2px;
+    border: 1*2px solid #fff;
+    font-size: 14*2px;
+    border-radius: 4*2px;
+    box-shadow: 0 2*2px 8*2px rgba(0, 0, 0, 0.15);
+}
+.ant-calendar-input-wrap {
+    height: 34*2px;
+    padding: 12px 20px;
+    border-bottom: 1*2px solid #e8e8e8;
+}
+.ant-calendar-input{
+    height: 22*2px;
+}
+.ant-calendar-header{
+    height: 40*2px;
+    line-height: 40*2px;
+    .ant-calendar-prev-year-btn,
+    .ant-calendar-next-year-btn,
+    .ant-calendar-prev-month-btn,
+    .ant-calendar-next-month-btn{
+        padding: 0 5*2px;
+        font-size: 16*2px;
+        line-height: 40*2px;
+    }
+    .ant-calendar-prev-year-btn{
+        left: 7*2px;
+    }
+    .ant-calendar-next-year-btn{
+        right: 7*2px;
+    }
+    .ant-calendar-prev-month-btn{
+        left: 29*2px;
+    }
+    .ant-calendar-next-month-btn{
+        right: 29*2px;
+    }
+}
+.ant-calendar-body{
+    padding: 8*2px 12*2px;
+    .ant-calendar-column-header{
+        line-height: 18*2px;
+        width: 33*2px;
+        padding: 6*2px 0;
+    }
+    .ant-calendar-cell{
+        padding: 3*2px 0;
+        height: 30*2px;
+        .ant-calendar-date{
+            border-radius: 2*2px;
+            width: 24*2px;
+            height: 24*2px;
+            line-height: 22*2px;
+        }
+    }
+}
+.ant-calendar-footer{
+    border-top: 1*2px solid #e8e8e8;
+    line-height: 38*2px;
+    padding: 0 12*2px;
+}
 .ant-calendar-picker {
     font-size: 32px;
     width: 700px !important;
@@ -21,15 +83,11 @@
 }
 .ant-calendar-picker-container {
     font-size: 28px;
-    & div, & a, & span,& input {
-
-    }
     .ant-calendar-range{
         font-size: 28px;
         width: 552*2px;
-        .ant-calendar-input-wrap {
-            height: 34*2px;
-            padding: 12px 20px;
+       .ant-calendar-input-wrap {
+           height: 34*2px;
         }
         &.ant-calendar-time .ant-calendar-range-middle {
             margin-left: -12*2px;
@@ -58,48 +116,6 @@
             border-radius: 4*2px;
             height: 24*2px;
         }
-        .ant-calendar-header{
-            height: 40*2px;
-            line-height: 40*2px;
-            .ant-calendar-prev-year-btn,
-            .ant-calendar-next-year-btn,
-            .ant-calendar-prev-month-btn,
-            .ant-calendar-next-month-btn{
-                padding: 0 5*2px;
-                font-size: 16*2px;
-                line-height: 40*2px;
-            }
-            .ant-calendar-prev-year-btn{
-                left: 7*2px;
-            }
-            .ant-calendar-next-year-btn{
-                right: 7*2px;
-            }
-            .ant-calendar-prev-month-btn{
-                left: 29*2px;
-            }
-            .ant-calendar-next-month-btn{
-                right: 29*2px;
-            }
-        }
-        .ant-calendar-body{
-            padding: 8*2px 12*2px;
-            .ant-calendar-column-header{
-                line-height: 18*2px;
-                width: 33*2px;
-                padding: 6*2px 0;
-            }
-            .ant-calendar-cell{
-                padding: 3*2px 0;
-                height: 30*2px;
-                .ant-calendar-date{
-                    border-radius: 2*2px;
-                    width: 24*2px;
-                    height: 24*2px;
-                    line-height: 22*2px;
-                }
-            }
-        }
         .ant-calendar-time-picker{
             height: 207*2px;
             top: 68*2px;
@@ -124,4 +140,20 @@
             padding: 0 12*2px;
         }
     }
+}
+.ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date:before {
+    top: -1*2px;
+    left: 5*2px;
+    width: 24*2px;
+    height: 24*2px;
+    border: 1*2px solid #bcbcbc;
+    border-radius: 2*2px;
+}
+.ant-calendar-disabled-cell.ant-calendar-today .ant-calendar-date {
+    padding-right: 5*2px;
+    padding-left: 5*2px;
+}
+.ant-calendar-disabled-cell-first-of-row .ant-calendar-date {
+    border-top-left-radius: 4*2px;
+    border-bottom-left-radius: 4*2px;
 }
