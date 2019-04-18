@@ -8,8 +8,12 @@
       <a-date-picker
         :defaultValue="moment(new Date(), 'YYYY-MM-DD')"
         suffixIcon=" "
+        v-model="date"
         :disabledDate="disabledDate"
         :allowClear="false">
+        <template slot="dateRender" slot-scope="current, today">
+          <div :class="['ant-calendar-date', notSave(current)]" @click="haha(current)">{{moment(current).format('DD')}}</div>
+        </template>
       </a-date-picker>
     </div>
   </nav>
@@ -20,10 +24,19 @@ export default {
   name: 'ConsoleNav',
   data () {
     return {
-      nowDate: this.moment().format('YYYY-MM-DD')
+      date: this.moment()
     }
   },
   methods: {
+    notSave (val) {
+      if (this.moment(val).format('DD') % 3 === 0) {
+        return 'not-save'
+      }
+    },
+    haha (time) {
+      this.date = this.moment(time)
+      console.log(time)
+    },
     disabledDate (current) {
       return current && current > this.moment().endOf('day')
     }
@@ -60,5 +73,8 @@ export default {
     .ant-calendar-body .ant-calendar-cell .ant-calendar-date {
       width: auto;
     }
+  }
+  .not-save{
+    color: #ff001c;
   }
 </style>
