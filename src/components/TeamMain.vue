@@ -9,9 +9,15 @@
             :showTime="{ format: 'HH:mm' }"
             format="YYYY-MM-DD HH:mm"
             :placeholder="['开始时间', '结束时间']"
-            v-model="range[index]"
             :disabledDate="disabledDate"
+            :value="[moment(range[index][0]),moment(range[index][1])]"
+            @change="onChange(...arguments, index)"
+            @ok="cacheRange(index)"
+            @blur="cacheRange(index)"
           >
+            <template slot="renderExtraFooter">
+              <a-button type="danger" @click="cancelTimeRange(index)">取消</a-button>
+            </template>
           </a-range-picker>
         </a-checkbox>
       </a-checkbox-group>
@@ -70,7 +76,7 @@ export default {
       teamVisible: false,
 
       checkedList: ['A', 'B', 'C', 'D'],
-      timeRange: [
+      cacheTimeRange: [
 
       ],
       range: [
@@ -125,12 +131,22 @@ export default {
     SwitchTeam, Modal
   },
   methods: {
+    cacheRange (index) {
+      this.cacheTimeRange[index] = this.range[index]
+    },
+    cancelTimeRange (index) {
+      this.range[index] = this.cacheTimeRange[index]
+      this.$forceUpdate()
+    },
+    onChange (value, dateString, index) {
+      this.range[index] = dateString
+      this.$forceUpdate()
+    },
     disabledDate (current) {
-      return current && current > this.moment().endOf('day')
+      return current < this.moment().subtract(2, 'days') || current > this.moment()
     },
     // 只读和编辑
     filterDisabled (record, index) {
-      console.log(record, index)
       const disabledRows = [3, 4, 6, 7]
       if (this.activeTab !== 4) {
         if (disabledRows.includes(record.number)) {
@@ -185,8 +201,10 @@ export default {
       }).then(res => {
         this.data = res.data
         this.range = res.data.timeData.map(v => {
-          return [this.moment(v.workBeginTime), this.moment(v.workEndTime)]
+          // return [this.moment(v.workBeginTime), this.moment(v.workEndTime)]
+          return [v.workBeginTime, v.workEndTime]
         })
+        this.cacheTimeRange = this.range.concat([])
         this.count()
       })
     },
@@ -350,6 +368,16 @@ export default {
         width: 14*2px;
         height: 14*2px;
       }
+    }
+  }
+
+  .ant-calendar-footer-extra{
+    .ant-btn {
+      padding: 0 15*2px;
+      font-size: 14*2px;
+      border-radius: 4*2px;
+      height: 32*2px;
+      box-shadow: 0 2*2px 0 rgba(0, 0, 0, 0.015);
     }
   }
 
