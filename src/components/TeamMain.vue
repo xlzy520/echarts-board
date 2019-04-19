@@ -110,7 +110,7 @@ export default {
                 return {
                   class: {
                     readOnly: true
-                  }
+                  },
                 }
               }
             } else {
@@ -224,11 +224,7 @@ export default {
           }
         }
       } else {
-        if (this.activeTab === 4) {
-          return false
-        } else {
-          return true
-        }
+        return this.activeTab !== 4
       }
     },
     inputChange (value, record, key) {
@@ -263,13 +259,15 @@ export default {
       for (let i = 0; i < 4; i++) {
         total += Number(this.data.teamBoardData[i].boardData[index][prop])
       }
-      if (index === 0) {
+      const averageIndex = [0, 2, 3, 4, 5, 6, 7]
+      if (averageIndex.includes(index)) {
         total = total / 4
       }
       return total
     },
     // 获取页面所需数据
     getConsoleData (date) {
+      this.tableLoading = true
       backStage.getBoardData({
         date: date
       }).then(res => {
@@ -279,6 +277,8 @@ export default {
         })
         this.cacheTimeRange = this.range.concat([])
         this.count()
+      }).finally(() => {
+        this.tableLoading = false
       })
     },
     // 换班弹窗
@@ -308,6 +308,9 @@ export default {
 
 <style lang="less">
   @import "../styles/ant-calendar";
+  .readOnly{
+    background-color: #eee;
+  }
   .console-team {
     width: 55%;
     margin: 80px auto 0;
@@ -353,9 +356,6 @@ export default {
       width: 80%;
       text-align: center;
     }
-    .readOnly{
-      background-color: #eee;
-    }
     &-bar {
       display: flex;
       flex-direction: row;
@@ -374,6 +374,26 @@ export default {
       }
     }
     &-content {
+      //表格loading样式
+      .ant-spin-nested-loading > div > .ant-spin{
+        max-height: 400*2px;
+        .ant-spin-dot{
+          margin: -10*2px;
+        }
+      }
+      .ant-spin{
+        font-size: 14*2px;
+        &-dot{
+          font-size: 20*2px;
+          width: 20*8px;
+          height: 20*8px;
+          i{
+            width: 9*8px;
+            height: 9*8px;
+          }
+        }
+      }
+
       .ant-table-thead > tr > th{
         background: #f3f7fb;
       }
