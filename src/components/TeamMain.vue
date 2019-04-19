@@ -263,6 +263,9 @@ export default {
       for (let i = 0; i < 4; i++) {
         total += Number(this.data.teamBoardData[i].boardData[index][prop])
       }
+      if (index === 0) {
+        total = total / 4
+      }
       return total
     },
     // 获取页面所需数据
@@ -285,8 +288,8 @@ export default {
     save () {
       // 格式化之后再保存
       this.range.map((v, index) => {
-        this.data.timeData[index].workBeginTime = this.moment(v[0]).format('YYYY-MM-DD HH:mm')
-        this.data.timeData[index].workEndTime = this.moment(v[1]).format('YYYY-MM-DD HH:mm')
+        this.data.timeData[index].workBeginTime = v[0]
+        this.data.timeData[index].workEndTime = v[1]
       })
       if (this.checkedList.length > 0) {
         backStage.addBoardData(this.data).then(res => {
