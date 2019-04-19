@@ -1,7 +1,7 @@
 <template>
   <div class="console">
-    <console-nav></console-nav>
-    <team-main></team-main>
+    <console-nav @update-date="updateDate"></console-nav>
+    <team-main ref="teamMain"></team-main>
   </div>
 </template>
 
@@ -20,6 +20,9 @@ export default {
     }
   },
   methods: {
+    updateDate (date) {
+      this.$refs.teamMain.getConsoleData(date)
+    }
   }
 }
 </script>

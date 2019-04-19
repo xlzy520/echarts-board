@@ -6,7 +6,6 @@
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
       <a-date-picker
-        :defaultValue="moment()"
         format="YYYY-MM-DD"
         suffixIcon=" "
         v-model="date"
@@ -14,7 +13,7 @@
         :allowClear="false">
         <template slot="dateRender" slot-scope="current, today">
           <div :class="['ant-calendar-date', workDayStyle(current)]"
-               @click="updateDate(current)">{{moment(current).format('DD')}}</div>
+               @click="updateDate(current)">{{current.format('DD')}}</div>
         </template>
       </a-date-picker>
     </div>
@@ -32,14 +31,15 @@ export default {
     }
   },
   methods: {
-    workDayStyle (val) {
-      const day = this.moment(val).format('DD')
+    workDayStyle (current) {
+      const day = current.format('DD')
       if (this.workDays.includes(Number(day))) {
         return 'work-day'
       }
     },
     updateDate (date) {
-      this.date = this.moment(date)
+      this.date = date
+      this.$emit('update-date', date.format('YYYY-MM-DD'))
     },
     disabledDate (current) {
       return current && current > this.moment().endOf('day')

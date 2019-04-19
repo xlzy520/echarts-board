@@ -266,13 +266,12 @@ export default {
       return total
     },
     // 获取页面所需数据
-    getConsoleData () {
+    getConsoleData (date) {
       backStage.getBoardData({
-
+        date: date
       }).then(res => {
         this.data = res.data
         this.range = res.data.timeData.map(v => {
-          // return [this.moment(v.workBeginTime), this.moment(v.workEndTime)]
           return [v.workBeginTime, v.workEndTime]
         })
         this.cacheTimeRange = this.range.concat([])
@@ -299,7 +298,7 @@ export default {
     }
   },
   mounted () {
-    this.getConsoleData()
+    this.getConsoleData(this.moment().format('YYYY-MM-DD'))
   }
 }
 </script>
