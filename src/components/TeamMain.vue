@@ -104,9 +104,17 @@ export default {
           dataIndex: 'day',
           align: 'center',
           scopedSlots: { customRender: 'day' },
-          customCell: function (record, index) {
-            if (this.activeTab !== 3) {
+          customCell: (record, index) => {
+            if (this.activeTab !== 4) {
               if ([0, 1, 4, 5].includes(index)) {
+                return {
+                  class: {
+                    readOnly: true
+                  }
+                }
+              }
+            } else {
+              if (index < 11) {
                 return {
                   class: {
                     readOnly: true
@@ -122,11 +130,9 @@ export default {
           align: 'center',
           scopedSlots: { customRender: 'month' },
           customCell: function (record, index) {
-            if (this.activeTab !== 3) {
-              return {
-                class: {
-                  readOnly: true
-                }
+            return {
+              class: {
+                readOnly: true
               }
             }
           }
@@ -135,7 +141,16 @@ export default {
           width: '20%',
           dataIndex: 'monthGoal',
           align: 'center',
-          scopedSlots: { customRender: 'monthGoal' }
+          scopedSlots: { customRender: 'monthGoal' },
+          customCell: (record, index) => {
+            if (this.activeTab === 4) {
+              return {
+                class: {
+                  readOnly: true
+                }
+              }
+            }
+          }
         }
       ],
       data: {
@@ -195,16 +210,23 @@ export default {
     },
     // 只读和编辑
     filterDisabled (record, index, indexColumn) {
-      const disabledRows = [3, 4, 6, 7]
+      const disabledRows = [3, 4, 6, 7, 8]
       if (indexColumn === 1) {
         return false
-      }
-      if (this.activeTab !== 4) {
-        if (disabledRows.includes(record.number)) {
-          return true
+      } else if (indexColumn === 0) {
+        if (this.activeTab !== 4) {
+          if (disabledRows.includes(record.number)) {
+            return true
+          }
+        } else {
+          if (record.number === 7 && index > 10) {
+            return true
+          }
         }
       } else {
-        if (record.number === 7 && index > 10 && indexColumn < 1) {
+        if (this.activeTab === 4) {
+          return false
+        } else {
           return true
         }
       }
