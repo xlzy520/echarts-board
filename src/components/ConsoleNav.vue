@@ -6,13 +6,15 @@
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
       <a-date-picker
-        :defaultValue="moment(new Date(), 'YYYY-MM-DD')"
+        :defaultValue="moment()"
+        format="YYYY-MM-DD"
         suffixIcon=" "
         v-model="date"
         :disabledDate="disabledDate"
         :allowClear="false">
         <template slot="dateRender" slot-scope="current, today">
-          <div :class="['ant-calendar-date', notSave(current)]" @click="haha(current)">{{moment(current).format('DD')}}</div>
+          <div :class="['ant-calendar-date', workDayStyle(current)]"
+               @click="updateDate(current)">{{moment(current).format('DD')}}</div>
         </template>
       </a-date-picker>
     </div>
@@ -20,26 +22,38 @@
 </template>
 
 <script>
+import backStage from '../api/backStage'
 export default {
   name: 'ConsoleNav',
   data () {
     return {
-      date: this.moment()
+      date: this.moment(),
+      workDays: []
     }
   },
   methods: {
-    notSave (val) {
-      if (this.moment(val).format('DD') % 3 === 0) {
-        return 'not-save'
+    workDayStyle (val) {
+      const day = this.moment(val).format('DD')
+      if (this.workDays.includes(Number(day))) {
+        return 'work-day'
       }
     },
-    haha (time) {
-      this.date = this.moment(time)
-      console.log(time)
+    updateDate (date) {
+      this.date = this.moment(date)
     },
     disabledDate (current) {
       return current && current > this.moment().endOf('day')
+    },
+    getWorkDay () {
+      backStage.getWorkDay({
+        date: this.date.format('YYYY-MM')
+      }).then(res => {
+        this.workDays = res.data.date
+      })
     }
+  },
+  mounted () {
+    this.getWorkDay()
   }
 }
 </script>
@@ -74,7 +88,9 @@ export default {
       width: auto;
     }
   }
-  .not-save{
-    color: #ff001c;
+  .work-day{
+    border-radius: 10px;
+    color: #fff;
+    background: #ffa161;
   }
 </style>

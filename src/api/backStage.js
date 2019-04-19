@@ -20,12 +20,17 @@ export default {
   changeTime (data) {
     return request.post(`${baseUrl}/changeTime`, data)
   },
-
+  // 获取班组所有数据
   getBoardData (data) {
     return request.post(`${baseUrl}/getBoardData`, data)
   },
+  // 保存班组所有数据
   addBoardData (data) {
     return request.post(`${baseUrl}/addBoardData`, data)
+  },
+  // 获取工作日
+  getWorkDay (data) {
+    return request.post(`${baseUrl}/getWorkDay`, data)
   }
 
 }
