@@ -254,11 +254,6 @@ export default {
           },
           splitLine: {
             show: true,
-            interval: (index, value) => {
-              console.log(2)
-              console.log(index, value)
-              return true
-            },
             lineStyle: {
               width: 5
             }
