@@ -165,42 +165,47 @@ export default {
     },
     // 总线数据
     drawZongXianShuJu () {
-      const legendName = ['日累计停机次数', '月累计停机次数', '月目标停机次数']
+      const { lineHaltCount } = this.data
+      const legendName = lineHaltCount.map(v => v.name)
+      const legendData = lineHaltCount.map(v => {
+        return {
+          name: v.name,
+          icon: 'rect',
+          textStyle: {
+            padding: [0, 0, 0, 28]
+          }
+        }
+      })
+      const dayTotal = lineHaltCount.find(v => v.name === '日累计停机次数').value
+      const monthGoal = lineHaltCount.find(v => v.name === '月目标停机次数').value
+      const monthTotal = lineHaltCount.find(v => v.name === '月累计停机次数').value
+      const seriesData = [
+        {
+          name: '日累计停机次数',
+          value: monthTotal >= monthGoal ? 0 : dayTotal
+        },
+        {
+          name: '月累计停机次数',
+          value: monthTotal
+        },
+        {
+          name: '月目标停机次数',
+          value: monthTotal >= monthGoal ? 0 : monthGoal * (1 - monthTotal / monthGoal)
+        }
+      ]
       let option = {
         color: ['#5095f3', '#ffb32f', '#0dd64f'],
         legend: {
           orient: 'vertical',
-          data: [
-            {
-              name: '日累计停机次数',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28]
-              }
-            },
-            {
-              name: '月累计停机次数',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28]
-              }
-            },
-            {
-              name: '月目标停机次数',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28]
-              }
-            }
-          ],
+          data: legendData,
           left: '50%',
-          top: 200,
+          top: 300,
           itemHeight: 96,
           itemWidth: 96,
           itemGap: 76,
           formatter: (name) => {
             const index = legendName.indexOf(name)
-            const value = this.data.lineHaltCount[index].value
+            const value = lineHaltCount[index].value
             return name + ': ' + value + '次'
           },
           textStyle: {
@@ -234,11 +239,7 @@ export default {
                 show: false
               }
             },
-            data: [
-              { value: 335, name: '日累计停机次数' },
-              { value: 310, name: '月累计停机次数' },
-              { value: 234, name: '月目标停机次数' }
-            ]
+            data: seriesData
           }
         ]
       }
@@ -247,7 +248,7 @@ export default {
       myChart.setOption(option, true)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.teamTrendMap[index].haltCountTrendMap.map(v => {
+      const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
           value: [v.date, Number(v.haltCount)]
