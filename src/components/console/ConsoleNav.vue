@@ -1,7 +1,7 @@
 <template>
   <nav class="console-nav">
     <div class="console-nav-logo">
-      <img src="../assets/logo.png"/>
+      <img src="../../assets/logo.png"/>
     </div>
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import backStage from '../api/backStage'
+import backStage from '../../api/backStage'
 export default {
   name: 'ConsoleNav',
   data () {

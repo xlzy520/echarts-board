@@ -67,9 +67,9 @@
 
 <script>
 
-import SwitchTeam from '../components/SwitchTeam'
-import Modal from '../components/Modal'
-import backStage from '../api/backStage'
+import SwitchTeam from './SwitchTeam'
+import Modal from '../Modal'
+import backStage from '../../api/backStage'
 export default {
   name: 'TeamMain',
   data () {
@@ -307,7 +307,7 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../styles/ant-calendar";
+  @import "../../styles/ant-calendar";
   .readOnly{
     background-color: #eee;
   }

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import backStage from '../api/backStage'
+import backStage from '../../api/backStage'
 export default {
   name: 'switchTeam',
   data () {
