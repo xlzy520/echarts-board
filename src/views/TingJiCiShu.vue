@@ -1,41 +1,29 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard-box">
-      <div class="dashboard-box-content">
-        <div id="top" class="chart" style="height: 1400px;width: 100%"></div>
-      </div>
-    </div>
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">总线数据</div>
-      <div class="dashboard-box-content">
-        <div id="middle" class="chart" style="height: 1000px;width: 100%"></div>
-      </div>
-    </div>
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">各组日均平均车速趋势图</div>
-      <div class="dashboard-box-header single-header">
-        <div class="group-tabs">
-          <div v-for="(item, index) in data.teamTrendMap"
-               :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
-               @click="tabClick(item, index)"
-               :key="item.teamName">{{item.teamName}}</div>
-        </div>
-      </div>
-      <div class="dashboard-box-content">
-        <div id="bottom" class="chart" style="height: 1440px;width: 100%"></div>
-      </div>
-    </div>
+    <chart-box ref="top" id="top"
+               chartStyle="height: 1400px;width: 100%"></chart-box>
+    <chart-box ref="middle" title="总线数据" id="middle"
+               chartStyle="height: 1000px;width: 100%"></chart-box>
+    <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
+               :header="chartHeader"
+               @tabClick="tabClick"
+               chartStyle="height: 1920px;width: 100%"></chart-box>
   </div>
 </template>
 
 <script>
 import board from '../api/board'
+import ChartBox from '../components/chart/ChartBox'
 export default {
   name: 'TingJiCiShu',
+  components: { ChartBox },
   data () {
     return {
       data: {},
-      checkTab: ''
+      chartHeader: {
+        checkTab: '',
+        groupData: []
+      }
     }
   },
   methods: {
@@ -83,7 +71,7 @@ export default {
         },
         grid: {
           top: 200,
-          left: -40,
+          left: -60,
           containLabel: true
         },
         xAxis: {
@@ -158,9 +146,7 @@ export default {
           }
         ]
       }
-      const myChart = this.$echarts.init(document.getElementById('top'))
-
-      myChart.setOption(option, true)
+      this.$refs.top.draw(option)
     },
     // 总线数据
     drawZongXianShuJu () {
@@ -242,15 +228,13 @@ export default {
           }
         ]
       }
-      const myChart = this.$echarts.init(document.getElementById('middle'))
-
-      myChart.setOption(option, true)
+      this.$refs.middle.draw(option)
     },
     drawLine (index = 0) {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, Number(v.haltCount)]
+          value: [v.date, Number(v.value)]
         }
       })
       let option = {
@@ -324,14 +308,13 @@ export default {
           }
         }]
       }
-      const myChart = this.$echarts.init(document.getElementById('bottom'))
-
-      myChart.setOption(option, true)
+      this.$refs.bottom.draw(option)
     },
     // 各组停机次数趋势图
     getHaltCount () {
       return board.getHaltCount().then(res => {
         this.data = res.data
+        this.chartHeader.groupData = this.data.teamTrendMap
         this.drawTingJiCiShu()
         this.drawZongXianShuJu()
         this.drawLine()

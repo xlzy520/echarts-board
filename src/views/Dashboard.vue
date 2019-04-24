@@ -1,28 +1,11 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">平均车速</div>
-      <div class="dashboard-box-content">
-        <div id="top" class="chart" style="height: 1920px;width: 100%"></div>
-      </div>
-    </div>
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">各组日均平均车速趋势图</div>
-      <div class="dashboard-box-header">
-        <div class="left-box">
-          <div>平均车速月目标：<span class="left-box-item">{{avgSpeed}}</span>m/m</div>
-        </div>
-        <div class="group-tabs">
-          <div v-for="(item, index) in data.teamTrendMap"
-               :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
-               @click="tabClick(item, index)"
-               :key="item.teamName">{{item.teamName}}</div>
-        </div>
-      </div>
-      <div class="dashboard-box-content">
-        <div id="bottom" class="chart" style="height: 1920px;width: 100%"></div>
-      </div>
-    </div>
+    <chart-box ref="top" title="平均车速" id="top"
+               chartStyle="height: 1920px;width: 100%"></chart-box>
+    <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
+               :header="chartHeader"
+               @tabClick="tabClick"
+               chartStyle="height: 1920px;width: 100%"></chart-box>
   </div>
 </template>
 
@@ -31,13 +14,19 @@ import board from '../api/board'
 import wugui from '../assets/乌龟.png'
 import tu from '../assets/兔.png'
 import ma from '../assets/马.png'
+import ChartBox from '../components/chart/ChartBox'
 export default {
   name: 'Dashboard',
+  components: { ChartBox },
   data () {
     return {
       data: {},
-      checkTab: '',
-      avgSpeed: ''
+      chartHeader: {
+        checkTab: '',
+        leftTitle: '平均车速月目标',
+        leftValue: '',
+        groupData: []
+      }
     }
   },
   methods: {
@@ -181,15 +170,13 @@ export default {
           }
         ]
       }
-      const myChart = this.$echarts.init(document.getElementById('top'))
-
-      myChart.setOption(option, true)
+      this.$refs.top.draw(option)
     },
     drawLine (index = 0) {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, Number(v.speed)]
+          value: [v.date, Number(v.value)]
         }
       })
       let option = {
@@ -264,9 +251,7 @@ export default {
           }
         }]
       }
-      const myChart = this.$echarts.init(document.getElementById('bottom'))
-
-      myChart.setOption(option, true)
+      this.$refs.bottom.draw(option)
     },
     getDetailStyleObj (isLeft, speedStr) {
       const title = this.data.avgSpeed[isLeft ? 0 : 1].name
@@ -325,6 +310,7 @@ export default {
     getSpeedData () {
       return board.getSpeed().then(res => {
         this.data = res.data
+        this.chartHeader.groupData = this.data.teamTrendMap
         this.drawGauge()
         this.drawLine()
         this.tabClick(res.data.teamTrendMap[0])
@@ -332,8 +318,8 @@ export default {
       })
     },
     tabClick (tab, index) {
-      this.checkTab = tab.teamName
-      this.avgSpeed = tab.avgSpeedMonthGoal
+      this.chartHeader.checkTab = tab.teamName
+      this.chartHeader.leftValue = tab.avgSpeedMonthGoal
       this.drawLine(index)
     },
     timer () {
@@ -361,40 +347,5 @@ export default {
   color: #333;
   font-size: 60 * 2px;
   height: 100%;
-  &-box {
-    &-title {
-      padding-top: 33 * 2px;
-      padding-left: 24 * 2px;
-    }
-    &-header{
-      display: flex;
-      font-size: 40*2px;
-      padding: 20*2px 0 20*2px 30*2px;
-      .left-box{
-        display: flex;
-        flex-direction: column;
-        width: 60%;
-        .left-box-item{
-          font-size: 60*2px;
-        }
-      }
-      .group-tabs{
-        display: flex;
-        align-items: flex-end;
-        margin-right: 7%;
-        .group-tab{
-          cursor: pointer;
-          font-size: 50*2px;
-          color: #999;
-          margin-left: 37*2px;
-          line-height: 1.1;
-        }
-        .tab-checked{
-          font-size: 70*2px;
-          color: #333;
-        }
-      }
-    }
-  }
 }
 </style>
