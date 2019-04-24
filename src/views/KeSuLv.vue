@@ -327,6 +327,19 @@ export default {
           lineStyle: {
             width: 10
           },
+          markLine: {
+            data: [
+              {
+                name: '合理最低原纸利用率：0.1%',
+                yAxis: 0.1,
+                lineStyle: {
+                  color: '#f78787',
+                  width: 5,
+                  type: 'solid'
+                }
+              }
+            ]
+          },
         }]
       }
       const myChart = echarts.init(document.getElementById('bottom'))

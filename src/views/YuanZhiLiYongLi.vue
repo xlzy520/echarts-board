@@ -21,7 +21,8 @@
           <div v-for="(item, index) in data.teamTrendMap"
                :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
                @click="tabClick(item, index)"
-               :key="item.teamName">{{item.teamName}}</div>
+               :key="item.teamName">{{item.teamName}}
+          </div>
         </div>
       </div>
       <div class="dashboard-box-content">
@@ -33,6 +34,7 @@
 
 <script>
 import board from '../api/board'
+
 const echarts = require('echarts')
 export default {
   name: 'YuanZhiLiYongLi',
@@ -313,6 +315,19 @@ export default {
         },
         series: [{
           data: seriesData,
+          markLine: {
+            data: [
+              {
+                name: '合理最低原纸利用率：98.00%',
+                yAxis: 98,
+                lineStyle: {
+                  color: '#f78787',
+                  width: 5,
+                  type: 'solid'
+                }
+              }
+            ]
+          },
           type: 'line',
           symbolSize: 35,
           itemStyle: {
