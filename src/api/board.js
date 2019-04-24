@@ -16,4 +16,12 @@ export default {
   getHaltCount () {
     return request.get(`${baseUrl}/getHaltCount`)
   },
+  /**
+   * 获取客诉率看板数据
+   * @returns {*}
+   */
+  getCustomComplaintRate () {
+    return request.get(`${baseUrl}/getCustomComplaintRate`)
+  }
+
 }
