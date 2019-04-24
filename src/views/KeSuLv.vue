@@ -12,8 +12,11 @@
       </div>
     </div>
     <div class="dashboard-box">
-      <div class="dashboard-box-title">各组日均平均车速趋势图</div>
-      <div class="dashboard-box-header single-header">
+      <div class="dashboard-box-title">各组客诉率趋势图</div>
+      <div class="dashboard-box-header">
+        <div class="left-box">
+          <div>客诉率月目标：<span class="left-box-item">{{0.1}}</span>%</div>
+        </div>
         <div class="group-tabs">
           <div v-for="(item, index) in data.teamTrendMap"
                :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
@@ -29,338 +32,340 @@
 </template>
 
 <script>
-  import board from '../api/board'
-  const echarts = require('echarts')
-  export default {
-    name: 'KeSuLv',
-    data () {
-      return {
-        data: {},
-        checkTab: ''
-      }
-    },
-    methods: {
-      // 停机次数
-      drawTingJiCiShu () {
-        let option = {
-          color: ['#000f84', '#5095f3'],
-          title: {
-            text: '停机次数',
-            textStyle: {
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 120,
-              fontWeight: 'normal'
-            },
-            left: 48,
-            top: 66
+import board from '../api/board'
+const echarts = require('echarts')
+export default {
+  name: 'KeSuLv',
+  data () {
+    return {
+      data: {},
+      checkTab: ''
+    }
+  },
+  methods: {
+    // 客诉率
+    drawKeSuLv () {
+      let option = {
+        color: ['#000f84', '#5095f3'],
+        title: {
+          text: '客诉率',
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 120,
+            fontWeight: 'normal'
           },
-          legend: {
-            data: [
-              {
-                name: '月累计完成',
-                icon: 'rect',
-                textStyle: {
-                  padding: [0, 0, 0, 28]
-                }
-              },
-              {
-                name: '月目标',
-                icon: 'rect',
-                textStyle: {
-                  padding: [0, 0, 0, 28]
-                }
-              }
-            ],
-            right: 120,
-            top: 66,
-            itemHeight: 96,
-            itemWidth: 96,
-            itemGap: 76,
-            textStyle: {
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 100,
-              itemGap: '10'
-            }
-          },
-          grid: {
-            top: 200,
-            left: -40,
-            containLabel: true
-          },
-          xAxis: {
-            show: false,
-            type: 'value'
-          },
-          yAxis: {
-            type: 'category',
-            inverse: true,
-            data: this.data.haltCountData.map(v => v.name),
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 120,
-              margin: 40,
-              formatter: (params, index) => {
-                return '{main|' + params + '}' + '\n{sub|(' + this.data.haltCountData[index].todayHaltCount + '次)}'
-              },
-              rich: {
-                main: {
-                  align: 'left',
-                  fontSize: 120
-                },
-                sub: {
-                  fontSize: 80
-                }
-              }
-            },
-            splitLine: {
-              show: false
-            }
-          },
-          series: [
+          left: 48,
+          top: 66
+        },
+        legend: {
+          data: [
             {
-              name: '月累计完成',
-              type: 'bar',
-              barWidth: 160,
-              barGap: '0%',
-              label: {
-                normal: {
-                  show: true,
-                  position: 'right',
-                  fontFamily: 'PingFang SC Regular',
-                  fontSize: 120,
-                  color: '#333',
-                  formatter: (paramas, index) => {
-                    return paramas.data + '次'
-                  },
-                  offset: [44, 0]
-                }
-              },
-              data: this.data.haltCountData.map(v => v.monthHaltCount)
+              name: '当前客诉率',
+              icon: 'rect',
+              textStyle: {
+                padding: [0, 0, 0, 28]
+              }
             },
             {
               name: '月目标',
-              type: 'bar',
-              barWidth: 160,
-              label: {
-                normal: {
-                  show: true,
-                  position: 'right',
-                  fontFamily: 'PingFang SC Regular',
-                  fontSize: 120,
-                  color: '#333',
-                  formatter: (paramas, index) => {
-                    return paramas.data + '次'
-                  },
-                  offset: [44, 0]
-                }
-              },
-              data: this.data.haltCountData.map(v => v.haltCountMonthGoal)
-            }
-          ]
-        }
-        const myChart = echarts.init(document.getElementById('top'))
-
-        myChart.setOption(option, true)
-      },
-      // 总线数据
-      drawZongXianShuJu () {
-        const legendName = ['日累计停机次数', '月累计停机次数', '月目标停机次数']
-        let option = {
-          color: ['#5095f3', '#ffb32f', '#0dd64f'],
-          legend: {
-            orient: 'vertical',
-            data: [
-              {
-                name: '日累计停机次数',
-                icon: 'rect',
-                textStyle: {
-                  padding: [0, 0, 0, 28]
-                }
-              },
-              {
-                name: '月累计停机次数',
-                icon: 'rect',
-                textStyle: {
-                  padding: [0, 0, 0, 28]
-                }
-              },
-              {
-                name: '月目标停机次数',
-                icon: 'rect',
-                textStyle: {
-                  padding: [0, 0, 0, 28]
-                }
+              icon: 'rect',
+              textStyle: {
+                padding: [0, 0, 0, 28]
               }
-            ],
-            left: '50%',
-            top: 200,
-            itemHeight: 96,
-            itemWidth: 96,
-            itemGap: 76,
-            formatter: (name) => {
-              const index = legendName.indexOf(name)
-              const value = this.data.lineHaltCount[index].value
-              return name + ': ' + value + '次'
-            },
-            textStyle: {
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 80,
-              itemGap: '10'
             }
-          },
-          series: [
-            {
-              name: '总线数据',
-              type: 'pie',
-              center: ['25%', '50%'],
-              radius: [240, 400],
-              avoidLabelOverlap: false,
-              label: {
-                normal: {
-                  show: false,
-                  position: 'center'
-                },
-                emphasis: {
-                  show: true,
-                  textStyle: {
-                    fontSize: '30',
-                    fontWeight: 'bold'
-                  }
-                }
-              },
-              labelLine: {
-                normal: {
-                  show: false
-                }
-              },
-              data: [
-                { value: 335, name: '日累计停机次数' },
-                { value: 310, name: '月累计停机次数' },
-                { value: 234, name: '月目标停机次数' }
-              ]
-            }
-          ]
-        }
-        const myChart = echarts.init(document.getElementById('middle'))
-
-        myChart.setOption(option, true)
-      },
-      drawLine (index = 0) {
-        const seriesData = this.data.teamTrendMap[index].haltCountTrendMap.map(v => {
-          return {
-            date: new Date(v.date).toString(),
-            value: [v.date, Number(v.haltCount)]
+          ],
+          right: 120,
+          top: 66,
+          itemHeight: 96,
+          itemWidth: 96,
+          itemGap: 76,
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 100,
+            itemGap: '10'
           }
-        })
-        let option = {
-          grid: {
-            bottom: 180
-          },
-          xAxis: {
-            type: 'category',
-            offset: 40,
-            splitNumber: 1,
-            axisLabel: {
-              interval: function (index, val) {
-                return index === 0 || index === seriesData.length - 1
+        },
+        grid: {
+          top: 200,
+          left: -100,
+          right: 420,
+          containLabel: true
+        },
+        xAxis: {
+          show: false,
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          data: this.data.avgComplaintRate.map(v => v.name),
+          axisLabel: {
+            color: '#333',
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 120,
+            margin: 40,
+            formatter: (params, index) => {
+              return '{main|' + params + '}' + '\n{sub|(' + this.data.avgComplaintRate[index].complaintRate + '%)}'
+            },
+            rich: {
+              main: {
+                align: 'left',
+                fontSize: 120
               },
-              formatter: (params, index) => {
-                if (index === 0) {
-                  return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-                } else {
-                  return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-                }
-              },
-              rich: {
-                front: {
-                  color: '#333',
-                  fontFamily: 'PingFang SC Regular',
-                  fontSize: 80,
-                  align: 'right',
-                  width: 600
-                },
-                end: {
-                  color: '#333',
-                  fontFamily: 'PingFang SC Regular',
-                  fontSize: 80,
-                  align: 'left',
-                  width: 600
-                }
+              sub: {
+                fontSize: 80
               }
             }
           },
-          yAxis: {
-            type: 'value',
-            min: 0,
-            splitNumber: 4,
-            interval: 3,
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 80,
-              margin: 40
-            },
-            splitLine: {
-              show: true,
-              lineStyle: {
-                width: 5
-              }
-            }
-          },
-          series: [{
-            data: seriesData,
-            type: 'line',
-            symbolSize: 35,
-            itemStyle: {
-              color: '#5095f3',
-              borderWidth: 10
-            },
-            lineStyle: {
-              width: 10
-            }
-          }]
-        }
-        const myChart = echarts.init(document.getElementById('bottom'))
-
-        myChart.setOption(option, true)
-      },
-      // 各组停机次数趋势图
-      getHaltCount () {
-        return board.getHaltCount().then(res => {
-          this.data = res.data
-          this.drawTingJiCiShu()
-          this.drawZongXianShuJu()
-          this.drawLine()
-          this.tabClick(res.data.teamTrendMap[0])
-          this.timer()
-        })
-      },
-      tabClick (tab, index) {
-        this.checkTab = tab.teamName
-        this.drawLine(index)
-      },
-      timer () {
-        let i = 1
-        return setInterval(() => {
-          this.tabClick(this.data.teamTrendMap[i], i)
-          i += 1
-          if (i > this.data.teamTrendMap.length - 1) {
-            i = 0
+          splitLine: {
+            show: false
           }
-        }, 10000)
+        },
+        series: [
+          {
+            name: '当前客诉率',
+            type: 'bar',
+            barWidth: 160,
+            barGap: '0%',
+            label: {
+              normal: {
+                show: true,
+                position: 'right',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 120,
+                color: '#333',
+                formatter: (paramas, index) => {
+                  return paramas.data + '%'
+                },
+                offset: [44, 0]
+              }
+            },
+            data: this.data.avgComplaintRate.map(v => v.complaintRateMonthRate)
+          },
+          {
+            name: '月目标',
+            type: 'bar',
+            barWidth: 160,
+            label: {
+              normal: {
+                show: true,
+                position: 'right',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 120,
+                color: '#333',
+                formatter: (paramas, index) => {
+                  return paramas.data + '%'
+                },
+                offset: [44, 0]
+              }
+            },
+            data: this.data.avgComplaintRate.map(v => v.complaintRateMonthGoalRate)
+          }
+        ]
       }
+      const myChart = echarts.init(document.getElementById('top'))
+
+      myChart.setOption(option, true)
     },
-    mounted () {
-      this.getHaltCount()
+    // 总线数据
+    drawZongXianShuJu () {
+      const { lineComplaintRate } = this.data
+      const legendName = lineComplaintRate.map(v => v.name)
+      const legendData = lineComplaintRate.map(v => {
+        return {
+          name: v.name,
+          icon: 'rect',
+          textStyle: {
+            padding: [0, 0, 0, 28]
+          }
+        }
+      })
+      const total = lineComplaintRate.find(v => v.name === '月目标客诉率').value
+      const currentTotal = lineComplaintRate.find(v => v.name === '月累计客诉率').value
+      const seriesData = [
+        {
+          name: '月累计客诉率',
+          value: currentTotal
+        },
+        {
+          'name': '月目标客诉率',
+          'value': currentTotal >= total ? 0 : total * (1 - currentTotal / total)
+        }
+      ]
+      let option = {
+        color: ['#ffb32f', '#0dd64f'],
+        legend: {
+          orient: 'vertical',
+          data: legendData,
+          left: '50%',
+          top: 350,
+          itemHeight: 96,
+          itemWidth: 96,
+          itemGap: 76,
+          formatter: (name) => {
+            const index = legendName.indexOf(name)
+            const value = this.data.lineComplaintRate[index].value
+            return name + ': ' + value + '%'
+          },
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 80,
+            itemGap: '10'
+          }
+        },
+        series: [
+          {
+            name: '总线数据',
+            type: 'pie',
+            center: ['25%', '50%'],
+            radius: [240, 400],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '30',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            // data: this.data.lineComplaintRate
+            data: seriesData
+          }
+        ]
+      }
+      const myChart = echarts.init(document.getElementById('middle'))
+
+      myChart.setOption(option, true)
     },
-    destroyed () {
-      clearInterval(this.timer())
+    drawLine (index = 0) {
+      const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
+        return {
+          date: new Date(v.date).toString(),
+          value: [v.date, Number(v.complaintRate)]
+        }
+      })
+      let option = {
+        grid: {
+          left: 360,
+          bottom: 180
+        },
+        xAxis: {
+          type: 'category',
+          offset: 40,
+          splitNumber: 1,
+          axisLabel: {
+            interval: function (index, val) {
+              return index === 0 || index === seriesData.length - 1
+            },
+            formatter: (params, index) => {
+              if (index === 0) {
+                return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+              } else {
+                return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+              }
+            },
+            rich: {
+              front: {
+                color: '#333',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 80,
+                align: 'right',
+                width: 600
+              },
+              end: {
+                color: '#333',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 80,
+                align: 'left',
+                width: 600
+              }
+            }
+          }
+        },
+        yAxis: {
+          type: 'value',
+          min: 0,
+          splitNumber: 4,
+          interval: 0.05,
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            color: '#333',
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 80,
+            margin: 40,
+            formatter: (params, index) => {
+              return params.toFixed(3) + '%'
+            }
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              width: 5
+            }
+          }
+        },
+        series: [{
+          data: seriesData,
+          type: 'line',
+          symbolSize: 35,
+          itemStyle: {
+            color: '#5095f3',
+            borderWidth: 10
+          },
+          lineStyle: {
+            width: 10
+          },
+        }]
+      }
+      const myChart = echarts.init(document.getElementById('bottom'))
+
+      myChart.setOption(option, true)
+    },
+    // 各组客诉率趋势图
+    getCustomComplaintRate () {
+      return board.getCustomComplaintRate().then(res => {
+        this.data = res.data
+        this.drawKeSuLv()
+        this.drawZongXianShuJu()
+        this.drawLine()
+        this.tabClick(res.data.teamTrendMap[0])
+        this.timer()
+      })
+    },
+    tabClick (tab, index) {
+      this.checkTab = tab.teamName
+      this.drawLine(index)
+    },
+    timer () {
+      let i = 1
+      return setInterval(() => {
+        this.tabClick(this.data.teamTrendMap[i], i)
+        i += 1
+        if (i > this.data.teamTrendMap.length - 1) {
+          i = 0
+        }
+      }, 10000)
     }
+  },
+  mounted () {
+    this.getCustomComplaintRate()
+  },
+  destroyed () {
+    clearInterval(this.timer())
   }
+}
 </script>
 
 <style lang="less">
