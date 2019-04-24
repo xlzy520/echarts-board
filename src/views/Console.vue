@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import ConsoleNav from '../components/ConsoleNav'
-import TeamMain from '../components/TeamMain'
+import ConsoleNav from '../components/console/ConsoleNav'
+import TeamMain from '../components/console/TeamMain'
 
 export default {
   name: 'Console',
