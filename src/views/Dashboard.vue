@@ -30,7 +30,8 @@
 <script>
 import board from '../api/board'
 import wugui from '../assets/乌龟.png'
-import baitu from '../assets/白兔.png'
+import tu from '../assets/兔.png'
+import ma from '../assets/马.png'
 // const echarts = require('echarts/lib/echarts')
 const echarts = require('echarts')
 // require('echarts/lib/chart/bar')
@@ -210,7 +211,7 @@ export default {
           splitNumber: 1,
           axisLabel: {
             interval: function (index, val) {
-              return index === 0 || index === 30
+              return index === 0 || index === seriesData.length - 1
             },
             formatter: (params, index) => {
               if (index === 0) {
@@ -303,8 +304,9 @@ export default {
         }
       }
     },
-    getTitleStyleObj (isLeft, speed) {
-      const image = Number(speed) > 128 ? baitu : wugui
+    getTitleStyleObj (isLeft, speedStr) {
+      const speed = Number(speedStr)
+      const image = speed < 170 ? wugui : speed < 186 ? tu : ma
       return {
         fontFamily: 'PingFang SC Regular',
         fontSize: 160,
@@ -380,14 +382,15 @@ export default {
       .speed-box{
         display: flex;
         flex-direction: column;
+        width: 60%;
         .speed-value{
           font-size: 60*2px;
         }
       }
       .group-tabs{
         display: flex;
-        margin-left: 235*2px;
         align-items: flex-end;
+        margin-right: 7%;
         .group-tab{
           cursor: pointer;
           font-size: 50*2px;
