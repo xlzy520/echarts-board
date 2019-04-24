@@ -7,5 +7,13 @@ export default {
     */
   getSpeed () {
     return request.get(`${baseUrl}/getSpeed`)
-  }
+  },
+  /**
+   * 获取停机次数看板数据
+   * @param data
+   * @returns {*}
+   */
+  getHaltCount () {
+    return request.get(`${baseUrl}/getHaltCount`)
+  },
 }
