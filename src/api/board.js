@@ -22,6 +22,13 @@ export default {
    */
   getCustomComplaintRate () {
     return request.get(`${baseUrl}/getCustomComplaintRate`)
+  },
+  /**
+   * 获取原纸利用率数据
+   * @returns {*}
+   */
+  getPaperUseRate () {
+    return request.get(`${baseUrl}/getPaperUseRate`)
   }
 
 }
