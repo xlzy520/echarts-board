@@ -305,8 +305,8 @@ export default {
         offsetCenter: [isLeft ? '-40%' : '40%', '-25%'],
         formatter: '2',
         rich: {},
-        width: 193 * 1.5,
-        height: 235 * 1.5,
+        width: 270 * 1.5,
+        height: 227 * 1.5,
         backgroundColor: {
           image: image
         }
