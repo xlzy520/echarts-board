@@ -9,9 +9,8 @@
     <div class="dashboard-box">
       <div class="dashboard-box-title">各组日均平均车速趋势图</div>
       <div class="dashboard-box-header">
-        <div class="speed-box">
-          <div>平均车速月目标：<span class="speed-value">{{avgSpeed}}</span>m/m</div>
-          <div>合理最低车速：<span class="speed-value">140</span>m/m</div>
+        <div class="left-box">
+          <div>平均车速月目标：<span class="left-box-item">{{avgSpeed}}</span>m/m</div>
         </div>
         <div class="group-tabs">
           <div v-for="(item, index) in data.teamTrendMap"
@@ -195,7 +194,7 @@ export default {
       myChart.setOption(option, true)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.teamTrendMap[index].speedTrendMap.map(v => {
+      const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
           value: [v.date, Number(v.speed)]
@@ -337,7 +336,7 @@ export default {
         this.drawGauge()
         this.drawLine()
         this.tabClick(res.data.teamTrendMap[0])
-        // this.timer()
+        this.timer()
       })
     },
     tabClick (tab, index) {
@@ -378,12 +377,12 @@ export default {
     &-header{
       display: flex;
       font-size: 40*2px;
-      padding: 49*2px 0 0 20*2px;
-      .speed-box{
+      padding: 20*2px 0 20*2px 30*2px;
+      .left-box{
         display: flex;
         flex-direction: column;
         width: 60%;
-        .speed-value{
+        .left-box-item{
           font-size: 60*2px;
         }
       }
