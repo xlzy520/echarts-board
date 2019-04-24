@@ -6,6 +6,10 @@ import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Select, Radi
 
 import moment from 'moment'
 import echarts from 'echarts'
+
+import './styles/index.less'
+import './styles/ant-message.less'
+
 require('echarts/lib/chart/bar')
 require('echarts/lib/chart/pie')
 require('echarts/lib/chart/gauge')
@@ -14,9 +18,6 @@ require('echarts/lib/component/title')
 require('echarts/lib/component/markLine')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/grid')
-
-import './styles/index.less'
-import './styles/ant-message.less'
 
 Vue.prototype.moment = moment
 Vue.prototype.$message = message
