@@ -4,6 +4,7 @@ import Console from './views/Console.vue'
 import Dashboard from './views/Dashboard.vue'
 import TingJiCiShu from './views/TingJiCiShu.vue'
 import KeSuLv from './views/KeSuLv.vue'
+import YuanZhiLiYongLi from './views/YuanZhiLiYongLi.vue'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/kesulv',
       name: 'kesulv',
       component: KeSuLv
+    },
+    {
+      path: '/yuanzhi',
+      name: 'yuanzhi',
+      component: YuanZhiLiYongLi
     }
   ]
 })
