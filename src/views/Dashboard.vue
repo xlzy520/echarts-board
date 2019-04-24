@@ -31,14 +31,6 @@ import board from '../api/board'
 import wugui from '../assets/乌龟.png'
 import tu from '../assets/兔.png'
 import ma from '../assets/马.png'
-// const echarts = require('echarts/lib/echarts')
-const echarts = require('echarts')
-// require('echarts/lib/chart/bar')
-// require('echarts/lib/chart/gauge')
-// require('echarts/lib/chart/line')
-// require('echarts/lib/component/markLine')
-// require('echarts/lib/component/grid')
-// require('echarts/lib/component/tooltip')
 export default {
   name: 'Dashboard',
   data () {
@@ -189,7 +181,7 @@ export default {
           }
         ]
       }
-      const myChart = echarts.init(document.getElementById('top'))
+      const myChart = this.$echarts.init(document.getElementById('top'))
 
       myChart.setOption(option, true)
     },
@@ -272,7 +264,7 @@ export default {
           }
         }]
       }
-      const myChart = echarts.init(document.getElementById('bottom'))
+      const myChart = this.$echarts.init(document.getElementById('bottom'))
 
       myChart.setOption(option, true)
     },

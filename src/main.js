@@ -5,12 +5,22 @@ import store from './store'
 import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Select, Radio, Spin, message, Input } from 'ant-design-vue'
 
 import moment from 'moment'
+import echarts from 'echarts'
+require('echarts/lib/chart/bar')
+require('echarts/lib/chart/pie')
+require('echarts/lib/chart/gauge')
+require('echarts/lib/chart/line')
+require('echarts/lib/component/title')
+require('echarts/lib/component/markLine')
+require('echarts/lib/component/legend')
+require('echarts/lib/component/grid')
 
 import './styles/index.less'
 import './styles/ant-message.less'
 
 Vue.prototype.moment = moment
 Vue.prototype.$message = message
+Vue.prototype.$echarts = echarts
 
 Vue.use(Checkbox)
 Vue.use(DatePicker)

@@ -34,8 +34,6 @@
 
 <script>
 import board from '../api/board'
-
-const echarts = require('echarts')
 export default {
   name: 'YuanZhiLiYongLi',
   data () {
@@ -168,7 +166,7 @@ export default {
           }
         ]
       }
-      const myChart = echarts.init(document.getElementById('top'))
+      const myChart = this.$echarts.init(document.getElementById('top'))
 
       myChart.setOption(option, true)
     },
@@ -234,7 +232,7 @@ export default {
           }
         ]
       }
-      const myChart = echarts.init(document.getElementById('middle'))
+      const myChart = this.$echarts.init(document.getElementById('middle'))
 
       myChart.setOption(option, true)
     },
@@ -339,7 +337,7 @@ export default {
           }
         }]
       }
-      const myChart = echarts.init(document.getElementById('bottom'))
+      const myChart = this.$echarts.init(document.getElementById('bottom'))
 
       myChart.setOption(option, true)
     },
