@@ -329,5 +329,6 @@ export default {
   color: #333;
   font-size: 60 * 2px;
   height: 100%;
+  transform: rotate(90deg);
 }
 </style>
