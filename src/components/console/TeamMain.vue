@@ -56,8 +56,8 @@
       </div>
     </div>
     <div class="console-footer">
-      <a-button @click="exchangeTeam">换班</a-button>
-      <a-button type="primary" class="save" @click="save">保存</a-button>
+      <a-button @click="exchangeTeam" :disabled="!data.timeData.length>0">换班</a-button>
+      <a-button type="primary" class="save" @click="save" :disabled="!data.timeData.length>0">保存</a-button>
     </div>
     <modal title="换班" :visible="teamVisible" @close="close">
       <switch-team @close="close" ref="switchTeam"></switch-team>
@@ -110,7 +110,7 @@ export default {
                 return {
                   class: {
                     readOnly: true
-                  },
+                  }
                 }
               }
             } else {
@@ -251,7 +251,9 @@ export default {
     },
     // 切换tab
     tabChange (tabIndex) {
-      this.activeTab = tabIndex
+      if (this.data.timeData.length > 0) {
+        this.activeTab = tabIndex
+      }
     },
     // 获取另外四个班组的某个项目的总和
     getCount (prop, index) {
