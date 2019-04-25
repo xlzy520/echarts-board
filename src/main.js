@@ -2,13 +2,13 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import { Checkbox, DatePicker, LocaleProvider, Tabs, Table, Button, Select, Radio, Spin, message, Input } from 'ant-design-vue'
+import { Checkbox, DatePicker, LocaleProvider, Table, Button, Select, Radio, Spin, message, Input } from 'ant-design-vue'
 
 import moment from 'moment'
-import echarts from 'echarts'
 
 import './styles/index.less'
 import './styles/ant-message.less'
+const echarts = require('echarts/lib/echarts')
 
 require('echarts/lib/chart/bar')
 require('echarts/lib/chart/pie')
@@ -26,7 +26,6 @@ Vue.prototype.$echarts = echarts
 Vue.use(Checkbox)
 Vue.use(DatePicker)
 Vue.use(LocaleProvider)
-Vue.use(Tabs)
 Vue.use(Table)
 Vue.use(Button)
 Vue.use(Select)
