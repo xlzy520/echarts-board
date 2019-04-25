@@ -1,13 +1,24 @@
 <template>
   <div class="dashboard">
-    <chart-box ref="top" id="top"
-               chartStyle="height: 1400px;width: 100%"></chart-box>
-    <chart-box ref="middle" title="总线数据" id="middle"
-               chartStyle="height: 1000px;width: 100%"></chart-box>
-    <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
-               :header="chartHeader"
-               @tabClick="tabClick"
-               chartStyle="height: 1920px;width: 100%"></chart-box>
+    <chart-box
+      ref="top"
+      id="top"
+      chartStyle="height: 1400px;width: 100%"
+    ></chart-box>
+    <chart-box
+      ref="middle"
+      title="总线数据"
+      id="middle"
+      chartStyle="height: 1000px;width: 100%"
+    ></chart-box>
+    <chart-box
+      ref="bottom"
+      title="各组日均平均车速趋势图"
+      id="bottom"
+      :header="chartHeader"
+      @tabClick="tabClick"
+      chartStyle="height: 1920px;width: 100%"
+    ></chart-box>
   </div>
 </template>
 
@@ -88,7 +99,14 @@ export default {
             fontSize: 120,
             margin: 40,
             formatter: (params, index) => {
-              return '{main|' + params + '}' + '\n{sub|(' + this.data.haltCountData[index].todayHaltCount + '次)}'
+              return (
+                '{main|' +
+                params +
+                '}' +
+                '\n{sub|(' +
+                this.data.haltCountData[index].todayHaltCount +
+                '次)}'
+              )
             },
             rich: {
               main: {
@@ -101,6 +119,9 @@ export default {
             }
           },
           splitLine: {
+            show: false
+          },
+          axisLine: {
             show: false
           }
         },
@@ -161,9 +182,12 @@ export default {
           }
         }
       })
-      const dayTotal = lineHaltCount.find(v => v.name === '日累计停机次数').value
-      const monthGoal = lineHaltCount.find(v => v.name === '月目标停机次数').value
-      const monthTotal = lineHaltCount.find(v => v.name === '月累计停机次数').value
+      const dayTotal = lineHaltCount.find(v => v.name === '日累计停机次数')
+        .value
+      const monthGoal = lineHaltCount.find(v => v.name === '月目标停机次数')
+        .value
+      const monthTotal = lineHaltCount.find(v => v.name === '月累计停机次数')
+        .value
       const seriesData = [
         {
           name: '日累计停机次数',
@@ -175,7 +199,10 @@ export default {
         },
         {
           name: '月目标停机次数',
-          value: monthTotal >= monthGoal ? 0 : monthGoal * (1 - monthTotal / monthGoal)
+          value:
+            monthTotal >= monthGoal
+              ? 0
+              : monthGoal * (1 - monthTotal / monthGoal)
         }
       ]
       let option = {
@@ -188,7 +215,7 @@ export default {
           itemHeight: 96,
           itemWidth: 96,
           itemGap: 76,
-          formatter: (name) => {
+          formatter: name => {
             const index = legendName.indexOf(name)
             const value = lineHaltCount[index].value
             return name + ': ' + value + '次'
@@ -246,9 +273,13 @@ export default {
             },
             formatter: (params, index) => {
               if (index === 0) {
-                return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+                return (
+                  '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+                )
               } else {
-                return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+                return (
+                  '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+                )
               }
             },
             rich: {
@@ -290,18 +321,20 @@ export default {
             }
           }
         },
-        series: [{
-          data: seriesData,
-          type: 'line',
-          symbolSize: 35,
-          itemStyle: {
-            color: '#5095f3',
-            borderWidth: 10
-          },
-          lineStyle: {
-            width: 10
+        series: [
+          {
+            data: seriesData,
+            type: 'line',
+            symbolSize: 35,
+            itemStyle: {
+              color: '#5095f3',
+              borderWidth: 10
+            },
+            lineStyle: {
+              width: 10
+            }
           }
-        }]
+        ]
       }
       this.$refs.bottom.draw(option)
     },
@@ -342,11 +375,11 @@ export default {
 </script>
 
 <style lang="less">
-.dashboard-box-header{
-  &.single-header{
+.dashboard-box-header {
+  &.single-header {
     justify-content: flex-end;
-    padding-top: 27*2px;
-    padding-bottom: 27*2px;
+    padding-top: 27 * 2px;
+    padding-bottom: 27 * 2px;
   }
 }
 </style>
