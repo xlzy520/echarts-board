@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="charts-wrapper">
     <chart-box ref="top" title="平均车速" id="top"
                chartStyle="height: 1920px;width: 100%"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
@@ -327,7 +327,7 @@ export default {
 </script>
 
 <style lang="less">
-.dashboard {
+.charts-wrapper {
   color: #333;
   font-size: 60 * 2px;
   height: 100%;

@@ -1,7 +1,7 @@
 <template>
-  <div class="dashboard-box">
-    <div class="dashboard-box-title" v-if="title">{{title}}</div>
-    <div :class="['dashboard-box-header', {'single-header': !header.leftTitle}]" v-if="header">
+  <div class="chart-box">
+    <div class="chart-box-title" v-if="title">{{title}}</div>
+    <div :class="['chart-box-header', {'single-header': !header.leftTitle}]" v-if="header">
       <div class="header-left" v-if="header.leftTitle">
         <div>{{header.leftTitle}}：<span class="header-left-item">{{header.leftValue}}</span>{{header.leftUnit}}</div>
       </div>
@@ -12,7 +12,7 @@
              :key="item.teamName">{{item.teamName}}</div>
       </div>
     </div>
-    <div class="dashboard-box-content">
+    <div class="chart-box-content">
       <div :id="id" :style="chartStyle"></div>
     </div>
   </div>
@@ -82,7 +82,7 @@ export default {
 </script>
 
 <style lang="less">
-  .dashboard-box {
+  .chart-box {
     &-title {
       padding-top: 33 * 2px;
       padding-left: 24 * 2px;

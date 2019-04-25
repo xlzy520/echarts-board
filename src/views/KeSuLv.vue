@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="charts-wrapper">
     <chart-box ref="top" id="top" chartStyle="height: 1400px;width: 100%"></chart-box>
     <chart-box
       ref="middle"

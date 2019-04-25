@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard">
+  <div class="charts-wrapper">
     <chart-box
       ref="top"
       id="top"
@@ -355,7 +355,7 @@ export default {
 </script>
 
 <style lang="less">
-.dashboard-box-header {
+.chart-box-header {
   &.single-header {
     justify-content: flex-end;
     padding-top: 27 * 2px;
