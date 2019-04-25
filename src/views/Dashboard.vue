@@ -1,12 +1,12 @@
 <template>
   <div class="charts-wrapper">
     <chart-box ref="top" title="平均车速" id="top"
-               chartStyle="height: 1920px;width: 100%"></chart-box>
+               chartStyle="height: 1684px;width: 100%"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
                :header="chartHeader"
                :group-data="data.teamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 1920px;width: 100%"></chart-box>
+               chartStyle="height: 1414px;width: 100%"></chart-box>
   </div>
 </template>
 
