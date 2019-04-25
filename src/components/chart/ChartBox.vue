@@ -40,9 +40,9 @@ export default {
       }
     },
     header: {
-      type: Object,
+      type: [Object, Boolean],
       default: () => {
-        return {}
+        return false
       }
     },
     groupData: {
