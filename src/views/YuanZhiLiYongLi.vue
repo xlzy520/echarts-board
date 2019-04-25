@@ -229,7 +229,7 @@ export default {
         return {
           date: new Date(v.date).toString(),
           // todo 小于98就直接为0行，97.5为伪0行,将97.5-98分成98份
-          value: [v.date, Number(v.paperUseRate) < 98 ? 97.5 + (0.5 / 98) * Number(v.paperUseRate) : Number(v.paperUseRate)]
+          value: [v.date, v.value < 98 ? 97.5 + (0.5 / 98) * v.value : v.value]
         }
       })
       let option = {
@@ -334,7 +334,7 @@ export default {
         this.drawKeSuLv()
         this.drawZongXianShuJu()
         this.tabClick(res.data.teamTrendMap[0], 0)
-        this.$refs.middle.timer()
+        this.$refs.bottom.timer()
       })
     },
     tabClick (tab, index = 0) {

@@ -252,7 +252,7 @@ export default {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, Number(v.value)]
+          value: [v.date, v.value]
         }
       })
       let option = {

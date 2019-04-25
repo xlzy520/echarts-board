@@ -40,7 +40,7 @@ export default {
             center: ['50%', '50%'],
             radius: '95%',
             startAngle: 270,
-            endAngle: 270 - 180 * (Number(left.speed) / 268),
+            endAngle: 270 - 180 * (left.speed / 268),
             splitNumber: -1,
             z: 5,
             min: 0,
@@ -97,7 +97,7 @@ export default {
             name: 'right',
             type: 'gauge',
             center: ['50%', '50%'],
-            startAngle: 450 - 180 * (Number(268 - right.speed) / 268),
+            startAngle: 450 - 180 * ((268 - right.speed) / 268),
             endAngle: 270,
             z: 5,
             splitNumber: -1,
@@ -176,7 +176,7 @@ export default {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, Number(v.value)]
+          value: [v.date, v.value]
         }
       })
       let option = {
@@ -253,11 +253,11 @@ export default {
       }
       this.$refs.bottom.draw(option)
     },
-    getDetailStyleObj (isLeft, speedStr) {
+    getDetailStyleObj (isLeft, speed) {
       const title = this.data.avgSpeed[isLeft ? 0 : 1].name
       return {
         fontFamily: 'PingFang SC Regular',
-        color: this.getColorBySpeed(speedStr),
+        color: this.getColorBySpeed(speed),
         offsetCenter: [isLeft ? '-40%' : '40%', '35%'],
         formatter: function (paramas) {
           return '{number|' + paramas + '}{speed|m/m}' + '\n\n\n' + '{title| ' + title + '}'
@@ -267,7 +267,7 @@ export default {
         rich: {
           number: {
             fontSize: 160,
-            color: this.getColorBySpeed(speedStr)
+            color: this.getColorBySpeed(speed)
           },
           speed: {
             fontSize: 100,
@@ -280,8 +280,7 @@ export default {
         }
       }
     },
-    getTitleStyleObj (isLeft, speedStr) {
-      const speed = Number(speedStr)
+    getTitleStyleObj (isLeft, speed) {
       const image = speed < 170 ? wugui : speed < 186 ? tu : ma
       return {
         fontFamily: 'PingFang SC Regular',
@@ -297,8 +296,7 @@ export default {
         }
       }
     },
-    getColorBySpeed (speedStr) {
-      const speed = Number(speedStr)
+    getColorBySpeed (speed) {
       if (speed < 170) {
         return '#f81129'
       } else if (speed < 186) {
