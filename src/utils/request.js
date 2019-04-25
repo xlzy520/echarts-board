@@ -3,7 +3,7 @@ import { message } from 'ant-design-vue'
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: 'http://192.168.23.4:3000/mock/5caed9dac07efa4fd83ae692/',
+  baseURL: '/djfb',
   timeout: 10000 // 请求超时时间
 })
 
