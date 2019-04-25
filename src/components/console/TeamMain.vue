@@ -308,6 +308,10 @@ export default {
 
 <style lang="less">
   @import "../../styles/ant-calendar";
+  .ant-table-placeholder {
+    padding: 16*2px 16*2px;
+    font-size: 30*2px;
+  }
   .readOnly{
     background-color: #eee;
   }
