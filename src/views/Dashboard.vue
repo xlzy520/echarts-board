@@ -150,6 +150,9 @@ export default {
             axisTick: {
               show: false
             },
+            detail:{
+              show: false
+            },
             splitLine: {
               show: false
             },
