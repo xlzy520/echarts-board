@@ -5,6 +5,7 @@ import Dashboard from './views/Dashboard.vue'
 import TingJiCiShu from './views/TingJiCiShu.vue'
 import KeSuLv from './views/KeSuLv.vue'
 import YuanZhiLiYongLi from './views/YuanZhiLiYongLi.vue'
+import home from './views/home.vue'
 
 Vue.use(Router)
 
@@ -12,6 +13,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'home',
+      component: home
+    },
+    {
+      path: '/console',
       name: 'console',
       component: Console
     },
