@@ -1,46 +1,38 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard-box">
-      <div class="dashboard-box-content">
-        <div id="top" class="chart" style="height: 1400px;width: 100%"></div>
-      </div>
-    </div>
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">总线数据</div>
-      <div class="dashboard-box-content">
-        <div id="middle" class="chart" style="height: 1000px;width: 100%"></div>
-      </div>
-    </div>
-    <div class="dashboard-box">
-      <div class="dashboard-box-title">各组原纸利用率趋势图</div>
-      <div class="dashboard-box-header">
-        <div class="left-box">
-          <div>原纸利用率月目标：<span class="left-box-item">{{paperUseRateMonthGoalRate}}</span>%</div>
-        </div>
-        <div class="group-tabs">
-          <div v-for="(item, index) in data.teamTrendMap"
-               :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
-               @click="tabClick(item, index)"
-               :key="item.teamName">{{item.teamName}}
-          </div>
-        </div>
-      </div>
-      <div class="dashboard-box-content">
-        <div id="bottom" class="chart" style="height: 1440px;width: 100%"></div>
-      </div>
-    </div>
+    <chart-box ref="top" id="top" chartStyle="height: 1400px;width: 100%"></chart-box>
+    <chart-box
+      ref="middle"
+      title="总线数据"
+      id="middle"
+      chartStyle="height: 1000px;width: 100%"
+    ></chart-box>
+    <chart-box
+      ref="bottom"
+      title="各组原纸利用率趋势图"
+      id="bottom"
+      :header="chartHeader"
+      :group-data="data.teamTrendMap"
+      @tabClick="tabClick"
+      chartStyle="height: 1440px;width: 100%"
+    ></chart-box>
   </div>
 </template>
 
 <script>
 import board from '../api/board'
+import ChartBox from '../components/chart/ChartBox'
 export default {
   name: 'YuanZhiLiYongLi',
+  components: { ChartBox },
   data () {
     return {
       data: {},
-      checkTab: '',
-      paperUseRateMonthGoalRate: ''
+      chartHeader: {
+        leftTitle: '原纸利用率月目标',
+        leftValue: '',
+        leftUnit: '%'
+      }
     }
   },
   methods: {
@@ -166,9 +158,7 @@ export default {
           }
         ]
       }
-      const myChart = this.$echarts.init(document.getElementById('top'))
-
-      myChart.setOption(option, true)
+      this.$refs.top.draw(option)
     },
     // 总线数据
     drawZongXianShuJu () {
@@ -232,9 +222,7 @@ export default {
           }
         ]
       }
-      const myChart = this.$echarts.init(document.getElementById('middle'))
-
-      myChart.setOption(option, true)
+      this.$refs.middle.draw(option)
     },
     drawLine (index = 0) {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
@@ -337,9 +325,7 @@ export default {
           }
         }]
       }
-      const myChart = this.$echarts.init(document.getElementById('bottom'))
-
-      myChart.setOption(option, true)
+      this.$refs.bottom.draw(option)
     },
     // 各组客诉率趋势图
     getPaperUseRate () {
@@ -347,32 +333,17 @@ export default {
         this.data = res.data
         this.drawKeSuLv()
         this.drawZongXianShuJu()
-        this.drawLine()
-        this.tabClick(res.data.teamTrendMap[0])
-        this.timer()
+        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.$refs.middle.timer()
       })
     },
     tabClick (tab, index = 0) {
-      this.checkTab = tab.teamName
-      this.paperUseRateMonthGoalRate = this.data.teamTrendMap[index].paperUseRateMonthGoalRate,
+      this.chartHeader.leftValue = this.data.teamTrendMap[index].paperUseRateMonthGoalRate
       this.drawLine(index)
-    },
-    timer () {
-      let i = 1
-      return setInterval(() => {
-        this.tabClick(this.data.teamTrendMap[i], i)
-        i += 1
-        if (i > this.data.teamTrendMap.length - 1) {
-          i = 0
-        }
-      }, 10000)
     }
   },
   mounted () {
     this.getPaperUseRate()
-  },
-  destroyed () {
-    clearInterval(this.timer())
   }
 }
 </script>

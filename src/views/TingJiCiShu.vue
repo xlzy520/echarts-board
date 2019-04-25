@@ -15,7 +15,7 @@
       ref="bottom"
       title="各组日均平均车速趋势图"
       id="bottom"
-      :header="chartHeader"
+      :group-data="data.teamTrendMap"
       @tabClick="tabClick"
       chartStyle="height: 1920px;width: 100%"
     ></chart-box>
@@ -30,11 +30,7 @@ export default {
   components: { ChartBox },
   data () {
     return {
-      data: {},
-      chartHeader: {
-        checkTab: '',
-        groupData: []
-      }
+      data: {}
     }
   },
   methods: {
@@ -342,34 +338,18 @@ export default {
     getHaltCount () {
       return board.getHaltCount().then(res => {
         this.data = res.data
-        this.chartHeader.groupData = this.data.teamTrendMap
         this.drawTingJiCiShu()
         this.drawZongXianShuJu()
-        this.drawLine()
-        this.tabClick(res.data.teamTrendMap[0])
-        this.timer()
+        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.$refs.bottom.timer()
       })
     },
     tabClick (tab, index) {
-      this.checkTab = tab.teamName
       this.drawLine(index)
-    },
-    timer () {
-      let i = 1
-      return setInterval(() => {
-        this.tabClick(this.data.teamTrendMap[i], i)
-        i += 1
-        if (i > this.data.teamTrendMap.length - 1) {
-          i = 0
-        }
-      }, 10000)
     }
   },
   mounted () {
     this.getHaltCount()
-  },
-  destroyed () {
-    clearInterval(this.timer())
   }
 }
 </script>

@@ -3,11 +3,11 @@
     <div class="dashboard-box-title" v-if="title">{{title}}</div>
     <div :class="['dashboard-box-header', {'single-header': !header.leftTitle}]" v-if="header">
       <div class="header-left" v-if="header.leftTitle">
-        <div>{{header.leftTitle}}：<span class="header-left-item">{{header.leftValue}}</span>m/m</div>
+        <div>{{header.leftTitle}}：<span class="header-left-item">{{header.leftValue}}</span>{{header.leftUnit}}</div>
       </div>
-      <div class="group-tabs" v-if="header.groupData">
-        <div v-for="(item, index) in header.groupData"
-             :class="['group-tab', {'tab-checked': item.teamName === header.checkTab}]"
+      <div class="group-tabs" v-if="groupData">
+        <div v-for="(item, index) in groupData"
+             :class="['group-tab', {'tab-checked': item.teamName === checkTab}]"
              @click="tabClick(item, index)"
              :key="item.teamName">{{item.teamName}}</div>
       </div>
@@ -40,30 +40,43 @@ export default {
       }
     },
     header: {
-      type: Object
-      // default: () => {
-      //   return {
-      //     leftTitle: '',
-      //     leftValue: '',
-      //     checkTab: '',
-      //     groupData: []
-      //   }
-      // }
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    groupData: {
+      type: Array
     }
   },
   data () {
     return {
-
+      checkTab: 'A'
     }
   },
   methods: {
     draw (option) {
+      console.log(1)
       const myChart = this.$echarts.init(document.getElementById(this.id))
       myChart.setOption(option, true)
     },
     tabClick (tab, index) {
+      this.checkTab = tab.teamName
       this.$emit('tabClick', tab, index)
+    },
+    timer () {
+      let i = 1
+      return setInterval(() => {
+        this.tabClick(this.groupData[i], i)
+        i += 1
+        if (i > this.groupData.length - 1) {
+          i = 0
+        }
+      }, 10000)
     }
+  },
+  destroyed () {
+    clearInterval(this.timer())
   }
 }
 </script>

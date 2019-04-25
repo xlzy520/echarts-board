@@ -4,6 +4,7 @@
                chartStyle="height: 1920px;width: 100%"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
                :header="chartHeader"
+               :group-data="data.teamTrendMap"
                @tabClick="tabClick"
                chartStyle="height: 1920px;width: 100%"></chart-box>
   </div>
@@ -22,10 +23,9 @@ export default {
     return {
       data: {},
       chartHeader: {
-        checkTab: '',
         leftTitle: '平均车速月目标',
         leftValue: '',
-        groupData: []
+        leftUnit: 'm/m'
       }
     }
   },
@@ -310,34 +310,18 @@ export default {
     getSpeedData () {
       return board.getSpeed().then(res => {
         this.data = res.data
-        this.chartHeader.groupData = this.data.teamTrendMap
         this.drawGauge()
-        this.drawLine()
-        this.tabClick(res.data.teamTrendMap[0])
-        this.timer()
+        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.$refs.bottom.timer()
       })
     },
     tabClick (tab, index) {
-      this.chartHeader.checkTab = tab.teamName
-      this.chartHeader.leftValue = tab.avgSpeedMonthGoal
       this.drawLine(index)
-    },
-    timer () {
-      let i = 1
-      return setInterval(() => {
-        this.tabClick(this.data.teamTrendMap[i], i)
-        i += 1
-        if (i > this.data.teamTrendMap.length - 1) {
-          i = 0
-        }
-      }, 10000)
+      this.chartHeader.leftValue = tab.avgSpeedMonthGoal
     }
   },
   mounted () {
     this.getSpeedData()
-  },
-  destroyed () {
-    clearInterval(this.timer())
   }
 }
 </script>
