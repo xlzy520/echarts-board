@@ -84,34 +84,34 @@ export default {
 <style lang="less">
   .chart-box {
     &-title {
-      padding-top: 33 * 2px;
-      padding-left: 24 * 2px;
+      padding-top: 33/2px;
+      padding-left: 24/2px;
     }
     &-header{
       display: flex;
-      font-size: 40*2px;
-      padding: 20*2px 0 20*2px 30*2px;
+      font-size: 20px;
+      padding: 20/2px 0 20/2px 30/2px;
       .header-left{
         display: flex;
         flex-direction: column;
-        width: 60%;
+        width: 63%;
         .header-left-item{
-          font-size: 60*2px;
+          font-size: 30px;
         }
       }
       .group-tabs{
         display: flex;
         align-items: flex-end;
-        margin-right: 7%;
+        margin-right: 7/4%;
         .group-tab{
           cursor: pointer;
-          font-size: 50*2px;
+          font-size: 25px;
           color: #999;
-          margin-left: 37*2px;
+          margin-left: 37/2px;
           line-height: 1.1;
         }
         .tab-checked{
-          font-size: 70*2px;
+          font-size: 35px;
           color: #333;
         }
       }

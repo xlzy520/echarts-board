@@ -104,7 +104,7 @@ export default {
       this.filterABCD(name === 'night' ? 'dayTime' : 'night', value)
     },
     teamFilter (data, num) {
-      return data.filter(v => v.beltLineId === num)
+      return data.filter(v => v.sameSign === num)
     },
     close () {
       this.$emit('close')

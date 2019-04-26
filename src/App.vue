@@ -19,6 +19,7 @@ export default {
 
 <style lang="less">
 #app {
+  transform: rotate(90deg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
