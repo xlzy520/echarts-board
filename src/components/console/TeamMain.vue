@@ -161,7 +161,9 @@ export default {
       },
 
       tableLoading: false,
-      disabledHour: ''
+      disabledHour: '',
+
+      navDate: this.moment().format('YYYY-MM-DD')
     }
   },
   components: {
@@ -270,6 +272,7 @@ export default {
     // 获取页面所需数据
     getConsoleData (date) {
       this.tableLoading = true
+      this.navDate = date
       backStage.getBoardData({
         date: date
       }).then(res => {
@@ -294,7 +297,10 @@ export default {
         this.data.timeData[index].workEndTime = v[1]
       })
       if (this.checkedList.length > 0) {
-        backStage.addBoardData(this.data).then(res => {
+        backStage.addBoardData({
+          ...this.data,
+          date: this.navDate
+        }).then(res => {
           this.$message.success(res.msg)
         })
       } else {
