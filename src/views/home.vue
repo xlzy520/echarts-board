@@ -52,6 +52,7 @@ export default {
     color: #c99;
     text-align: center;
     ::selection {
+      background-color: #fff;
       color: @myBlue;
     }
 

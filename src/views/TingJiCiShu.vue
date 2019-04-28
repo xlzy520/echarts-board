@@ -3,21 +3,22 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 1120px;width: 100%"
+      chartStyle="height: 240px;width: 560px"
     ></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
       id="middle"
-      chartStyle="height: 960px;width: 100%"
+      chartStyle="height: 210px;width: 560px"
     ></chart-box>
     <chart-box
       ref="bottom"
       title="各组日均平均车速趋势图"
+      :header="true"
       id="bottom"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 1280px;width: 100%"
+      chartStyle="height: 345px;width: 560px"
     ></chart-box>
   </div>
 </template>
@@ -42,11 +43,11 @@ export default {
           text: '停机次数',
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 120,
+            fontSize: 30,
             fontWeight: 'normal'
           },
-          left: 48,
-          top: 66
+          left: 12,
+          top: 10
         },
         legend: {
           data: [
@@ -54,31 +55,32 @@ export default {
               name: '月累计完成',
               icon: 'rect',
               textStyle: {
-                padding: [0, 0, 0, 28]
+                padding: [0, 0, 0, 28 / 4]
               }
             },
             {
               name: '月目标',
               icon: 'rect',
               textStyle: {
-                padding: [0, 0, 0, 28]
+                padding: [0, 0, 0, 28 / 4]
               }
             }
           ],
-          right: 120,
-          top: 66,
-          itemHeight: 96,
-          itemWidth: 96,
-          itemGap: 76,
+          right: 120 / 4,
+          top: 66 / 4,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 100,
-            itemGap: '10'
+            fontSize: 100 / 4,
+            itemGap: 10 / 4
           }
         },
         grid: {
-          top: 200,
-          left: -60,
+          top: 200 / 4,
+          left: -60 / 4,
+          bottom: 0,
           containLabel: true
         },
         xAxis: {
@@ -92,8 +94,8 @@ export default {
           axisLabel: {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
-            fontSize: 120,
-            margin: 40,
+            fontSize: 120 / 4,
+            margin: 40 / 4,
             formatter: (params, index) => {
               return (
                 '{main|' +
@@ -107,14 +109,17 @@ export default {
             rich: {
               main: {
                 align: 'left',
-                fontSize: 120
+                fontSize: 120 / 4
               },
               sub: {
-                fontSize: 80
+                fontSize: 80 / 4
               }
             }
           },
           splitLine: {
+            show: false
+          },
+          axisTick: {
             show: false
           },
           axisLine: {
@@ -125,19 +130,19 @@ export default {
           {
             name: '月累计完成',
             type: 'bar',
-            barWidth: 160,
+            barWidth: 160 / 4,
             barGap: '0%',
             label: {
               normal: {
                 show: true,
                 position: 'right',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 120,
+                fontSize: 120 / 4,
                 color: '#333',
                 formatter: (paramas, index) => {
                   return paramas.data + '次'
                 },
-                offset: [44, 0]
+                offset: [44 / 4, 0]
               }
             },
             data: this.data.haltCountData.map(v => v.monthHaltCount)
@@ -145,18 +150,18 @@ export default {
           {
             name: '月目标',
             type: 'bar',
-            barWidth: 160,
+            barWidth: 160 / 4,
             label: {
               normal: {
                 show: true,
                 position: 'right',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 120,
+                fontSize: 120 / 4,
                 color: '#333',
                 formatter: (paramas, index) => {
                   return paramas.data + '次'
                 },
-                offset: [44, 0]
+                offset: [44 / 4, 0]
               }
             },
             data: this.data.haltCountData.map(v => v.haltCountMonthGoal)
@@ -174,7 +179,7 @@ export default {
           name: v.name,
           icon: 'rect',
           textStyle: {
-            padding: [0, 0, 0, 28]
+            padding: [0, 0, 0, 28 / 4]
           }
         }
       })
@@ -207,10 +212,10 @@ export default {
           orient: 'vertical',
           data: legendData,
           left: '50%',
-          top: 300,
-          itemHeight: 96,
-          itemWidth: 96,
-          itemGap: 76,
+          top: 40,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
           formatter: name => {
             const index = legendName.indexOf(name)
             const value = lineHaltCount[index].value
@@ -218,8 +223,8 @@ export default {
           },
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 80,
-            itemGap: '10'
+            fontSize: 80 / 4,
+            itemGap: 10 / 4
           }
         },
         series: [
@@ -227,7 +232,7 @@ export default {
             name: '总线数据',
             type: 'pie',
             center: ['25%', '50%'],
-            radius: [240, 400],
+            radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
             label: {
               normal: {
@@ -257,11 +262,12 @@ export default {
       })
       let option = {
         grid: {
-          bottom: 180
+          top: 20,
+          bottom: 180 / 4
         },
         xAxis: {
           type: 'category',
-          offset: 40,
+          offset: 40 / 4,
           splitNumber: 1,
           axisLabel: {
             interval: function (index, val) {
@@ -282,18 +288,24 @@ export default {
               front: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 80,
+                fontSize: 80 / 4,
                 align: 'right',
-                width: 600
+                width: 200
               },
               end: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 80,
+                fontSize: 80 / 4,
                 align: 'left',
-                width: 600
+                width: 240
               }
             }
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
           }
         },
         yAxis: {
@@ -304,16 +316,19 @@ export default {
           axisLine: {
             show: false
           },
+          axisTick: {
+            show: false
+          },
           axisLabel: {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
-            fontSize: 80,
-            margin: 40
+            fontSize: 80 / 4,
+            margin: 40 / 4
           },
           splitLine: {
             show: true,
             lineStyle: {
-              width: 5
+              width: 5 / 4
             }
           }
         },
@@ -321,13 +336,13 @@ export default {
           {
             data: seriesData,
             type: 'line',
-            symbolSize: 35,
+            symbolSize: 35 / 4,
             itemStyle: {
               color: '#5095f3',
-              borderWidth: 10
+              borderWidth: 10 / 4
             },
             lineStyle: {
-              width: 10
+              width: 10 / 4
             }
           }
         ]
@@ -346,10 +361,21 @@ export default {
     },
     tabClick (tab, index) {
       this.drawLine(index)
+    },
+    timingUpdateData () {
+      setTimeout(() => {
+        board.getHaltCount().then(res => {
+          this.data = res.data
+        })
+      }, 1000 * 60 * 5)
     }
   },
   mounted () {
     this.getHaltCount()
+    this.timingUpdateData()
+  },
+  destroyed () {
+    clearTimeout(this.timingUpdateData())
   }
 }
 </script>
@@ -358,8 +384,7 @@ export default {
 .chart-box-header {
   &.single-header {
     justify-content: flex-end;
-    padding-top: 27 * 2px;
-    padding-bottom: 27 * 2px;
+    padding-top: 0;
   }
 }
 </style>

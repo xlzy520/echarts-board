@@ -1,11 +1,11 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 1000px;width: 100%"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 240px;width: 560px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
       id="middle"
-      chartStyle="height: 840px;width: 100%"
+      chartStyle="height: 210px;width: 560px"
     ></chart-box>
     <chart-box
       ref="bottom"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 1280px;width: 100%"
+      chartStyle="height: 345px;width: 560px"
     ></chart-box>
   </div>
 </template>
@@ -44,11 +44,11 @@ export default {
           text: '原纸利用率',
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 120,
+            fontSize: 120 / 4,
             fontWeight: 'normal'
           },
-          left: 48,
-          top: 66
+          left: 48 / 4,
+          top: 40 / 4
         },
         legend: {
           data: [
@@ -56,32 +56,33 @@ export default {
               name: '当前原纸利用率',
               icon: 'rect',
               textStyle: {
-                padding: [0, 0, 0, 28]
+                padding: [0, 0, 0, 28 / 4]
               }
             },
             {
               name: '月目标',
               icon: 'rect',
               textStyle: {
-                padding: [0, 0, 0, 28]
+                padding: [0, 0, 0, 28 / 4]
               }
             }
           ],
-          right: 120,
-          top: 66,
-          itemHeight: 96,
-          itemWidth: 96,
-          itemGap: 76,
+          right: 120 / 4,
+          top: 66 / 4,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 100,
-            itemGap: '10'
+            fontSize: 100 / 4,
+            itemGap: 10 / 4
           }
         },
         grid: {
-          top: 200,
-          left: -100,
-          right: 420,
+          top: 200 / 4,
+          left: -100 / 4,
+          bottom: 0,
+          right: 560 / 4,
           containLabel: true
         },
         xAxis: {
@@ -94,21 +95,27 @@ export default {
           type: 'category',
           inverse: true,
           data: this.data.paperUseRate.map(v => v.name),
+          axisTick: {
+            show: false
+          },
+          axisLine: {
+            show: false
+          },
           axisLabel: {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
-            fontSize: 120,
-            margin: 40,
+            fontSize: 120 / 4,
+            margin: 40 / 4,
             formatter: (params, index) => {
               return '{main|' + params + '}' + '\n{sub|(' + this.data.paperUseRate[index].paperUseRate.toFixed(2) + '%)}'
             },
             rich: {
               main: {
                 align: 'left',
-                fontSize: 120
+                fontSize: 120 / 4
               },
               sub: {
-                fontSize: 80
+                fontSize: 80 / 4
               }
             }
           },
@@ -120,19 +127,19 @@ export default {
           {
             name: '当前原纸利用率',
             type: 'bar',
-            barWidth: 160,
+            barWidth: 160 / 4,
             barGap: '0%',
             label: {
               normal: {
                 show: true,
                 position: 'right',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 120,
+                fontSize: 120 / 4,
                 color: '#333',
                 formatter: (paramas, index) => {
                   return paramas.data.toFixed(2) + '%'
                 },
-                offset: [44, 0]
+                offset: [44 / 4, 0]
               }
             },
             data: this.data.paperUseRate.map(v => v.paperUseRateMonthRate)
@@ -140,18 +147,18 @@ export default {
           {
             name: '月目标',
             type: 'bar',
-            barWidth: 160,
+            barWidth: 160 / 4,
             label: {
               normal: {
                 show: true,
                 position: 'right',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 120,
+                fontSize: 120 / 4,
                 color: '#333',
                 formatter: (paramas, index) => {
                   return paramas.data.toFixed(2) + '%'
                 },
-                offset: [44, 0]
+                offset: [44 / 4, 0]
               }
             },
             data: this.data.paperUseRate.map(v => v.paperUseRateMonthGoalRate)
@@ -168,7 +175,7 @@ export default {
           name: v.name,
           icon: 'rect',
           textStyle: {
-            padding: [0, 0, 0, 28]
+            padding: [0, 0, 0, 28 / 4]
           }
         }
       })
@@ -178,10 +185,10 @@ export default {
           orient: 'vertical',
           data: legendData,
           left: '50%',
-          top: 350,
-          itemHeight: 96,
-          itemWidth: 96,
-          itemGap: 76,
+          top: 240 / 4,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
           formatter: (name) => {
             const index = legendName.indexOf(name)
             const value = this.data.linePaperUseRate[index].value
@@ -189,8 +196,8 @@ export default {
           },
           textStyle: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 80,
-            itemGap: '10'
+            fontSize: 80 / 4,
+            itemGap: 10 / 4
           }
         },
         series: [
@@ -198,7 +205,7 @@ export default {
             name: '总线数据',
             type: 'pie',
             center: ['25%', '50%'],
-            radius: [240, 400],
+            radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
             label: {
               normal: {
@@ -208,7 +215,7 @@ export default {
               emphasis: {
                 show: true,
                 textStyle: {
-                  fontSize: '30',
+                  fontSize: 30 / 4,
                   fontWeight: 'bold'
                 }
               }
@@ -234,13 +241,17 @@ export default {
       })
       let option = {
         grid: {
-          left: 400,
-          bottom: 180
+          top: 10,
+          left: 360 / 4,
+          bottom: 260 / 4
         },
         xAxis: {
           type: 'category',
-          offset: 40,
+          offset: 40 / 4,
           splitNumber: 1,
+          axisTick: {
+            show: false
+          },
           axisLabel: {
             interval: function (index, val) {
               return index === 0 || index === seriesData.length - 1
@@ -256,18 +267,21 @@ export default {
               front: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 80,
+                fontSize: 80 / 4,
                 align: 'right',
-                width: 600
+                width: 200
               },
               end: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 80,
+                fontSize: 80 / 4,
                 align: 'left',
-                width: 600
+                width: 200
               }
             }
+          },
+          axisLine: {
+            show: false
           }
         },
         yAxis: {
@@ -280,11 +294,14 @@ export default {
           axisLine: {
             show: false
           },
+          axisTick: {
+            show: false
+          },
           axisLabel: {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
-            fontSize: 80,
-            margin: 40,
+            fontSize: 80 / 4,
+            margin: 40 / 4,
             formatter: (params, index) => {
               if (params < 98) {
                 return '0.00%'
@@ -295,7 +312,7 @@ export default {
           splitLine: {
             show: true,
             lineStyle: {
-              width: 5
+              width: 5 / 4
             }
           }
         },
@@ -308,20 +325,25 @@ export default {
                 yAxis: 98,
                 lineStyle: {
                   color: '#f78787',
-                  width: 5,
+                  width: 5 / 4,
                   type: 'solid'
+                },
+                label: {
+                  formatter: () => {
+                    return '98%'
+                  }
                 }
               }
             ]
           },
           type: 'line',
-          symbolSize: 35,
+          symbolSize: 35 / 4,
           itemStyle: {
             color: '#5095f3',
-            borderWidth: 10
+            borderWidth: 10 / 4
           },
           lineStyle: {
-            width: 10
+            width: 10 / 4
           }
         }]
       }
@@ -340,10 +362,21 @@ export default {
     tabClick (tab, index = 0) {
       this.chartHeader.leftValue = this.data.teamTrendMap[index].paperUseRateMonthGoalRate
       this.drawLine(index)
+    },
+    timingUpdateData () {
+      setTimeout(() => {
+        board.getPaperUseRate().then(res => {
+          this.data = res.data
+        })
+      }, 1000 * 60 * 5)
     }
   },
   mounted () {
     this.getPaperUseRate()
+    this.timingUpdateData()
+  },
+  destroyed () {
+    clearTimeout(this.timingUpdateData())
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="charts-wrapper">
     <chart-box ref="top" title="平均车速" id="top"
-               chartStyle="height: 418px;width: 560px"></chart-box>
+               chartStyle="height: 428px;width: 560px"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
                :header="chartHeader"
                :group-data="data.teamTrendMap"
@@ -184,7 +184,9 @@ export default {
       })
       let option = {
         grid: {
-          bottom: 45
+          top: 10,
+          left: 60,
+          bottom: 60
         },
         xAxis: {
           type: 'category',
@@ -207,16 +209,22 @@ export default {
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 20,
                 align: 'right',
-                width: 250
+                width: 200
               },
               end: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 20,
                 align: 'left',
-                width: 250
+                width: 240
               }
             }
+          },
+          axisLine: {
+            show: false
+          },
+          axisTick: {
+            show: false
           }
         },
         yAxis: {
@@ -321,10 +329,21 @@ export default {
     tabClick (tab, index) {
       this.drawLine(index)
       this.chartHeader.leftValue = tab.avgSpeedMonthGoal
+    },
+    timingUpdateData () {
+      setTimeout(() => {
+        board.getSpeed().then(res => {
+          this.data = res.data
+        })
+      }, 1000 * 60 * 5)
     }
   },
   mounted () {
     this.getSpeedData()
+    this.timingUpdateData()
+  },
+  destroyed () {
+    clearTimeout(this.timingUpdateData())
   }
 }
 </script>
@@ -333,8 +352,7 @@ export default {
 .charts-wrapper {
   color: #333;
   font-size: 30px;
-  height: 100%;
-  width: 560px;
-
+  transform: rotate(90deg);
+  height: 960px;
 }
 </style>

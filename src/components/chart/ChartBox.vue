@@ -88,6 +88,7 @@ export default {
       padding-left: 24/2px;
     }
     &-header{
+      width: 540px;
       display: flex;
       font-size: 20px;
       padding: 20/2px 0 20/2px 30/2px;
