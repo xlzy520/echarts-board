@@ -364,6 +364,7 @@ export default {
   }
   .console-tabs {
     margin: 0 42*2px;
+    font-size: 60px;
     input.table-input{
       width: 80%;
       text-align: center;
