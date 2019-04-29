@@ -102,6 +102,13 @@ export default {
           scopedSlots: { customRender: 'day' },
           customCell: (record, index) => {
             if (this.activeTab !== 4) {
+              if (this.data.teamBoardData[this.activeTab].canWrite) {
+                return {
+                  class: {
+                    readOnly: true
+                  }
+                }
+              }
               if ([0, 1, 4, 5].includes(index)) {
                 return {
                   class: {
@@ -170,7 +177,7 @@ export default {
     cacheRange (index) {
       this.cacheTimeRange[index] = this.range[index]
     },
-    //取消选择
+    // 取消选择
     cancelTimeRange (index) {
       this.range[index] = this.cacheTimeRange[index]
       this.$forceUpdate()
@@ -216,7 +223,9 @@ export default {
         return false
       } else if (indexColumn === 0) {
         if (this.activeTab !== 4) {
-          if (disabledRows.includes(record.number)) {
+          if (this.data.teamBoardData[this.activeTab].canWrite) {
+            return false
+          } else if (disabledRows.includes(record.number)) {
             return true
           }
         } else {
@@ -257,13 +266,19 @@ export default {
     // 获取另外四个班组的某个项目的总和
     getCount (prop, index) {
       const precision = [2, 0, 3, 2, 2, 2, 2, 2, 2, 0, 0, 1] // 总线从上到下的每行的精度
+      const checkTabs = this.data.timeData.filter(v => v.selectTime === 1).map(v => v.teamName)
       let total = 0
-      for (let i = 0; i < 4; i++) {
-        total += Number(this.data.teamBoardData[i].boardData[index][prop])
-      }
+      this.data.teamBoardData.map(v => {
+        if (v.canWrite === 1) {
+          total += Number(v.boardData[index][prop])
+        }
+      })
+      // for (let i = 0; i < 4; i++) {
+      //   total += Number(this.data.teamBoardData[i].boardData[index][prop])
+      // }
       const averageIndex = [0, 2, 3, 4, 5, 6, 7] // 需要计算平均值的列
       if (averageIndex.includes(index)) {
-        total = total / 4
+        total = total / checkTabs.length
       }
       return total.toFixed(precision[index])
     },
@@ -275,12 +290,12 @@ export default {
         date: date
       }).then(res => {
         this.data = res.data
+        this.checkedList = res.data.timeData.filter(v => v.selectTime === 1).map(v => v.teamName)
         this.range = res.data.timeData.map(v => {
           return [v.workBeginTime, v.workEndTime]
         })
         this.cacheTimeRange = this.range.concat([])
         this.count()
-        this.checkedList = ['A', 'B', 'C', 'D']
       }).finally(() => {
         this.tableLoading = false
       })
@@ -297,6 +312,12 @@ export default {
       this.range.map((v, index) => {
         this.data.timeData[index].workBeginTime = v[0]
         this.data.timeData[index].workEndTime = v[1]
+      })
+      const allCheck = ['A', 'B', 'C', 'D']
+      allCheck.map((v, index) => {
+        if (!this.checkedList.includes(v)) {
+          this.data.timeData[index].selectTime = 0
+        }
       })
       if (this.checkedList.length > 0) {
         backStage.addBoardData({
