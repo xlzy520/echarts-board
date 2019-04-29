@@ -77,12 +77,8 @@ export default {
       teamVisible: false,
 
       checkedList: ['A', 'B', 'C', 'D'],
-      cacheTimeRange: [
-
-      ],
-      range: [
-        [], [], [], []
-      ],
+      cacheTimeRange: [],
+      range: [[], [], [], []],
       activeTab: 0,
       tabs: ['A', 'B', 'C', 'D', '总线'],
       columns: [
@@ -170,13 +166,16 @@ export default {
     SwitchTeam, Modal
   },
   methods: {
+    // 缓存选择的时间段
     cacheRange (index) {
       this.cacheTimeRange[index] = this.range[index]
     },
+    //取消选择
     cancelTimeRange (index) {
       this.range[index] = this.cacheTimeRange[index]
       this.$forceUpdate()
     },
+    // 选择时间段
     timeRangeChange (value, dateString, index) {
       this.range[index] = dateString
       this.$forceUpdate()
@@ -229,6 +228,7 @@ export default {
         return this.activeTab !== 4
       }
     },
+    // 表格输入框输入规则
     inputChange (value, record, key) {
       if (value === '' || Number(value) >= 0) {
         record[key] = value
@@ -236,9 +236,6 @@ export default {
       } else {
         this.$message.warning('请输入数字')
       }
-    },
-    close () {
-      this.teamVisible = false
     },
     // 累加ABCD到总线
     count () {
@@ -291,6 +288,9 @@ export default {
     // 换班弹窗
     exchangeTeam () {
       this.teamVisible = true
+    },
+    close () {
+      this.teamVisible = false
     },
     save () {
       // 格式化之后再保存
