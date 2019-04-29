@@ -259,15 +259,16 @@ export default {
     },
     // 获取另外四个班组的某个项目的总和
     getCount (prop, index) {
+      const precision = [2, 0, 3, 2, 2, 2, 2, 2, 2, 0, 0, 1] // 总线从上到下的每行的精度
       let total = 0
       for (let i = 0; i < 4; i++) {
         total += Number(this.data.teamBoardData[i].boardData[index][prop])
       }
-      const averageIndex = [0, 2, 3, 4, 5, 6, 7]
+      const averageIndex = [0, 2, 3, 4, 5, 6, 7] // 需要计算平均值的列
       if (averageIndex.includes(index)) {
         total = total / 4
       }
-      return total
+      return total.toFixed(precision[index])
     },
     // 获取页面所需数据
     getConsoleData (date) {
