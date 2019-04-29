@@ -35,7 +35,7 @@ Vue.use(Input)
 message.config({
   top: `80px`,
   duration: 1.5,
-  maxCount: 3
+  maxCount: 1
 })
 
 Vue.config.productionTip = false
