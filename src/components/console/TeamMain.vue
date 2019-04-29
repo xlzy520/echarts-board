@@ -282,6 +282,7 @@ export default {
         })
         this.cacheTimeRange = this.range.concat([])
         this.count()
+        this.checkedList = ['A', 'B', 'C', 'D']
       }).finally(() => {
         this.tableLoading = false
       })
