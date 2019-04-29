@@ -230,7 +230,7 @@ export default {
       }
     },
     inputChange (value, record, key) {
-      if (value !== '' && Number(value) >= 0) {
+      if (value === '' || Number(value) >= 0) {
         record[key] = value
         this.count()
       } else {
@@ -302,6 +302,7 @@ export default {
           date: this.navDate
         }).then(res => {
           this.$message.success(res.msg)
+          this.getConsoleData(this.navDate)
         })
       } else {
         this.$message.error('请选择班组！')
