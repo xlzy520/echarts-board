@@ -54,7 +54,7 @@ export default {
         legend: {
           data: [
             {
-              name: '当前客诉率',
+              name: '月累计完成',
               icon: 'rect',
               textStyle: {
                 padding: [0, 0, 0, 28 / 4]
@@ -125,7 +125,7 @@ export default {
         },
         series: [
           {
-            name: '当前客诉率',
+            name: '月累计完成',
             type: 'bar',
             barWidth: 160 / 4,
             barGap: '0%',
