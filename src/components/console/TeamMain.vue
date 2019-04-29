@@ -103,16 +103,11 @@ export default {
           customCell: (record, index) => {
             if (this.activeTab !== 4) {
               if (this.data.teamBoardData[this.activeTab].canWrite) {
-                return {
-                  class: {
-                    readOnly: true
-                  }
-                }
-              }
-              if ([0, 1, 4, 5].includes(index)) {
-                return {
-                  class: {
-                    readOnly: true
+                if ([0, 1, 4, 5].includes(index)) {
+                  return {
+                    class: {
+                      readOnly: true
+                    }
                   }
                 }
               }
@@ -126,7 +121,7 @@ export default {
               }
             }
           }
-        }, {
+        },{
           title: '月累计(总数)',
           width: '20%',
           dataIndex: 'month',
@@ -224,14 +219,10 @@ export default {
       } else if (indexColumn === 0) {
         if (this.activeTab !== 4) {
           if (this.data.teamBoardData[this.activeTab].canWrite) {
-            return false
-          } else if (disabledRows.includes(record.number)) {
-            return true
+            return disabledRows.includes(record.number)
           }
         } else {
-          if (record.number === 7 && index > 10) {
-            return true
-          }
+          return record.number === 7 && index > 10
         }
       } else {
         return this.activeTab !== 4
@@ -269,13 +260,10 @@ export default {
       const checkTabs = this.data.timeData.filter(v => v.selectTime === 1).map(v => v.teamName)
       let total = 0
       this.data.teamBoardData.map(v => {
-        if (v.canWrite === 1) {
+        if (v.canWrite) {
           total += Number(v.boardData[index][prop])
         }
       })
-      // for (let i = 0; i < 4; i++) {
-      //   total += Number(this.data.teamBoardData[i].boardData[index][prop])
-      // }
       const averageIndex = [0, 2, 3, 4, 5, 6, 7] // 需要计算平均值的列
       if (averageIndex.includes(index)) {
         total = total / checkTabs.length
