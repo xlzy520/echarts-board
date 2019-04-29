@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 240px;width: 560px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 280px;width: 560px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 345px;width: 560px"
+      chartStyle="height: 305px;width: 560px"
     ></chart-box>
   </div>
 </template>
@@ -80,7 +80,7 @@ export default {
           }
         },
         grid: {
-          top: 200 / 4,
+          top: 320 / 4,
           left: -100 / 4,
           bottom: 0,
           right: 560 / 4,
@@ -93,14 +93,15 @@ export default {
         yAxis: {
           type: 'category',
           inverse: true,
+          offset: -20,
           data: this.data.avgComplaintRate.map(v => v.name),
           axisLabel: {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
             fontSize: 120 / 4,
-            margin: 40 / 4,
+            margin: 140 / 4,
             formatter: (params, index) => {
-              return '{main|' + params + '}' + '\n{sub|(' + this.data.avgComplaintRate[index].complaintRate + '%)}'
+              return '{main|' + params + '}' + '\n{sub|' + this.data.avgComplaintRate[index].complaintRate + '%}'
             },
             rich: {
               main: {
@@ -253,7 +254,7 @@ export default {
       let option = {
         grid: {
           top: 10,
-          left: 360 / 4,
+          left: 400 / 4,
           bottom: 260 / 4
         },
         xAxis: {

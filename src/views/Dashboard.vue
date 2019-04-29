@@ -302,8 +302,8 @@ export default {
         offsetCenter: [isLeft ? '-40%' : '40%', '-25%'],
         formatter: '2',
         rich: {},
-        width: 193 / 4,
-        height: 235 / 4,
+        width: 235 / 4,
+        height: 193 / 4,
         backgroundColor: {
           image: image
         }
@@ -352,7 +352,7 @@ export default {
 .charts-wrapper {
   color: #333;
   font-size: 30px;
-  transform: rotate(90deg);
+  transform: rotate(-90deg);
   height: 960px;
 }
 </style>

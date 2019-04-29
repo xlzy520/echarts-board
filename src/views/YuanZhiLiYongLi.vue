@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 240px;width: 560px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 300px;width: 560px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 345px;width: 560px"
+      chartStyle="height: 305px;width: 560px"
     ></chart-box>
   </div>
 </template>
@@ -79,16 +79,15 @@ export default {
           }
         },
         grid: {
-          top: 200 / 4,
+          top: 320 / 4,
           left: -100 / 4,
           bottom: 0,
-          right: 560 / 4,
           containLabel: true
         },
         xAxis: {
           show: false,
           type: 'value',
-          min: 97,
+          min: 98,
           max: 100
         },
         yAxis: {
@@ -107,7 +106,7 @@ export default {
             fontSize: 120 / 4,
             margin: 40 / 4,
             formatter: (params, index) => {
-              return '{main|' + params + '}' + '\n{sub|(' + this.data.paperUseRate[index].paperUseRate.toFixed(2) + '%)}'
+              return '{main|' + params + '}' + '\n{sub|' + this.data.paperUseRate[index].paperUseRate.toFixed(2) + '%}'
             },
             rich: {
               main: {
@@ -242,7 +241,7 @@ export default {
       let option = {
         grid: {
           top: 10,
-          left: 360 / 4,
+          left: 400 / 4,
           bottom: 260 / 4
         },
         xAxis: {
