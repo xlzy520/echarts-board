@@ -110,6 +110,12 @@ export default {
                     }
                   }
                 }
+              } else {
+                return {
+                  class: {
+                    readOnly: true
+                  }
+                }
               }
             } else {
               if (index < 11) {
