@@ -37,12 +37,16 @@ export default {
         return 'work-day'
       }
     },
-    updateDate (date) {
-      this.date = date
-      this.$emit('update-date', date.format('YYYY-MM-DD'))
+    updateDate (current) {
+      const month = current.format('MM')
+      const day = current.format('DD')
+      if (month === this.moment().format('MM') && this.workDays.includes(Number(day))) {
+        this.date = current
+        this.$emit('update-date', current.format('YYYY-MM-DD'))
+      }
     },
     disabledDate (current) {
-      return current && current > this.moment().endOf('day')
+      return (current && current > this.moment().endOf('day')) || !this.workDays.includes(Number(current.format('DD')))
     },
     getWorkDay () {
       backStage.getWorkDay({
