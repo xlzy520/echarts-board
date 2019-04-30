@@ -56,7 +56,6 @@ export default {
   },
   methods: {
     draw (option) {
-      console.log(1)
       const myChart = this.$echarts.init(document.getElementById(this.id))
       myChart.setOption(option, true)
     },
