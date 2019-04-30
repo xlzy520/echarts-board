@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 300px;width: 560px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 280px;width: 560px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -37,7 +37,6 @@ export default {
     }
   },
   methods: {
-    // 客诉率
     drawBar () {
       let option = {
         color: ['#000f84', '#5095f3'],
@@ -81,8 +80,8 @@ export default {
         },
         grid: {
           top: 320 / 4,
-          left: -100 / 4,
-          right: 125,
+          left: -20,
+          right: -200,
           bottom: 0,
           containLabel: true
         },
@@ -199,7 +198,7 @@ export default {
         legend: {
           orient: 'vertical',
           data: legendData,
-          left: '50%',
+          left: '45%',
           top: 240 / 4,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
