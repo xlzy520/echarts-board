@@ -90,6 +90,7 @@ export default {
         eveningShift: selectEveningShift
       }).then(res => {
         this.$message.success(res.msg)
+        this.close()
       })
     },
     filterABCD (type, value) {
