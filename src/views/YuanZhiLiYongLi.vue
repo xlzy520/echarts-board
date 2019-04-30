@@ -32,12 +32,13 @@ export default {
         leftTitle: '原纸利用率月目标',
         leftValue: '',
         leftUnit: '%'
-      }
+      },
+      paperUseRate: []
     }
   },
   methods: {
     // 客诉率
-    drawKeSuLv () {
+    drawBar () {
       let option = {
         color: ['#000f84', '#5095f3'],
         title: {
@@ -67,7 +68,7 @@ export default {
               }
             }
           ],
-          right: 120 / 4,
+          right: 100 / 4,
           top: 66 / 4,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
@@ -81,13 +82,14 @@ export default {
         grid: {
           top: 320 / 4,
           left: -100 / 4,
+          right: 125,
           bottom: 0,
           containLabel: true
         },
         xAxis: {
           show: false,
           type: 'value',
-          min: 98,
+          min: 97.5,
           max: 100
         },
         yAxis: {
@@ -135,13 +137,20 @@ export default {
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 120 / 4,
                 color: '#333',
-                formatter: (paramas, index) => {
-                  return paramas.data.toFixed(2) + '%'
+                formatter: (paramas) => {
+                  // 解决小于98%的数值显示
+                  return this.paperUseRate[paramas.dataIndex].paperUseRateMonthRate.toFixed(2) + '%'
                 },
                 offset: [44 / 4, 0]
               }
             },
-            data: this.data.paperUseRate.map(v => v.paperUseRateMonthRate)
+            data: this.data.paperUseRate.map(v => {
+              // 解决小于98%的数值显示
+              if (v.paperUseRateMonthRate < 98) {
+                v.paperUseRateMonthRate = 97.5 + (0.5 / 49 * v.paperUseRateMonthRate)
+              }
+              return v.paperUseRateMonthRate
+            })
           },
           {
             name: '月目标',
@@ -154,13 +163,20 @@ export default {
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 120 / 4,
                 color: '#333',
-                formatter: (paramas, index) => {
-                  return paramas.data.toFixed(2) + '%'
+                formatter: (paramas) => {
+                  // 解决小于98%的数值显示
+                  return this.paperUseRate[paramas.dataIndex].paperUseRateMonthGoalRate.toFixed(2) + '%'
                 },
                 offset: [44 / 4, 0]
               }
             },
-            data: this.data.paperUseRate.map(v => v.paperUseRateMonthGoalRate)
+            data: this.data.paperUseRate.map(v => {
+              // 解决小于98%的数值显示
+              if (v.paperUseRateMonthGoalRate < 98) {
+                v.paperUseRateMonthGoalRate = 97.5 + (0.5 / 49 * v.paperUseRateMonthGoalRate)
+              }
+              return v.paperUseRateMonthGoalRate
+            })
           }
         ]
       }
@@ -352,7 +368,8 @@ export default {
     getPaperUseRate () {
       return board.getPaperUseRate().then(res => {
         this.data = res.data
-        this.drawKeSuLv()
+        this.paperUseRate = JSON.parse(JSON.stringify(this.data.paperUseRate))
+        this.drawBar()
         this.drawZongXianShuJu()
         this.tabClick(res.data.teamTrendMap[0], 0)
         this.$refs.bottom.timer()
