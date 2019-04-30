@@ -127,7 +127,7 @@ export default {
               }
             }
           }
-        },{
+        }, {
           title: '月累计(总数)',
           width: '20%',
           dataIndex: 'month',
@@ -263,14 +263,15 @@ export default {
     // 获取另外四个班组的某个项目的总和
     getCount (prop, index) {
       const precision = [2, 0, 3, 2, 2, 2, 2, 2, 2, 0, 0, 1] // 总线从上到下的每行的精度
-      const checkTabs = this.data.timeData.filter(v => v.selectTime === 1).map(v => v.teamName)
+      const checkTabs = this.data.teamBoardData.filter(v => v.canWrite === 1 && v.teamName !== '总线')
       let total = 0
-      this.data.teamBoardData.map(v => {
-        if (v.canWrite) {
-          total += Number(v.boardData[index][prop])
-        }
+      checkTabs.map(v => {
+        total += Number(v.boardData[index][prop])
       })
       const averageIndex = [0, 2, 3, 4, 5, 6, 7] // 需要计算平均值的列
+      if (checkTabs.length === 0) {
+        return '暂无数据'
+      }
       if (averageIndex.includes(index)) {
         total = total / checkTabs.length
       }
