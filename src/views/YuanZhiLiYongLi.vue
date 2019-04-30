@@ -249,7 +249,7 @@ export default {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          // todo 小于98就直接为0行，97.5为伪0行,将97.5-98分成98份
+          // 小于98就直接为0行，97.5为伪0行,将97.5-98分成98份
           value: [v.date, v.value < 98 ? 97.5 + (0.5 / 98) * v.value : v.value]
         }
       })
