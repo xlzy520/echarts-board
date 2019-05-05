@@ -248,7 +248,8 @@ export default {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
             fontSize: 80 / 4,
-            margin: 40 / 4
+            margin: 40 / 4,
+            formatter: val => Number(val)
           },
           splitLine: {
             show: true,
