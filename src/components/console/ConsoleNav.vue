@@ -67,34 +67,36 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 90*2px;
-    font-size: 24*2px;
+    height: 90px;
+    font-size: 24px;
     color: #fff;
     background-color: #333;
     &-logo {
-      padding: 26*2px 10*2px 26*2px 40*2px;
+      padding: 26px 10px 26px 40px;
       img {
-        height: 38*2px;
+        height: 38px;
       }
     }
     &-title {
-      padding: 41*2px 0 27*2px 0;
+      padding: 41px 0 27px 0;
     }
     &-date {
       flex-grow: 1;
       text-align: right;
-      padding-right: 48*2px;
+      padding-right: 48px;
     }
     .ant-calendar-picker{
-      width: 210px!important;
+      width: 100px;
     }
     .ant-calendar-body .ant-calendar-cell .ant-calendar-date {
       width: auto;
     }
   }
   .work-day{
-    border-radius: 10px;
     color: #fff;
     background: #ffa161;
+    &:hover{
+      background: #ff7f36;
+    }
   }
 </style>

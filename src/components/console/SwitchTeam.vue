@@ -122,39 +122,39 @@ export default {
     display: flex;
     flex-direction: column;
     color: #000;
-    font-size: 16*2px;
-    margin-left: 76*2-24px;
+    font-size: 16px;
+    margin-left: 76-24px;
     .setting-item {
       display: flex;
-      height: 30*2px;
-      line-height: 30*2px;
-      margin-top: 40*2-24px;
+      height: 30px;
+      line-height: 30px;
+      margin-top: 40-24px;
       &>label {
-        width: 80*2px;
+        width: 80px;
         text-align: right;
       }
       .ant-radio-wrapper{
         color: #000;
-        font-size: 16*2px;
-        margin-right: 8*2px;
+        font-size: 16px;
+        margin-right: 8px;
         span.ant-radio + *{
-          padding-left: 8*2px;
-          padding-right: 8*2px;
+          padding-left: 8px;
+          padding-right: 8px;
         }
         .ant-radio-checked .ant-radio-inner {
           border-color: #5095f3;
         }
         .ant-radio-inner{
-          width: 16*2px;
-          height: 16*2px;
-          border-width: 1*2px;
-          border-radius: 100*2px;
+          width: 16px;
+          height: 16px;
+          border-width: 1px;
+          border-radius: 100px;
           &:after{
-            width: 8*2px;
-            height: 8*2px;
-            left: 3*2px;
-            top: 3*2px;
-            border-radius: 8*2px;
+            width: 8px;
+            height: 8px;
+            left: 3px;
+            top: 3px;
+            border-radius: 8px;
           }
         }
       }
@@ -165,16 +165,16 @@ export default {
     &-footer {
       display: flex;
       justify-content: center;
-      height: 32*2px;
-      line-height: 32*2px;
-      margin-top: 45*2px;
+      height: 32px;
+      line-height: 32px;
+      margin-top: 45px;
       .ant-btn {
-        margin-left: 22*2px;
-        width: 96*2px;
-        padding: 0 15*2px;
-        font-size: 14*2px;
-        border-radius: 4*2px;
-        height: 32*2px;
+        margin-left: 22px;
+        width: 96px;
+        padding: 0 15px;
+        font-size: 14px;
+        border-radius: 4px;
+        height: 32px;
       }
       .ant-btn-default {
         color: #5095f3;
@@ -186,29 +186,29 @@ export default {
     }
 
     .ant-select {
-      font-size: 16*2px;
+      font-size: 16px;
       color: #000;
       &-selection {
-        border-radius: 4*2px;
-        border: 1*2px solid #d9d9d9;
-        border-top-width: 1.02*2px;
+        border-radius: 4px;
+        border: 1px solid #d9d9d9;
+        border-top-width: 1.02px;
         &--single {
-          height: 32*2px;
+          height: 32px;
         }
         &__rendered {
-          margin-left: 11*2px;
-          margin-right: 11*2px;
-          line-height: 30*2px;
+          margin-left: 11px;
+          margin-right: 11px;
+          line-height: 30px;
         }
         &-selected-value {
-          padding-right: 20*2px;
+          padding-right: 20px;
         }
       }
       &-arrow{
         color: #000;
-        right: 11*2px;
-        margin-top: -6*2px;
-        font-size: 14*2px;
+        right: 11px;
+        margin-top: -6px;
+        font-size: 14px;
       }
     }
   }

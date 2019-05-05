@@ -334,42 +334,41 @@ export default {
 </script>
 
 <style lang="less">
-  @import "../../styles/ant-calendar";
   .ant-table-placeholder {
-    padding: 16*2px 16*2px;
-    font-size: 30*2px;
+    padding: 16px 16px;
+    font-size: 30px;
   }
   .readOnly{
     background-color: #eee;
   }
   .console-team {
     width: 55%;
-    margin: 80px auto 0;
+    margin: 40px auto 0;
     &-name {
       display: inline-block;
       position: relative;
-      width: 80px;
-      font-size: 80px;
+      width: 40px;
+      font-size: 40px;
       vertical-align: middle;
       color: #333;
-      bottom: 10px;
-      margin: 0 42px;
+      bottom: 5px;
+      margin: 0 21px;
     }
 
     .ant-checkbox-inner {
-      width: 33*2px;
-      height: 33*2px;
+      width: 33px;
+      height: 33px;
       border-radius: 50%;
       &:after{
-        transform: rotate(45deg) scale(4);
-        left: 30.142858px;
-        top: 24.285714px;
+        transform: rotate(45deg) scale(2);
+        left: 32.142858/2.5px;
+        top: 24.285714/2.5px;
       }
     }
     .ant-checkbox-wrapper {
-      height: 40*2px;
-      line-height: 40*2px;
-      margin-bottom: 40*2px;
+      height: 40px;
+      line-height: 40px;
+      margin-bottom: 33px;
       &:nth-child(3), &:nth-child(4) {
         margin-bottom: 0;
       }
@@ -377,13 +376,13 @@ export default {
         margin-left: 0;
       }
       &:nth-child(2n) {
-        margin-left: 69*2px;
+        margin-left: 69px;
       }
     }
   }
   .console-tabs {
-    margin: 0 42*2px;
-    font-size: 60px;
+    margin: 0 42px;
+    font-size: 30px;
     input.table-input{
       width: 80%;
       text-align: center;
@@ -397,10 +396,10 @@ export default {
         color: #999;
         line-height: 1;
         &:not(:first-child) {
-          margin-left: 20*2px;
+          margin-left: 20px;
         }
         &.active-tab {
-          font-size: 50*2px;
+          font-size: 50px;
           color: #5095f3;
         }
       }
@@ -408,24 +407,27 @@ export default {
     &-content {
       //表格loading样式
       .ant-spin-nested-loading > div > .ant-spin{
-        max-height: 400*2px;
+        max-height: 400px;
         .ant-spin-dot{
-          margin: -10*2px;
+          margin: -10px;
         }
       }
       .ant-spin{
-        font-size: 14*2px;
+        font-size: 14px;
         &-dot{
-          font-size: 20*2px;
-          width: 20*8px;
-          height: 20*8px;
+          font-size: 20px;
+          width: 20*4px;
+          height: 20*4px;
           i{
-            width: 9*8px;
-            height: 9*8px;
+            width: 9*4px;
+            height: 9*4px;
           }
         }
       }
 
+      .ant-table-thead > tr > th, .ant-table-tbody > tr > td{
+        padding: 8px;
+      }
       .ant-table-thead > tr > th{
         background: #f3f7fb;
       }
@@ -433,18 +435,18 @@ export default {
         border-color: #ddd;
       }
       .ant-table-bordered .ant-table-thead > tr > th, .ant-table-bordered .ant-table-tbody > tr > td {
-        font-size: 30*2px;
+        font-size: 30px;
         color: #727578;
       }
       .ant-table-bordered .ant-table-thead > tr > th:not(:last-child) {
         border-right: none;
       }
       .ant-input{
-        padding: 4*2px 11*2px;
-        height: 45*2px;
-        font-size: 30*2px;
-        border: 1*2px solid #d9d9d9;
-        border-radius: 4*2px;
+        padding: 4px 11px;
+        height: 45px;
+        font-size: 30px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
       }
     }
   }
@@ -452,15 +454,15 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 35*2px 0;
+    padding: 35px 0;
     & > button {
-      font-size: 34*2px;
+      font-size: 34px;
       color: #999;
-      width: 240*2px;
-      margin-left: 37*2px;
-      padding: 0 15*2px;
-      border-radius: 4*2px;
-      height: 60*2px;
+      width: 240px;
+      margin-left: 37px;
+      padding: 0 15px;
+      border-radius: 4px;
+      height: 60px;
     }
     .save {
       color: #fff;
@@ -468,17 +470,17 @@ export default {
   }
   // after body
   .ant-select-dropdown{
-    box-shadow: 0 2*2px 8*2px rgba(0, 0, 0, 0.15);
-    border-radius: 4*2px;
-    font-size: 14*2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    font-size: 14px;
     &-menu{
-      max-height: 250*2px;
+      max-height: 250px;
       &-item{
         color: #000;
-        padding: 5*2px 12*2px;
-        line-height: 22*2px;
+        padding: 5px 12px;
+        line-height: 22px;
         &:first-child{
-          border-radius: 4*2px 4*2px 0 0;
+          border-radius: 4px 4px 0 0;
         }
       }
     }
@@ -486,26 +488,26 @@ export default {
 
   .ant-spin-very-large{
     & > div > .ant-spin-lg .ant-spin-dot{
-      margin-left: -16*2px;
+      margin-left: -16px;
     }
     .ant-spin-lg .ant-spin-dot{
-      font-size: 32*2px;
-      width: 32*2px;
-      height: 32*2px;
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
       i{
-        width: 14*2px;
-        height: 14*2px;
+        width: 14px;
+        height: 14px;
       }
     }
   }
 
   .ant-calendar-footer-extra{
     .ant-btn {
-      padding: 0 15*2px;
-      font-size: 14*2px;
-      border-radius: 4*2px;
-      height: 32*2px;
-      box-shadow: 0 2*2px 0 rgba(0, 0, 0, 0.015);
+      padding: 0 15px;
+      font-size: 14px;
+      border-radius: 4px;
+      height: 32px;
+      box-shadow: 0 2px 0 rgba(0, 0, 0, 0.015);
     }
   }
 
