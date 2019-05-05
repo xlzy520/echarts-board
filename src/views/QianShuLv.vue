@@ -73,6 +73,23 @@ export default {
         yAxis: [
           {
             type: 'value',
+            min: 0,
+            max: 6,
+            interval: 2,
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 20,
+              formatter: val => val.toFixed(2) + '%'
+            }
+          },
+          {
+            type: 'value',
             min: 85,
             max: 100,
             interval: 5,
@@ -89,29 +106,30 @@ export default {
                 return params === 85 ? '0.00%' : Number(params).toFixed(2) + '%'
               }
             }
-          },
-          {
-            type: 'value',
-            min: 0,
-            max: 6,
-            interval: 2,
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: val => val.toFixed(2) + '%'
-            }
           }
         ],
         series: [
           {
             name: '欠数率',
             type: 'bar',
+            data: this.data.ownRateAndPunctualRate.map(v => v.todayOwnRate),
+            label: {
+              normal: {
+                show: true,
+                position: 'top',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 20,
+                color: '#333',
+                formatter: params => params.value.toFixed(2) + '%'
+              }
+            },
+            barWidth: 40,
+            barGap: '80%'
+          },
+          {
+            name: '准时入库率',
+            type: 'bar',
+            yAxisIndex: 1,
             data: this.data.ownRateAndPunctualRate.map(v => {
               if (v.todayPunctualRate < 90) {
                 return 85 + 5 / 90 * v.todayPunctualRate
@@ -135,37 +153,21 @@ export default {
             },
             barWidth: 40,
             barGap: '80%'
-          },
-          {
-            name: '准时入库率',
-            type: 'bar',
-            yAxisIndex: 1,
-            data: this.data.ownRateAndPunctualRate.map(v => v.todayOwnRate),
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
-                color: '#333',
-                formatter: params => params.value.toFixed(2) + '%'
-              }
-            },
-            barWidth: 40,
-            barGap: '80%'
           }
         ]
       }
       this.$refs.top.draw(option)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.ownRateTeamTrendMap[index].trendMap.map(v => {
+      // 准时入库率
+      const seriesData = this.data.punctualRateTeamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
           value: [v.date, v.value < 90 ? 85 + (5 / 90) * v.value : v.value]
         }
       })
-      const seriesDataSecond = this.data.punctualRateTeamTrendMap[index].trendMap.map(v => {
+      // 欠数率
+      const seriesDataSecond = this.data.ownRateTeamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
           value: [v.date, v.value]
@@ -242,6 +244,29 @@ export default {
         yAxis: [
           {
             type: 'value',
+            min: 0,
+            max: 6,
+            interval: 2,
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: '#333',
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 20,
+              formatter: val => val.toFixed(2) + '%'
+            },
+            splitLine: {
+              lineStyle: {
+                width: 1.25
+              }
+            }
+          },
+          {
+            type: 'value',
             min: 85,
             max: 100,
             interval: 5,
@@ -264,36 +289,13 @@ export default {
                 width: 1.25
               }
             }
-          },
-          {
-            type: 'value',
-            min: 0,
-            max: 6,
-            interval: 2,
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: val => val.toFixed(2) + '%'
-            },
-            splitLine: {
-              lineStyle: {
-                width: 1.25
-              }
-            }
           }
         ],
         series: [
           {
             name: '欠数率',
             yAxisIndex: 0,
-            data: seriesData,
+            data: seriesDataSecond,
             type: 'line',
             symbolSize: 8,
             itemStyle: {
@@ -305,7 +307,7 @@ export default {
           },
           {
             name: '准时入库率',
-            data: seriesDataSecond,
+            data: seriesData,
             yAxisIndex: 1,
             type: 'line',
             symbolSize: 8,
