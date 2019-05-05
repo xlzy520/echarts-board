@@ -359,7 +359,7 @@ export default {
       this.drawLine(index)
     },
     timingUpdateData () {
-      setTimeout(() => {
+      setInterval(() => {
         board.getHaltCount().then(res => {
           this.data = res.data
         })
@@ -371,7 +371,7 @@ export default {
     this.timingUpdateData()
   },
   destroyed () {
-    clearTimeout(this.timingUpdateData())
+    clearInterval(this.timingUpdateData())
   }
 }
 </script>

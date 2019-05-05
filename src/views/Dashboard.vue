@@ -314,7 +314,7 @@ export default {
       this.chartHeader.leftValue = tab.avgSpeedMonthGoal
     },
     timingUpdateData () {
-      setTimeout(() => {
+      setInterval(() => {
         board.getSpeed().then(res => {
           this.data = res.data
         })
@@ -326,7 +326,7 @@ export default {
     this.timingUpdateData()
   },
   destroyed () {
-    clearTimeout(this.timingUpdateData())
+    clearInterval(this.timingUpdateData())
   }
 }
 </script>
