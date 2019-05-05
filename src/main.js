@@ -21,6 +21,7 @@ require('echarts/lib/component/grid')
 Vue.prototype.moment = moment
 Vue.prototype.$message = message
 Vue.prototype.$echarts = echarts
+Vue.prototype.timeout = 1000 * 60 * 5
 
 Vue.use(Checkbox)
 Vue.use(DatePicker)

@@ -383,7 +383,7 @@ export default {
         board.getPaperUseRate().then(res => {
           this.data = res.data
         })
-      }, 1000 * 60 * 5)
+      }, this.$timeout)
     }
   },
   mounted () {
