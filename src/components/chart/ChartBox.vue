@@ -61,7 +61,7 @@ export default {
     },
     tabClick (tab, index) {
       this.checkTab = tab.teamName
-      this.$emit('tabClick', tab, index)
+      this.$emit('tabClick', index, tab)
     },
     timer () {
       let i = 1
