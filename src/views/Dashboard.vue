@@ -72,7 +72,7 @@ export default {
                 // 属性lineStyle控制线条样式
                 width: 26,
                 color: [[268, this.getColorBySpeed(left.speed)]],
-                shadowColor: '#e9e9e9',
+                shadowColor: '#e9e9e9'
                 // shadowOffsetX: 10 / 4
                 // shadowBlur: 50 / 4
               }
@@ -126,7 +126,7 @@ export default {
             },
             title: this.getTitleStyleObj(false, right.speed),
             detail: this.getDetailStyleObj(false, right.speed)
-          },
+          }
         ]
       }
       this.$refs.top.draw(option)
@@ -305,13 +305,13 @@ export default {
       return board.getSpeed().then(res => {
         this.data = res.data
         this.drawGauge()
-        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index) {
+    tabClick (index = 0) {
       this.drawLine(index)
-      this.chartHeader.leftValue = tab.avgSpeedMonthGoal
+      this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
     },
     timingUpdateData () {
       setInterval(() => {

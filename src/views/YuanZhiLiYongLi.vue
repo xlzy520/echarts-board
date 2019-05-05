@@ -370,11 +370,11 @@ export default {
         this.paperUseRate = JSON.parse(JSON.stringify(this.data.paperUseRate))
         this.drawBar()
         this.drawZongXianShuJu()
-        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index = 0) {
+    tabClick (index = 0) {
       this.chartHeader.leftValue = this.data.teamTrendMap[index].paperUseRateMonthGoalRate
       this.drawLine(index)
     },
