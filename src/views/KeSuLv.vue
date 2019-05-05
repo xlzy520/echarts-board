@@ -358,28 +358,28 @@ export default {
       this.$refs.bottom.draw(option)
     },
     // 各组客诉率趋势图
-    getCustomComplaintRate () {
-      return board.getCustomComplaintRate().then(res => {
+    getPageData () {
+      return board.getPageData().then(res => {
         this.data = res.data
         this.drawKeSuLv()
         this.drawZongXianShuJu()
-        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index) {
+    tabClick (index = 0) {
       this.drawLine(index)
     },
     timingUpdateData () {
       setInterval(() => {
-        board.getCustomComplaintRate().then(res => {
+        board.getPageData().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
     }
   },
   mounted () {
-    this.getCustomComplaintRate()
+    this.getPageData()
     this.timingUpdateData()
   },
   destroyed () {

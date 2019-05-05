@@ -319,15 +319,15 @@ export default {
       }
       this.$refs.bottom.draw(option)
     },
-    getMenFu () {
+    getPageData () {
       return board.getTrimmingRateAndAvgWidth().then(res => {
         this.data = res.data
         this.drawBar()
-        this.tabClick(res.data.avgWidthTeamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index) {
+    tabClick (index = 0) {
       this.drawLine(index)
     },
     timingUpdateData () {
@@ -339,7 +339,7 @@ export default {
     }
   },
   mounted () {
-    this.getMenFu()
+    this.getPageData()
     this.timingUpdateData()
   },
   destroyed () {

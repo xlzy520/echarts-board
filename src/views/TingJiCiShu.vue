@@ -346,28 +346,28 @@ export default {
       this.$refs.bottom.draw(option)
     },
     // 各组停机次数趋势图
-    getHaltCount () {
-      return board.getHaltCount().then(res => {
+    getPageData () {
+      return board.getPageData().then(res => {
         this.data = res.data
         this.drawTingJiCiShu()
         this.drawZongXianShuJu()
-        this.tabClick(res.data.teamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index) {
+    tabClick (index = 0) {
       this.drawLine(index)
     },
     timingUpdateData () {
       setInterval(() => {
-        board.getHaltCount().then(res => {
+        board.getPageData().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
     }
   },
   mounted () {
-    this.getHaltCount()
+    this.getPageData()
     this.timingUpdateData()
   },
   destroyed () {
