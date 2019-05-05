@@ -1,11 +1,9 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" title="修边比例、平均门幅" id="top"
-               chartStyle="height: 428px;width: 560px"></chart-box>
-    <chart-box ref="bottom" title="各组修边比例、平均门幅趋势图" id="bottom"
-               class="group-inside"
-               :header="true"
-               :group-data="data.avgWidthTeamTrendMap"
+    <chart-box ref="top" id="top" chartStyle="height: 428px;width: 560px"></chart-box>
+    <chart-box ref="bottom" title="各组制程损耗趋势图" id="bottom"
+               :header="chartHeader"
+               :group-data="data.processLossTeamTrendMap"
                @tabClick="tabClick"
                chartStyle="height: 409px;width: 560px"></chart-box>
   </div>
@@ -19,63 +17,89 @@ export default {
   components: { ChartBox },
   data () {
     return {
-      data: {}
+      data: {},
+      chartHeader: {
+        leftTitle: '合理最高制程损耗：',
+        leftValue: '260',
+        leftUnit: 'm²'
+      }
     }
   },
   methods: {
     drawBar () {
       let option = {
         color: ['#000f84', '#5095f3'],
-        grid: {
-          top: '20%',
-          left: '2%',
-          bottom: '5%',
-          containLabel: true
+        title: {
+          text: '制程损耗、维修费用',
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 30,
+            fontWeight: 'normal'
+          },
+          left: 0,
+          top: 10
         },
         legend: {
-          top: '5%',
-          left: '2%',
-          itemHeight: 24,
-          itemWidth: 24,
+          data: [
+            {
+              name: '制程损耗',
+              icon: 'rect',
+              textStyle: {
+                padding: [0, 0, 0, 28 / 4]
+              }
+            },
+            {
+              name: '维修费用',
+              icon: 'rect',
+              textStyle: {
+                padding: [0, 0, 0, 28 / 4]
+              }
+            }
+          ],
+          top: 60,
+          left: 0,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
           textStyle: {
             fontFamily: 'PingFang SC Regular',
             fontSize: 20,
-            padding: [0, 20, 0, 0]
-          },
-          data: [
-            {
-              name: '修边比例',
-              icon: 'rect'
-            },
-            {
-              name: '平均门幅',
-              icon: 'rect'
-            }
-          ]
+            itemGap: 10 / 4
+          }
         },
-        xAxis: {
-          axisLabel: {
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 25
+        grid: [
+          {
+            width: '75%',
+            top: '20%',
+            bottom: '45%',
+            left: 10,
+            containLabel: true
           },
-          splitLine: {
-            show: false
+          {
+            width: '75%',
+            top: '65%',
+            bottom: '0%',
+            left: 10,
+            containLabel: true
+          }
+        ],
+        xAxis: [
+          {
+            show: false,
+            type: 'value',
+            max: 1000
           },
-          axisTick: {
-            show: false
-          },
-          axisLine: {
-            show: false
-          },
-          type: 'category',
-          data: this.data.trimmingRateAndAvgWidth.map(v => v.name)
-        },
+          {
+            gridIndex: 1,
+            show: false,
+            type: 'value'
+          }
+        ],
         yAxis: [
           {
-            type: 'value',
-            min: 1.5,
-            max: 3.5,
-            interval: 0.5,
+            type: 'category',
+            inverse: true,
+            data: this.data.processLoss.map(v => v.name),
             axisTick: {
               show: false
             },
@@ -83,18 +107,20 @@ export default {
               show: false
             },
             axisLabel: {
+              color: '#333',
               fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: (params) => {
-                return params === 1.5 ? '0.00%' : Number(params).toFixed(2) + '%'
-              }
+              fontSize: 120 / 4,
+              margin: 40 / 4
+            },
+            splitLine: {
+              show: false
             }
           },
           {
-            type: 'value',
-            min: 0,
-            max: 2400,
-            interval: 600,
+            type: 'category',
+            inverse: true,
+            gridIndex: 1,
+            data: this.data.upkeepCost.map(v => v.name),
             axisTick: {
               show: false
             },
@@ -102,107 +128,78 @@ export default {
               show: false
             },
             axisLabel: {
+              color: '#333',
               fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: val => Number(val) // 否则会显示2,400这种格式
+              fontSize: 120 / 4,
+              margin: 40 / 4
+            },
+            splitLine: {
+              show: false
             }
           }
         ],
         series: [
           {
-            name: '修边比例',
+            name: '制程损耗',
             type: 'bar',
-            data: this.data.trimmingRateAndAvgWidth.map(v => {
-              if (v.todayTrimmingRate < 2) {
-                return 1.5 + 0.5 / 2 * v.todayTrimmingRate
-              }
-              return v.todayTrimmingRate
-            }),
+            barWidth: 40,
+            barGap: '0%',
             label: {
               normal: {
                 show: true,
-                position: 'top',
+                position: 'right',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 20,
                 color: '#333',
-                formatter: params => {
-                  if (params.value < 2) {
-                    return ((params.value - 1.5) * 4).toFixed(2) + '%'
-                  }
-                  return params.value.toFixed(2) + '%'
-                }
+                formatter: (paramas) => this.data.processLoss[paramas.dataIndex].todayProcessLoss + 'm²',
+                offset: [5, 0]
               }
             },
-            barWidth: 40,
-            barGap: '60%'
+            data: this.data.processLoss.map(v => v.todayProcessLoss)
           },
           {
-            name: '平均门幅',
+            name: '维修费用',
             type: 'bar',
+            xAxisIndex: 1,
             yAxisIndex: 1,
-            data: this.data.trimmingRateAndAvgWidth.map(v => v.todayAvgWidth),
+            barWidth: 160 / 4,
             label: {
               normal: {
                 show: true,
-                position: 'top',
+                position: 'right',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 20,
-                color: '#333'
+                color: '#333',
+                formatter: (paramas) => this.data.upkeepCost[paramas.dataIndex].monthCost + '万',
+                offset: [5, 0]
               }
             },
-            barWidth: 40,
-            barGap: '60%'
+            data: this.data.upkeepCost.map(v => v.monthCost)
           }
         ]
       }
       this.$refs.top.draw(option)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.trimmingRateTeamTrendMap[index].trendMap.map(v => {
+      const seriesData = this.data.processLossTeamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, v.value < 2 ? 1.5 + (0.5 / 2) * v.value : v.value]
-        }
-      })
-      const seriesDataAvg = this.data.avgWidthTeamTrendMap[index].trendMap.map(v => {
-        return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value]
+          value: [ v.date, v.value ]
         }
       })
       let option = {
-        color: ['#f45b5b', '#5095f3'],
         grid: {
-          top: 60,
-          bottom: 30,
-          left: '2%',
-          containLabel: true
-        },
-        legend: {
-          top: '0%',
-          left: '2%',
-          itemHeight: 24,
-          itemWidth: 24,
-          textStyle: {
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 20,
-            padding: [0, 20, 0, 0]
-          },
-          data: [
-            {
-              name: '修边比例',
-              icon: 'rect'
-            },
-            {
-              name: '平均门幅',
-              icon: 'rect'
-            }
-          ]
+          top: 20,
+          left: 80,
+          bottom: 260 / 4
         },
         xAxis: {
           type: 'category',
-          offset: 10,
+          offset: 40 / 4,
           splitNumber: 1,
+          axisTick: {
+            show: false
+          },
           axisLabel: {
             interval: function (index, val) {
               return index === 0 || index === seriesData.length - 1
@@ -218,128 +215,85 @@ export default {
               front: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
+                fontSize: 80 / 4,
                 align: 'right',
                 width: 200
               },
               end: {
                 color: '#333',
                 fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
+                fontSize: 80 / 4,
                 align: 'left',
-                width: 240
+                width: 200
               }
             }
           },
           axisLine: {
             show: false
+          }
+        },
+        yAxis: {
+          type: 'value',
+          interval: 200,
+          min: 0,
+          max: 1200,
+          scale: true,
+          axisLine: {
+            show: false
           },
           axisTick: {
             show: false
+          },
+          axisLabel: {
+            color: '#333',
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 80 / 4,
+            margin: 40 / 4
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              width: 5 / 4
+            }
           }
         },
-        yAxis: [
-          {
-            type: 'value',
-            min: 1.5,
-            max: 3.5,
-            interval: 0.5,
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: (params) => {
-                return params === 1.5 ? '0.00%' : Number(params).toFixed(2) + '%'
-              }
-            },
-            splitLine: {
-              lineStyle: {
-                width: 1.25
-              }
-            }
+        series: [{
+          data: seriesData,
+          type: 'line',
+          symbolSize: 35 / 4,
+          itemStyle: {
+            color: '#5095f3',
+            borderWidth: 10 / 4
           },
-          {
-            type: 'value',
-            min: 0,
-            max: 2400,
-            interval: 600,
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 20,
-              formatter: val => Number(val)
-            },
-            splitLine: {
-              lineStyle: {
-                width: 1.25
-              }
-            }
+          lineStyle: {
+            width: 10 / 4
           }
-        ],
-        series: [
-          {
-            name: '修边比例',
-            yAxisIndex: 0,
-            data: seriesData,
-            type: 'line',
-            symbolSize: 8,
-            itemStyle: {
-              borderWidth: 2.5
-            },
-            lineStyle: {
-              width: 2.5
-            }
-          },
-          {
-            name: '平均门幅',
-            data: seriesDataAvg,
-            yAxisIndex: 1,
-            type: 'line',
-            symbolSize: 8,
-            itemStyle: {
-              borderWidth: 2.5
-            },
-            lineStyle: {
-              width: 2.5
-            }
-          }
-        ]
+        }]
       }
       this.$refs.bottom.draw(option)
     },
-    getMenFu () {
-      return board.getTrimmingRateAndAvgWidth().then(res => {
+    // 各组客诉率趋势图
+    getPageData () {
+      return board.getProcessLossAndCost().then(res => {
         this.data = res.data
         this.drawBar()
-        this.tabClick(res.data.avgWidthTeamTrendMap[0], 0)
+        this.tabClick()
         this.$refs.bottom.timer()
       })
     },
-    tabClick (tab, index) {
+    tabClick (index = 0) {
       this.drawLine(index)
     },
     timingUpdateData () {
       setInterval(() => {
-        board.getTrimmingRateAndAvgWidth().then(res => {
+        board.getProcessLossAndCost().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
     }
   },
   mounted () {
-    this.getMenFu()
+    this.getPageData()
     this.timingUpdateData()
   },
   destroyed () {
