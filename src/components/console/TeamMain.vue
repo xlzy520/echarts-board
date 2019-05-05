@@ -9,8 +9,8 @@
             :showTime="{ format: 'HH:mm' }"
             format="YYYY-MM-DD HH:mm"
             :placeholder="['开始时间', '结束时间']"
-            :disabledDate="(current)=>{return disabledDate(current, time.teamName)}"
-            :disabledTime="(current, type)=>{return disabledTime(current,type, time.teamName)}"
+            :disabledDate="(current)=>disabledDate(current, time.teamName)"
+            :disabledTime="(current, type)=>disabledTime(current,type, time.teamName)"
             :value="[moment(range[index][0]),moment(range[index][1])]"
             @change="timeRangeChange(...arguments, index)"
             @ok="cacheRange(index)"
@@ -344,6 +344,9 @@ export default {
   .console-team {
     width: 55%;
     margin: 40px auto 0;
+    @media screen and (max-width: 1366px){
+      width: 80%;
+    }
     &-name {
       display: inline-block;
       position: relative;
@@ -416,11 +419,11 @@ export default {
         font-size: 14px;
         &-dot{
           font-size: 20px;
-          width: 20*4px;
-          height: 20*4px;
+          width: 20*3px;
+          height: 20*3px;
           i{
-            width: 9*4px;
-            height: 9*4px;
+            width: 9*3px;
+            height: 9*3px;
           }
         }
       }
