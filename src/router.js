@@ -6,6 +6,8 @@ import TingJiCiShu from './views/TingJiCiShu.vue'
 import KeSuLv from './views/KeSuLv.vue'
 import YuanZhiLiYongLi from './views/YuanZhiLiYongLi.vue'
 import MenFuXiuBian from './views/MenFuXiuBian.vue'
+import QianShuLv from './views/QianShuLv.vue'
+import Cost from './views/Cost.vue'
 import home from './views/home.vue'
 
 Vue.use(Router)
@@ -47,6 +49,16 @@ export default new Router({
       path: '/mengfu',
       name: 'mengfu',
       component: MenFuXiuBian
+    } ,
+    {
+      path: '/qiansulv',
+      name: 'qiansulv',
+      component: QianShuLv
+    },
+    {
+      path: '/cost',
+      name: 'cost',
+      component: Cost
     }
   ]
 })
