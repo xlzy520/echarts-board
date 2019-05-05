@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" title="平均车速" id="top"
+    <chart-box ref="top" title="平均车速" id="top" class="average"
                chartStyle="height: 428px;width: 560px"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
                :header="chartHeader"
@@ -38,7 +38,7 @@ export default {
             name: 'left',
             type: 'gauge',
             center: ['50%', '50%'],
-            radius: '90%',
+            radius: '86%',
             startAngle: 270,
             endAngle: 270 - 180 * (left.speed / 268),
             splitNumber: -1,
@@ -56,10 +56,10 @@ export default {
                 [
                   {
                     x: '50%',
-                    y: '5%',
+                    y: '7%',
                     lineStyle: { width: 1, color: '#d1d1d1' }
                   },
-                  { x: '50%', y: '95%' }
+                  { x: '50%', y: '93%' }
                 ]
               ]
             },
@@ -70,19 +70,15 @@ export default {
               show: false, // 坐标轴线
               lineStyle: {
                 // 属性lineStyle控制线条样式
-                width: 200 / 4,
+                width: 26,
                 color: [[268, this.getColorBySpeed(left.speed)]],
-                shadowColor: '#888',
-                shadowOffsetX: -10 / 4,
-                shadowBlur: 50 / 4
+                shadowColor: '#e9e9e9',
+                // shadowOffsetX: 10 / 4
+                // shadowBlur: 50 / 4
               }
             },
             pointer: {
               show: false
-            },
-            itemStyle: {
-              color: this.getColorBySpeed(left.speed),
-              fontSize: 30
             },
             title: this.getTitleStyleObj(true, left.speed),
             detail: this.getDetailStyleObj(true, left.speed),
@@ -103,16 +99,14 @@ export default {
             splitNumber: -1,
             min: 268,
             max: 0,
-            radius: '90%',
+            radius: '86%',
             axisLine: {
               show: false, // 坐标轴线
               lineStyle: {
                 // 属性lineStyle控制线条样式
-                width: 50,
+                width: 26,
                 color: [[268, this.getColorBySpeed(right.speed)]],
-                shadowColor: '#888',
-                shadowOffsetX: 10 / 4,
-                shadowBlur: 50 / 4
+                shadowColor: '#e9e9e9'
               }
             },
             splitLine: {
@@ -131,46 +125,8 @@ export default {
               show: false
             },
             title: this.getTitleStyleObj(false, right.speed),
-            itemStyle: {
-              color: this.getColorBySpeed(right.speed),
-              fontSize: 30
-            },
             detail: this.getDetailStyleObj(false, right.speed)
           },
-          {
-            name: 'background',
-            type: 'gauge',
-            center: ['50%', '50%'],
-            radius: '90%',
-            startAngle: 0,
-            endAngle: 0.0000001,
-            z: 4,
-            min: 0,
-            max: 268,
-            axisTick: {
-              show: false
-            },
-            detail: {
-              show: false
-            },
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              show: false, // 坐标轴线
-              lineStyle: {
-                // 属性lineStyle控制线条样式
-                width: 50,
-                color: [[268, '#ededed']],
-                shadowColor: '#888',
-                shadowOffsetX: 5,
-                shadowBlur: 25
-              }
-            },
-            pointer: {
-              show: false
-            }
-          }
         ]
       }
       this.$refs.top.draw(option)
@@ -270,7 +226,7 @@ export default {
       const title = this.data.avgSpeed[isLeft ? 0 : 1].name
       return {
         fontFamily: 'PingFang SC Regular',
-        color: this.getColorBySpeed(speed),
+        color: this.getTextColorBySpeed(speed),
         offsetCenter: [isLeft ? '-40%' : '40%', '15%'],
         formatter: function (paramas) {
           return '{number|' + paramas + '}{speed|m/m}' + '\n\n' + '{title| ' + title + '}'
@@ -280,7 +236,7 @@ export default {
         rich: {
           number: {
             fontSize: 40,
-            color: this.getColorBySpeed(speed)
+            color: this.getTextColorBySpeed(speed)
           },
           speed: {
             fontSize: 25,
@@ -302,14 +258,41 @@ export default {
         offsetCenter: [isLeft ? '-40%' : '40%', '-25%'],
         formatter: '2',
         rich: {},
-        width: 235 / 4,
-        height: 193 / 4,
+        width: 235 / 3,
+        height: 193 / 3,
         backgroundColor: {
           image: image
         }
       }
     },
     getColorBySpeed (speed) {
+      if (speed < 170) {
+        return new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+          offset: 0,
+          color: '#eb3349'
+        }, {
+          offset: 1,
+          color: '#ea162c'
+        }], false)
+      } else if (speed < 186) {
+        return new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+          offset: 0,
+          color: '#27e164'
+        }, {
+          offset: 1,
+          color: '#20c556'
+        }], false)
+      } else if (speed > 185) {
+        return new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [{
+          offset: 0,
+          color: '#509aff'
+        }, {
+          offset: 1,
+          color: '#387bd6'
+        }], false)
+      }
+    },
+    getTextColorBySpeed (speed) {
       if (speed < 170) {
         return '#f81129'
       } else if (speed < 186) {
@@ -355,4 +338,10 @@ export default {
   transform: rotate(-90deg);
   height: 960px;
 }
+.average #top{
+    background: url("../assets/圆环背景.png") no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    background-size: 380px;
+  }
 </style>
