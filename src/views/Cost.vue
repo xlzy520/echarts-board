@@ -19,7 +19,7 @@ export default {
     return {
       data: {},
       chartHeader: {
-        leftTitle: '合理最高制程损耗：',
+        leftTitle: '合理最高制程损耗',
         leftValue: '260',
         leftUnit: 'm²'
       }
