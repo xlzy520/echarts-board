@@ -25,7 +25,7 @@ export default {
         { name: '停机次数', href: 'tingji' },
         { name: '客诉率', href: 'kesulv' },
         { name: '原纸利用率', href: 'yuanzhi' },
-        { name: '平均门幅、修边比例', href: '' },
+        { name: '平均门幅、修边比例', href: 'mengfu' },
         { name: '欠数率、准时入库率', href: '' },
         { name: '制程损耗、维修费用', href: '' }
       ]

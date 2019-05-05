@@ -5,6 +5,7 @@ import Dashboard from './views/Dashboard.vue'
 import TingJiCiShu from './views/TingJiCiShu.vue'
 import KeSuLv from './views/KeSuLv.vue'
 import YuanZhiLiYongLi from './views/YuanZhiLiYongLi.vue'
+import MenFuXiuBian from './views/MenFuXiuBian.vue'
 import home from './views/home.vue'
 
 Vue.use(Router)
@@ -41,6 +42,11 @@ export default new Router({
       path: '/yuanzhi',
       name: 'yuanzhi',
       component: YuanZhiLiYongLi
+    },
+    {
+      path: '/mengfu',
+      name: 'mengfu',
+      component: MenFuXiuBian
     }
   ]
 })
