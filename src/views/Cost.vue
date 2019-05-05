@@ -36,7 +36,7 @@ export default {
             fontSize: 30,
             fontWeight: 'normal'
           },
-          left: 0,
+          left: 10,
           top: 10
         },
         legend: {
@@ -57,7 +57,7 @@ export default {
             }
           ],
           top: 60,
-          left: 0,
+          left: 10,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
           itemGap: 76 / 4,
