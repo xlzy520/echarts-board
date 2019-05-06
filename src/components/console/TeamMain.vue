@@ -310,9 +310,7 @@ export default {
       })
       const allCheck = ['A', 'B', 'C', 'D']
       allCheck.map((v, index) => {
-        if (!this.checkedList.includes(v)) {
-          this.data.timeData[index].selectTime = 0
-        }
+        this.data.timeData[index].selectTime = this.checkedList.includes(v) ? 1 : 0
       })
       if (this.checkedList.length > 0) {
         backStage.addBoardData({
