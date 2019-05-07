@@ -167,7 +167,7 @@ export default {
       tableLoading: false,
       disabledHour: '',
 
-      navDate: this.moment().format('YYYY-MM-DD')
+      navDate: this.moment()
     }
   },
   components: {
@@ -192,9 +192,9 @@ export default {
     disabledDate (current, name) {
       const { dayTime } = this.$refs.switchTeam
       if (dayTime.includes(name)) {
-        return current < this.moment().subtract(1, 'days') || current > this.moment()
+        return current < this.navDate.subtract(1, 'days') || current > this.navDate
       }
-      return current > this.moment().add(2, 'days') || current < this.moment()
+      return current > this.navDate.add(2, 'days') || current < this.navDate
     },
     rangeM (start, end) {
       const result = []
@@ -280,7 +280,7 @@ export default {
     // 获取页面所需数据
     getConsoleData (date) {
       this.tableLoading = true
-      this.navDate = date
+      this.navDate = this.moment(date)
       backStage.getBoardData({
         date: date
       }).then(res => {
@@ -315,10 +315,10 @@ export default {
       if (this.checkedList.length > 0) {
         backStage.addBoardData({
           ...this.data,
-          date: this.navDate
+          date: this.navDate.format('YYYY-MM-DD')
         }).then(res => {
           this.$message.success(res.msg)
-          this.getConsoleData(this.navDate)
+          // this.getConsoleData(this.navDate)
         })
       } else {
         this.$message.error('请选择班组！')
