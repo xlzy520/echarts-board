@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="chart-box-content">
-      <div :id="id" :style="chartStyle"></div>
+      <div :id="id" :style="chartStyle + ';width: 540px'"></div>
     </div>
   </div>
 </template>

@@ -1,13 +1,13 @@
 <template>
   <div class="charts-wrapper">
     <chart-box ref="top" title="欠数率、准时入库率" id="top"
-               chartStyle="height: 428px;width: 540px"></chart-box>
+               chartStyle="height: 428px"></chart-box>
     <chart-box ref="bottom" title="各组欠数率、准时入库率趋势图" id="bottom"
                class="group-inside"
                :header="true"
                :group-data="data.punctualRateTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 409px;width: 540px"></chart-box>
+               chartStyle="height: 409px"></chart-box>
   </div>
 </template>
 

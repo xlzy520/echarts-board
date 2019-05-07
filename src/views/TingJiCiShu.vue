@@ -3,13 +3,13 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 280px;width: 540px"
+      chartStyle="height: 280px"
     ></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
       id="middle"
-      chartStyle="height: 210px;width: 540px"
+      chartStyle="height: 210px"
     ></chart-box>
     <chart-box
       ref="bottom"
@@ -18,7 +18,7 @@
       id="bottom"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 305px;width: 540px"
+      chartStyle="height: 305px"
     ></chart-box>
   </div>
 </template>
