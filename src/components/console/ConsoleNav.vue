@@ -5,11 +5,14 @@
     </div>
     <div class="console-nav-title">东诚数字看板后台</div>
     <div class="console-nav-date">
+      <div class="date-picker-spin" v-show="dateSpinning" :style="datePanelStyle">
+        <a-spin size="large"/>
+      </div>
       <a-date-picker
-        format="YYYY-MM-DD"
         suffixIcon=" "
         v-model="date"
         :disabledDate="disabledDate"
+        @openChange="datePanelChange"
         :allowClear="false">
         <template slot="dateRender" slot-scope="current, today">
           <div :class="['ant-calendar-date', workDayStyle(current)]"
@@ -27,37 +30,62 @@ export default {
   data () {
     return {
       date: this.moment(),
-      workDays: []
+      workDays: [],
+      dateSpinning: false,
+      datePanelStyle: ''
     }
   },
   methods: {
+    getDatePanelStyle () {
+      const datePanelBox = document.querySelector('.ant-calendar-picker-container')
+      this.datePanelStyle = datePanelBox.style.cssText +
+        `width: ${datePanelBox.clientWidth}px;height:${datePanelBox.clientHeight}px`
+    },
+    datePanelChange (isShow) {
+      if (isShow) {
+        setTimeout(() => {
+          const dateDom = document.querySelector('.ant-calendar-ym-select')
+          dateDom.addEventListener('DOMCharacterDataModified', () => {
+            this.getDatePanelStyle()
+            this.dateSpinning = true
+            const year = document.querySelector('.ant-calendar-year-select').innerText.replace('年', '')
+            let month = document.querySelector('.ant-calendar-month-select').innerText.replace('月', '')
+            month = month < 10 ? '0' + month : month
+            this.getWorkDay(year + '-' + month)
+          })
+        }, 0)
+      }
+    },
     workDayStyle (current) {
-      const day = current.format('DD')
-      if (this.workDays.includes(Number(day))) {
+      const date = current.format('YYYY-MM-DD')
+      if (this.workDays.includes(date)) {
         return 'work-day'
       }
     },
     updateDate (current) {
       const month = current.format('MM')
-      const day = current.format('DD')
-      if (month === this.moment().format('MM') && this.workDays.includes(Number(day))) {
+      const date = current.format('YYYY-MM-DD')
+      if (month === this.moment().format('MM') && this.workDays.includes(date)) {
         this.date = current
         this.$emit('update-date', current.format('YYYY-MM-DD'))
       }
     },
     disabledDate (current) {
-      return (current && current > this.moment().endOf('day')) || !this.workDays.includes(Number(current.format('DD')))
+      return (current && current > this.moment().endOf('day')) ||
+        !this.workDays.includes(current.format('YYYY-MM-DD'))
     },
-    getWorkDay () {
+    getWorkDay (date) {
       backStage.getWorkDay({
-        date: this.date.format('YYYY-MM')
+        date: date
       }).then(res => {
         this.workDays = res.data.date
+      }).finally(() => {
+        this.dateSpinning = false
       })
     }
   },
   mounted () {
-    this.getWorkDay()
+    this.getWorkDay(this.date.format('YYYY-MM'))
   }
 }
 </script>
@@ -98,5 +126,16 @@ export default {
     &:hover{
       background: #ff7f36;
     }
+  }
+  // 日期切换时遮罩
+  .date-picker-spin{
+    position: absolute;
+    width: 280px;
+    height: 341px;
+    background-color: rgba(237,237,237, 0.5);
+    z-index: 3000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>
