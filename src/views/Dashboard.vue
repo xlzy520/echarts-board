@@ -336,7 +336,6 @@ export default {
   color: #333;
   font-size: 30px;
   transform: rotate(-90deg);
-  height: 960px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;

@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 280px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 272px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 305px"
+      chartStyle="height: 290px"
     ></chart-box>
   </div>
 </template>
@@ -82,7 +82,7 @@ export default {
         grid: {
           top: 320 / 4,
           left: -100 / 4,
-          bottom: 0,
+          bottom: -30,
           right: 560 / 4,
           containLabel: true
         },

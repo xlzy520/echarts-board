@@ -3,7 +3,7 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 280px"
+      chartStyle="height: 279px"
     ></chart-box>
     <chart-box
       ref="middle"
@@ -18,7 +18,7 @@
       id="bottom"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 305px"
+      chartStyle="height: 300px"
     ></chart-box>
   </div>
 </template>
