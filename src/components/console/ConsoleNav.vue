@@ -63,11 +63,10 @@ export default {
       }
     },
     updateDate (current) {
-      const month = current.format('MM')
       const date = current.format('YYYY-MM-DD')
-      if (month === this.moment().format('MM') && this.workDays.includes(date)) {
+      if (this.workDays.includes(date)) {
         this.date = current
-        this.$emit('update-date', current.format('YYYY-MM-DD'))
+        this.$emit('update-date', date)
       }
     },
     disabledDate (current) {
