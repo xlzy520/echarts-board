@@ -347,7 +347,7 @@ export default {
     },
     // 各组停机次数趋势图
     getPageData () {
-      return board.getPageData().then(res => {
+      return board.getHaltCount().then(res => {
         this.data = res.data
         this.drawTingJiCiShu()
         this.drawZongXianShuJu()

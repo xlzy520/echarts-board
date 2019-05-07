@@ -359,7 +359,7 @@ export default {
     },
     // 各组客诉率趋势图
     getPageData () {
-      return board.getPageData().then(res => {
+      return board.getCustomComplaintRate().then(res => {
         this.data = res.data
         this.drawKeSuLv()
         this.drawZongXianShuJu()
