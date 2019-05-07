@@ -372,7 +372,7 @@ export default {
     },
     timingUpdateData () {
       setInterval(() => {
-        board.getPageData().then(res => {
+        board.getCustomComplaintRate().then(res => {
           this.data = res.data
         })
       }, this.$timeout)

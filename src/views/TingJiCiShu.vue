@@ -360,7 +360,7 @@ export default {
     },
     timingUpdateData () {
       setInterval(() => {
-        board.getPageData().then(res => {
+        board.getHaltCount().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
