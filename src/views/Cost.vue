@@ -1,11 +1,11 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 428px;width: 560px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 428px;width: 540px"></chart-box>
     <chart-box ref="bottom" title="各组制程损耗趋势图" id="bottom"
                :header="chartHeader"
                :group-data="data.processLossTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 409px;width: 560px"></chart-box>
+               chartStyle="height: 409px;width: 540px"></chart-box>
   </div>
 </template>
 

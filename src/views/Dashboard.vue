@@ -1,12 +1,12 @@
 <template>
   <div class="charts-wrapper">
     <chart-box ref="top" title="平均车速" id="top" class="average"
-               chartStyle="height: 428px;width: 560px"></chart-box>
+               chartStyle="height: 420px;width: 540px"></chart-box>
     <chart-box ref="bottom" title="各组日均平均车速趋势图" id="bottom"
                :header="chartHeader"
                :group-data="data.teamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 353px;width: 560px"></chart-box>
+               chartStyle="height: 352px;width: 540px"></chart-box>
   </div>
 </template>
 
@@ -337,6 +337,9 @@ export default {
   font-size: 30px;
   transform: rotate(-90deg);
   height: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 .average #top{
     background: url("../assets/圆环背景.png") no-repeat;

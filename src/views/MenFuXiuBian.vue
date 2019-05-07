@@ -1,13 +1,13 @@
 <template>
   <div class="charts-wrapper">
     <chart-box ref="top" title="修边比例、平均门幅" id="top"
-               chartStyle="height: 428px;width: 560px"></chart-box>
+               chartStyle="height: 428px;width: 540px"></chart-box>
     <chart-box ref="bottom" title="各组修边比例、平均门幅趋势图" id="bottom"
                class="group-inside"
                :header="true"
                :group-data="data.avgWidthTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 409px;width: 560px"></chart-box>
+               chartStyle="height: 409px;width: 540px"></chart-box>
   </div>
 </template>
 

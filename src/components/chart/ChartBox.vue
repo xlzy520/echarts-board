@@ -82,6 +82,7 @@ export default {
 
 <style lang="less">
   .chart-box {
+    display: inline-block;
     &-title {
       padding-top: 33/2px;
       padding-left: 24/2px;
