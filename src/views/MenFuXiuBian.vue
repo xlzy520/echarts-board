@@ -352,7 +352,7 @@ export default {
   .group-inside{
     .chart-box-header{
       position: absolute;
-      left: -15px;
+      right: 35px;
       z-index: 200;
     }
   }

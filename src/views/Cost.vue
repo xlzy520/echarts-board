@@ -304,11 +304,5 @@ export default {
 </script>
 
 <style lang="less">
-  .group-inside{
-    .chart-box-header{
-      position: absolute;
-      left: -15px;
-      z-index: 200;
-    }
-  }
+
 </style>
