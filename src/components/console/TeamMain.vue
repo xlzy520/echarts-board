@@ -6,7 +6,7 @@
           <span class="console-team-name">{{time.teamName}}</span>
           <a-range-picker
             :allowClear="false"
-            :showTime="{ format: 'HH:mm' }"
+            :showTime="{ format: 'HH:mm',hideDisabledOptions: true}"
             format="YYYY-MM-DD HH:mm"
             :placeholder="['开始时间', '结束时间']"
             :disabledDate="(current)=>disabledDate(current, time.teamName)"
@@ -191,10 +191,12 @@ export default {
     // 禁用日期
     disabledDate (current, name) {
       const { dayTime } = this.$refs.switchTeam
+      // 否则会影响navDate的值
+      const dateClone = this.navDate.clone()
       if (dayTime.includes(name)) {
-        return current < this.navDate.subtract(1, 'days') || current > this.navDate
+        return current < dateClone.subtract(1, 'days') || current > this.navDate.endOf('day')
       }
-      return current > this.navDate.add(2, 'days') || current < this.navDate
+      return current > dateClone.add(2, 'days') || current < this.navDate.endOf('day')
     },
     rangeM (start, end) {
       const result = []
@@ -212,7 +214,7 @@ export default {
         }
         if (type === 'end') {
           return {
-            disabledHours: () => this.rangeM(0, 24).splice(this.disabledHour, 1)
+            disabledHours: () => this.rangeM(0, 24).splice(0, this.disabledHour + 1)
           }
         }
       }
@@ -278,11 +280,11 @@ export default {
       return total.toFixed(precision[index])
     },
     // 获取页面所需数据
-    getConsoleData (date) {
+    getConsoleData (date = this.moment(new Date())) {
       this.tableLoading = true
-      this.navDate = this.moment(date)
+      this.navDate = date
       backStage.getBoardData({
-        date: date
+        date: date.format('YYYY-MM-DD')
       }).then(res => {
         this.data = res.data
         this.checkedList = res.data.timeData.filter(v => v.selectTime === 1).map(v => v.teamName)
@@ -326,7 +328,7 @@ export default {
     }
   },
   mounted () {
-    this.getConsoleData(this.moment().format('YYYY-MM-DD'))
+    this.getConsoleData()
   }
 }
 </script>
