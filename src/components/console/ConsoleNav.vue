@@ -10,12 +10,12 @@
       </div>
       <a-date-picker
         suffixIcon=" "
-        v-model="date"
+        :defaultValue="moment()"
         :disabledDate="disabledDate"
         @openChange="datePanelChange"
         :allowClear="false">
         <template slot="dateRender" slot-scope="current, today">
-          <div :class="['ant-calendar-date', workDayStyle(current)]"
+          <div :class="['ant-calendar-date', {'work-day': isWorkDay(current)}]"
                @click="updateDate(current)">{{current.format('DD')}}</div>
         </template>
       </a-date-picker>
@@ -29,7 +29,6 @@ export default {
   name: 'ConsoleNav',
   data () {
     return {
-      date: this.moment(),
       workDays: [],
       dateSpinning: false,
       datePanelStyle: ''
@@ -38,8 +37,8 @@ export default {
   methods: {
     getDatePanelStyle () {
       const datePanelBox = document.querySelector('.ant-calendar-picker-container')
-      this.datePanelStyle = datePanelBox.style.cssText +
-        `width: ${datePanelBox.clientWidth}px;height:${datePanelBox.clientHeight}px`
+      const { style, clientWidth, clientHeight } = datePanelBox
+      this.datePanelStyle = style.cssText + `width: ${clientWidth}px;height:${clientHeight}px`
     },
     datePanelChange (isShow) {
       if (isShow) {
@@ -56,22 +55,16 @@ export default {
         }, 0)
       }
     },
-    workDayStyle (current) {
-      const date = current.format('YYYY-MM-DD')
-      if (this.workDays.includes(date)) {
-        return 'work-day'
-      }
+    isWorkDay (date) {
+      return this.workDays.includes(date.format('YYYY-MM-DD'))
     },
     updateDate (current) {
-      const date = current.format('YYYY-MM-DD')
-      if (this.workDays.includes(date)) {
-        this.date = current
-        this.$emit('update-date', date)
+      if (this.isWorkDay(current)) {
+        this.$emit('update-date', current)
       }
     },
     disabledDate (current) {
-      return (current && current > this.moment().endOf('day')) ||
-        !this.workDays.includes(current.format('YYYY-MM-DD'))
+      return (current && current > this.moment().endOf('day')) || !this.isWorkDay(current)
     },
     getWorkDay (date) {
       backStage.getWorkDay({
@@ -84,7 +77,7 @@ export default {
     }
   },
   mounted () {
-    this.getWorkDay(this.date.format('YYYY-MM'))
+    this.getWorkDay(this.moment().format('YYYY-MM'))
   }
 }
 </script>
