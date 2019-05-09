@@ -7,7 +7,7 @@
                :header="true"
                :group-data="data.punctualRateTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 409px"></chart-box>
+               chartStyle="height: 379px"></chart-box>
   </div>
 </template>
 

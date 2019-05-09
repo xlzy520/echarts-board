@@ -70,14 +70,14 @@ export default {
         grid: [
           {
             width: '75%',
-            top: '20%',
-            bottom: '45%',
+            top: '30%',
+            bottom: '40%',
             left: 10,
             containLabel: true
           },
           {
             width: '75%',
-            top: '65%',
+            top: '70%',
             bottom: '0%',
             left: 10,
             containLabel: true

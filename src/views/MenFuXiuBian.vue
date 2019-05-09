@@ -7,7 +7,7 @@
                :header="true"
                :group-data="data.avgWidthTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 409px"></chart-box>
+               chartStyle="height: 379px"></chart-box>
   </div>
 </template>
 
@@ -354,6 +354,9 @@ export default {
       position: absolute;
       right: 35px;
       z-index: 200;
+    }
+    .chart-box-title{
+      padding-bottom: 30px;
     }
   }
 </style>

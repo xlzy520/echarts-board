@@ -38,7 +38,7 @@ export default {
             name: 'left',
             type: 'gauge',
             center: ['50%', '50%'],
-            radius: '86%',
+            radius: '87%',
             startAngle: 270,
             endAngle: 270 - 180 * (left.speed / 268),
             splitNumber: -1,
@@ -56,10 +56,10 @@ export default {
                 [
                   {
                     x: '50%',
-                    y: '7%',
+                    y: '5%',
                     lineStyle: { width: 1, color: '#d1d1d1' }
                   },
-                  { x: '50%', y: '93%' }
+                  { x: '50%', y: '14%' }
                 ]
               ]
             },
@@ -99,7 +99,7 @@ export default {
             splitNumber: -1,
             min: 268,
             max: 0,
-            radius: '86%',
+            radius: '87%',
             axisLine: {
               show: false, // 坐标轴线
               lineStyle: {
@@ -135,7 +135,7 @@ export default {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
           date: new Date(v.date).toString(),
-          value: [v.date, v.value]
+          value: [v.date, v.value > 200 ? 200 + (50 / 68) * (v.value - 200) : v.value]
         }
       })
       let option = {
@@ -186,7 +186,7 @@ export default {
         yAxis: {
           type: 'value',
           min: 0,
-          max: 268,
+          max: 250,
           splitNumber: 4,
           interval: 50,
           axisLine: {
@@ -199,7 +199,13 @@ export default {
             color: '#333',
             fontFamily: 'PingFang SC Regular',
             fontSize: 20,
-            margin: 10
+            margin: 10,
+            formatter: params => {
+              if (params === 250) {
+                return '268'
+              }
+              return params
+            }
           },
           splitLine: {
             lineStyle: {
