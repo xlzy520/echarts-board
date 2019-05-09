@@ -257,10 +257,6 @@ export default {
     },
     getTitleStyleObj (isLeft, speed) {
       const image = speed < 170 ? wugui : speed < 186 ? tu : ma
-      let argsa = 2.5
-      if (speed >= 186) {
-        argsa = 3
-      }
       return {
         fontFamily: 'PingFang SC Regular',
         fontSize: 40,
@@ -268,8 +264,8 @@ export default {
         offsetCenter: [isLeft ? '-40%' : '40%', '-25%'],
         formatter: '2',
         rich: {},
-        width: 400 / argsa,
-        height: 260 / argsa,
+        width: 400 / 3,
+        height: 260 / 3,
         backgroundColor: {
           image: image
         }
