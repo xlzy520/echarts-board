@@ -13,7 +13,7 @@
 <script>
 import board from '../api/board'
 import wugui from '../assets/乌龟.png'
-import tu from '../assets/兔.png'
+import tu from '../assets/兔子.png'
 import ma from '../assets/马.png'
 import ChartBox from '../components/chart/ChartBox'
 export default {
@@ -257,6 +257,10 @@ export default {
     },
     getTitleStyleObj (isLeft, speed) {
       const image = speed < 170 ? wugui : speed < 186 ? tu : ma
+      let argsa = 2.5
+      if (speed >= 186) {
+        argsa = 3
+      }
       return {
         fontFamily: 'PingFang SC Regular',
         fontSize: 40,
@@ -264,8 +268,8 @@ export default {
         offsetCenter: [isLeft ? '-40%' : '40%', '-25%'],
         formatter: '2',
         rich: {},
-        width: 235 / 3,
-        height: 193 / 3,
+        width: 400 / argsa,
+        height: 260 / argsa,
         backgroundColor: {
           image: image
         }
