@@ -42,14 +42,13 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    background: #fff url("//activity.hdslb.com/blackboard/static/20180416/b8f2b74d0482aed61472c7065dc1ed56/images/m6kmoznp0p.jpg") center/cover no-repeat;
   }
 
   .headers-container {
     position: absolute;
     top: 10%;
     left: 12%;
-    color: #c99;
+    color: @myBlue;
     text-align: center;
     ::selection {
       background-color: #fff;
