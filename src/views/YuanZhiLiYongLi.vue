@@ -333,6 +333,7 @@ export default {
         series: [{
           data: seriesData,
           markLine: {
+            symbol: 'circle',
             data: [
               {
                 name: '合理最低原纸利用率：98.00%',

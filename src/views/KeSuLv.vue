@@ -335,6 +335,7 @@ export default {
             width: 10 / 4
           },
           markLine: {
+            symbol: 'circle',
             data: [
               {
                 name: '合理最低原纸利用率：0.1%',
