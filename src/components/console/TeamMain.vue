@@ -196,7 +196,7 @@ export default {
       if (dayTime.includes(name)) {
         return current < dateClone.subtract(1, 'days') || current > this.navDate.endOf('day')
       }
-      return current > dateClone.add(2, 'days') || current < this.navDate.endOf('day')
+      return current > dateClone.add(2, 'days') || current < this.navDate.startOf('day')
     },
     rangeM (start, end) {
       const result = []
