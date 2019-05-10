@@ -56,11 +56,11 @@
       </div>
     </div>
     <div class="console-footer">
-      <a-button @click="exchangeTeam" :disabled="!data.timeData.length>0">换班</a-button>
+      <a-button @click="changeTeamVisible" :disabled="!data.timeData.length>0">换班</a-button>
       <a-button type="primary" class="save" @click="save" :disabled="!data.timeData.length>0">保存</a-button>
     </div>
-    <modal title="换班" :visible="teamVisible" @close="close">
-      <switch-team @close="close" ref="switchTeam"></switch-team>
+    <modal title="换班" :visible="teamVisible" @close="changeTeamVisible">
+      <switch-team @close="changeTeamVisible" ref="switchTeam"></switch-team>
     </modal>
   </div>
 </template>
@@ -181,6 +181,7 @@ export default {
     // 取消选择
     cancelTimeRange (index) {
       this.range[index] = this.cacheTimeRange[index]
+      // 强制刷新视图
       this.$forceUpdate()
     },
     // 选择时间段
@@ -190,12 +191,15 @@ export default {
     },
     // 禁用日期
     disabledDate (current, name) {
+      // 取白班的班组
       const { dayTime } = this.$refs.switchTeam
-      // 否则会影响navDate的值
+      // 深拷贝，否则会影响navDate的值
       const dateClone = this.navDate.clone()
       if (dayTime.includes(name)) {
+        // 白班规则：只能选当天
         return current < dateClone.subtract(1, 'days') || current > this.navDate.endOf('day')
       }
+      // 晚班规则：选择当天和第二天
       return current > dateClone.add(2, 'days') || current < this.navDate.startOf('day')
     },
     rangeM (start, end) {
@@ -298,11 +302,8 @@ export default {
       })
     },
     // 换班弹窗
-    exchangeTeam () {
-      this.teamVisible = true
-    },
-    close () {
-      this.teamVisible = false
+    changeTeamVisible () {
+      this.teamVisible = !this.teamVisible
     },
     save () {
       // 格式化之后再保存
