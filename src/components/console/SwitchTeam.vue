@@ -4,7 +4,7 @@
       <div class="setting-item">
         <label class="remaining-days-title">换班剩余：</label>
         <a-select v-model="teamData.restDay" style="width: 160px">
-          <a-select-option v-for="i in 15" :key="i" :value="i">{{i}}</a-select-option>
+          <a-select-option v-for="i in 14" :key="i" :value="i">{{i}}</a-select-option>
         </a-select>
         <div style="margin-left: 10px">天</div>
       </div>
