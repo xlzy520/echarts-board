@@ -101,29 +101,27 @@ export default {
           align: 'center',
           scopedSlots: { customRender: 'day' },
           customCell: (record, index) => {
+            const readOnly = {
+              class: {
+                readOnly: true
+              }
+            }
+            // 不为总线时
             if (this.activeTab !== 4) {
+              // 有canWrite属性为真
               if (this.data.teamBoardData[this.activeTab].canWrite) {
+                // 第0145列为只读
                 if ([0, 1, 4, 5].includes(index)) {
-                  return {
-                    class: {
-                      readOnly: true
-                    }
-                  }
+                  return readOnly
                 }
               } else {
-                return {
-                  class: {
-                    readOnly: true
-                  }
-                }
+                // 有canWrite属性为假
+                return readOnly
               }
             } else {
+              // 为总线时，小于11的列数为只读
               if (index < 11) {
-                return {
-                  class: {
-                    readOnly: true
-                  }
-                }
+                return readOnly
               }
             }
           }
@@ -133,7 +131,7 @@ export default {
           dataIndex: 'month',
           align: 'center',
           scopedSlots: { customRender: 'month' },
-          customCell: function (record, index) {
+          customCell: () => {
             return {
               class: {
                 readOnly: true
