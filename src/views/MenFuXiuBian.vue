@@ -344,9 +344,6 @@ export default {
   mounted () {
     this.getPageData()
     this.timingUpdateData()
-  },
-  destroyed () {
-    clearInterval(this.timingUpdateData())
   }
 }
 </script>

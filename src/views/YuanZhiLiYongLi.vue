@@ -393,9 +393,6 @@ export default {
   mounted () {
     this.getPaperUseRate()
     this.timingUpdateData()
-  },
-  destroyed () {
-    clearInterval(this.timingUpdateData())
   }
 }
 </script>
