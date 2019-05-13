@@ -286,11 +286,14 @@ export default {
       this.drawLine(index)
     },
     timingUpdateData () {
-      setInterval(() => {
+      const timer = setInterval(() => {
         board.getProcessLossAndCost().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timer)
+      })
     }
   },
   mounted () {

@@ -320,19 +320,19 @@ export default {
       this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
     },
     timingUpdateData () {
-      setInterval(() => {
+      const timer = setInterval(() => {
         board.getSpeed().then(res => {
           this.data = res.data
         })
       }, this.$timeout)
+      this.$once('hook:beforeDestroy', () => {
+        clearInterval(timer)
+      })
     }
   },
   mounted () {
     this.getSpeedData()
     this.timingUpdateData()
-  },
-  destroyed () {
-    clearInterval(this.timingUpdateData())
   }
 }
 </script>
