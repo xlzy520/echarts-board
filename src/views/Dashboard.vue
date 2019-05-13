@@ -39,8 +39,8 @@ export default {
             type: 'gauge',
             center: ['50%', '50%'],
             radius: '87%',
-            startAngle: 270,
-            endAngle: 270 - 180 * (left.speed / 268),
+            startAngle: 269.5,
+            endAngle: 270.5 - 180 * (left.speed / 268),
             splitNumber: -1,
             z: 5,
             min: 0,
@@ -56,10 +56,10 @@ export default {
                 [
                   {
                     x: '50%',
-                    y: '5%',
+                    y: '32.5%',
                     lineStyle: { width: 1, color: '#d1d1d1' }
                   },
-                  { x: '50%', y: '14%' }
+                  { x: '50%', y: '67.5%' }
                 ]
               ]
             },
@@ -93,8 +93,8 @@ export default {
             name: 'right',
             type: 'gauge',
             center: ['50%', '50%'],
-            startAngle: 450 - 180 * ((268 - right.speed) / 268),
-            endAngle: 270,
+            startAngle: 449.5 - 180 * ((268 - right.speed) / 268),
+            endAngle: 270.5,
             z: 5,
             splitNumber: -1,
             min: 268,
