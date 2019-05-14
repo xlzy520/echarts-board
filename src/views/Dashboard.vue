@@ -134,10 +134,17 @@ export default {
     drawLine (index = 0) {
       const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
         return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value > 200 ? 200 + (50 / 68) * (v.value - 200) : v.value]
+          date: v.date,
+          value: v.value > 200 ? 200 + (50 / 68) * (v.value - 200) : v.value
         }
       })
+      const length = seriesData.length - 1
+      const startValue = seriesData[0].value
+      const endValue = seriesData[length].value
+      const markPointData = [
+        { name: '第一天', value: startValue, xAxis: 0, yAxis: startValue },
+        { name: '最后一天', value: endValue, xAxis: length, yAxis: endValue }
+      ]
       let option = {
         grid: {
           top: 10,
@@ -146,35 +153,35 @@ export default {
         },
         xAxis: {
           type: 'category',
-          offset: 10,
-          splitNumber: 1,
           axisLabel: {
-            interval: function (index, val) {
-              return index === 0 || index === seriesData.length - 1
-            },
-            formatter: (params, index) => {
-              if (index === 0) {
-                return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              } else {
-                return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              }
-            },
-            rich: {
-              front: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
-                align: 'right',
-                width: 200
-              },
-              end: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
-                align: 'left',
-                width: 240
-              }
-            }
+            show: false
+            // 不在需要X轴的始末日期
+            // interval: function (index, val) {
+            //   return index === 0 || index === seriesData.length - 1
+            // },
+            // formatter: (params, index) => {
+            //   if (index === 0) {
+            //     return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+            //   } else {
+            //     return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
+            //   }
+            // },
+            // rich: {
+            //   front: {
+            //     color: '#333',
+            //     fontFamily: 'PingFang SC Regular',
+            //     fontSize: 20,
+            //     align: 'right',
+            //     width: 200
+            //   },
+            //   end: {
+            //     color: '#333',
+            //     fontFamily: 'PingFang SC Regular',
+            //     fontSize: 20,
+            //     align: 'left',
+            //     width: 240
+            //   }
+            // }
           },
           axisLine: {
             show: false
@@ -187,7 +194,6 @@ export default {
           type: 'value',
           min: 0,
           max: 250,
-          splitNumber: 4,
           interval: 50,
           axisLine: {
             show: false
@@ -223,6 +229,48 @@ export default {
           },
           lineStyle: {
             width: 2.5
+          },
+          markLine: {
+            symbol: 'none',
+            data: [
+              {
+                name: '平均车速月目标',
+                yAxis: this.chartHeader.leftValue,
+                lineStyle: {
+                  color: '#f78787',
+                  width: 5 / 4,
+                  type: 'solid'
+                },
+                label: {
+                  show: false
+                }
+
+              }
+            ]
+          },
+          markPoint: {
+            symbol: 'rect',
+            symbolSize: [50, 20],
+            symbolOffset: [0, '-80%'],
+            data: markPointData,
+            itemStyle: {
+              color: '#1c97ff',
+              shadowColor: '#b5b5b5',
+              shadowBlur: 5,
+              shadowOffsetX: 1,
+              shadowOffsetY: 3
+            },
+            label: {
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 15,
+              formatter: params => {
+                function formatter (date) {
+                  let monthDay = date.substr(date.indexOf('-') + 1)
+                  return monthDay.replace('-', '/')
+                }
+                return formatter(seriesData[params.dataIndex ? length : 0].date)
+              }
+            }
           }
         }]
       }
@@ -316,8 +364,8 @@ export default {
       })
     },
     tabClick (index = 0) {
-      this.drawLine(index)
       this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
+      this.drawLine(index)
     },
     timingUpdateData () {
       const timer = setInterval(() => {
