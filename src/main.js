@@ -15,6 +15,7 @@ require('echarts/lib/chart/gauge')
 require('echarts/lib/chart/line')
 require('echarts/lib/component/title')
 require('echarts/lib/component/markLine')
+require('echarts/lib/component/markPoint')
 require('echarts/lib/component/legend')
 require('echarts/lib/component/grid')
 
