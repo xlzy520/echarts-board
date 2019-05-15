@@ -386,14 +386,6 @@ export default {
 </script>
 
 <style lang="less">
-.charts-wrapper {
-  color: #333;
-  font-size: 30px;
-  transform: rotate(-90deg);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
 .average #top{
     background: url("../assets/圆环背景.png") no-repeat;
     background-position-x: center;
