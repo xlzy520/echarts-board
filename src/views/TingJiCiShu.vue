@@ -3,7 +3,7 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 279px"
+      chartStyle="height: 330px"
     ></chart-box>
     <chart-box
       ref="middle"
@@ -13,7 +13,7 @@
     ></chart-box>
     <chart-box
       ref="bottom"
-      title="各组日均平均车速趋势图"
+      title="各组停机次数趋势图"
       :header="true"
       id="bottom"
       :group-data="data.teamTrendMap"
@@ -37,87 +37,99 @@ export default {
   methods: {
     // 停机次数
     drawTingJiCiShu () {
+      const max = this.data.haltCountData[0].haltCountMonthGoal
+      const [a, b] = this.data.haltCountData
+      const markPointData = [
+        {
+          name: '日累计',
+          value: a.todayHaltCount,
+          xAxis: a.todayHaltCount + a.monthHaltCount,
+          yAxis: 0
+        },
+        {
+          name: '日累计',
+          value: b.todayHaltCount,
+          xAxis: b.todayHaltCount + b.monthHaltCount,
+          yAxis: 1
+        }
+      ]
+      let markPointRectData = [
+        {
+          name: '日累计',
+          value: a.todayHaltCount,
+          xAxis: a.todayHaltCount + a.monthHaltCount,
+          yAxis: 0
+        },
+        {
+          name: '日累计',
+          value: b.todayHaltCount,
+          xAxis: b.todayHaltCount + b.monthHaltCount,
+          yAxis: 1
+        }
+      ]
+      markPointRectData.map(v => {
+        let rate = v.xAxis / max
+        if (rate < 0.1) {
+          v.xAxis += max * 0.08
+        } else if (rate > 0.9) {
+          v.xAxis -= max * 0.08
+        }
+      })
       let option = {
-        color: ['#000f84', '#5095f3'],
+        color: ['#5095f3', '#000f84', '#bbdaf7'],
         title: {
           text: '停机次数',
           textStyle: {
-            fontFamily: 'PingFang SC Regular',
+            fontFamily: 'PingFang SC Bold',
             fontSize: 30,
-            fontWeight: 'normal'
+            fontWeight: 'lighter'
           },
           left: 12,
-          top: 10
+          top: 15
         },
         legend: {
-          data: [
-            {
-              name: '月累计完成',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
-            },
-            {
-              name: '月目标',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
-            }
-          ],
-          right: 120 / 4,
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 100 / 4
+          },
+          right: 15,
           top: 66 / 4,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
           itemGap: 76 / 4,
-          textStyle: {
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 100 / 4,
-            itemGap: 10 / 4
-          }
+          data: [
+            {
+              name: '日累计',
+              icon: 'rect'
+            },
+            {
+              name: '月累计',
+              icon: 'rect'
+            },
+            {
+              name: '月目标',
+              icon: 'rect'
+            }
+          ]
         },
         grid: {
-          top: 320 / 4,
-          left: -60 / 4,
-          right: 120,
-          bottom: 0,
+          top: 60,
+          left: 15,
+          right: 15,
+          bottom: -10,
           containLabel: true
         },
         xAxis: {
           show: false,
-          type: 'value'
+          type: 'value',
+          max: max
         },
         yAxis: {
           type: 'category',
-          inverse: true,
-          offset: -20,
-          data: this.data.haltCountData.map(v => v.name),
           axisLabel: {
-            color: '#333',
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 120 / 4,
-            margin: 140 / 4,
-            formatter: (params, index) => {
-              return (
-                '{main|' +
-                params +
-                '}' +
-                '\n{sub|' +
-                this.data.haltCountData[index].todayHaltCount +
-                '次}'
-              )
-            },
-            rich: {
-              main: {
-                align: 'left',
-                fontSize: 120 / 4
-              },
-              sub: {
-                fontSize: 80 / 4
-              }
-            }
+            show: false
           },
+          data: this.data.haltCountData.map(v => v.name),
           splitLine: {
             show: false
           },
@@ -130,40 +142,111 @@ export default {
         },
         series: [
           {
-            name: '月累计完成',
+            name: '月累计',
             type: 'bar',
             barWidth: 160 / 4,
-            barGap: '0%',
+            stack: 'count',
             label: {
-              normal: {
-                show: true,
-                position: 'right',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 120 / 4,
-                color: '#333',
-                offset: [44 / 4, 0]
+              show: true,
+              position: 'insideLeft',
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 18,
+              offset: [0, -50],
+              color: '#333',
+              formatter: params => {
+                return '{letter|' + params.name + '}组月累计停机次数 ' + '{number|' + params.value + '}次'
+              },
+              rich: {
+                letter: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 26
+                },
+                number: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 30
+                }
               }
             },
             data: this.data.haltCountData.map(v => v.monthHaltCount)
           },
           {
+            name: '日累计',
+            type: 'bar',
+            barWidth: 160 / 4,
+            barGap: '0%',
+            stack: 'count',
+            label: {
+              normal: {
+                show: false,
+                position: 'top',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 120 / 4,
+                color: '#333'
+              }
+            },
+            data: this.data.haltCountData.map(v => v.todayHaltCount),
+            markPoint: {
+              symbol: function (data, params) {
+                console.log(data, params)
+                // return 'image://http://s0.hao123img.com/res/img/moe/bilibili-logoo.jpg'
+                return 'arrow'
+              },
+              symbolSize: 15,
+              symbolOffset: [0, 20],
+              data: markPointData,
+              label: {
+                show: false
+              }
+            }
+          },
+          {
             name: '月目标',
             type: 'bar',
             barWidth: 160 / 4,
+            stack: 'count',
             label: {
-              normal: {
-                show: true,
-                position: 'right',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 120 / 4,
-                color: '#333',
-                offset: [44 / 4, 0]
+              show: true,
+              position: 'insideRight',
+              offset: [0, -50],
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 18,
+              color: '#333',
+              formatter: params => {
+                return '月目标停机次数 {number|' + this.data.haltCountData[params.dataIndex].haltCountMonthGoal + '}次'
+              },
+              rich: {
+                number: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 30
+                }
               }
             },
-            data: this.data.haltCountData.map(v => v.haltCountMonthGoal)
+            data: this.data.haltCountData.map(v => v.haltCountMonthGoal - v.monthHaltCount - v.todayHaltCount),
+            markPoint: {
+              symbol: 'rect',
+              symbolSize: [100, 30],
+              symbolOffset: [0, 45],
+              data: markPointRectData,
+              itemStyle: {
+                color: '#000f84'
+              },
+              label: {
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 15,
+                formatter: paramas => {
+                  return '今日已停 ' + paramas.value + '次'
+                },
+                offset: [0, 0]
+              }
+            }
+
           }
         ]
       }
+
       this.$refs.top.draw(option)
     },
     // 总线数据
