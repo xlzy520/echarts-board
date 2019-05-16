@@ -3,7 +3,7 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 330px"
+      chartStyle="height: 299px"
     ></chart-box>
     <chart-box
       ref="middle"
@@ -18,7 +18,7 @@
       id="bottom"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 300px"
+      chartStyle="height: 280px"
     ></chart-box>
   </div>
 </template>
@@ -37,43 +37,83 @@ export default {
   methods: {
     // 停机次数
     drawTingJiCiShu () {
-      const max = this.data.haltCountData[0].haltCountMonthGoal
+      this.data.haltCountData = this.data.haltCountData.reverse()
       const [a, b] = this.data.haltCountData
+      const max = Math.max(a.haltCountMonthGoal, b.haltCountMonthGoal)
       const markPointData = [
         {
           name: '日累计',
-          value: a.todayHaltCount,
-          xAxis: a.todayHaltCount + a.monthHaltCount,
-          yAxis: 0
+          value: b.todayHaltCount,
+          xAxis: b.monthHaltCount >= max ? max : max - b.todayHaltCount,
+          yAxis: 1
         },
         {
           name: '日累计',
-          value: b.todayHaltCount,
-          xAxis: b.todayHaltCount + b.monthHaltCount,
-          yAxis: 1
+          value: a.todayHaltCount,
+          xAxis: a.monthHaltCount >= max ? max : max - a.todayHaltCount,
+          yAxis: 0
         }
       ]
+      markPointData.map((v, index) => {
+        if ((v.xAxis - v.value) >= max) {
+          v.xAxis -= v.value * 2
+        }
+      })
       let markPointRectData = [
         {
           name: '日累计',
-          value: a.todayHaltCount,
-          xAxis: a.todayHaltCount + a.monthHaltCount,
-          yAxis: 0
+          value: b.todayHaltCount,
+          xAxis: b.monthHaltCount >= max ? max : max - b.todayHaltCount,
+          yAxis: 1
         },
         {
           name: '日累计',
-          value: b.todayHaltCount,
-          xAxis: b.todayHaltCount + b.monthHaltCount,
-          yAxis: 1
+          value: a.todayHaltCount,
+          xAxis: a.monthHaltCount >= max ? max : max - a.todayHaltCount,
+          yAxis: 0
         }
       ]
-      markPointRectData.map(v => {
+      markPointRectData.map((v, index) => {
+        if ((v.xAxis - v.value) >= max) {
+          v.xAxis -= v.value * 2
+        }
         let rate = v.xAxis / max
         if (rate < 0.1) {
           v.xAxis += max * 0.08
         } else if (rate > 0.9) {
           v.xAxis -= max * 0.08
         }
+      })
+      let markLineData = [
+        [
+          {
+            x: '15',
+            y: '39.3%',
+            lineStyle: { width: 40, color: '#ff001c' }
+          },
+          { x: '525', y: '39.3%' }
+        ],
+        [
+          {
+            x: '15',
+            y: '77.5%',
+            lineStyle: { width: 40, color: '#ff001c' }
+          },
+          { x: '525', y: '77.5%' }
+        ]
+      ]
+      let monthCount = this.data.haltCountData.map((v, index) => {
+        if (v.monthHaltCount >= v.haltCountMonthGoal) {
+          if (markLineData.length === 2) {
+            markLineData[index][1].x -= 510 * (index ? a : b).todayHaltCount / max
+          } else {
+            markLineData[0][1].x -= 510 * (index ? a : b).todayHaltCount / max
+          }
+          return v.haltCountMonthGoal - v.todayHaltCount
+        } else {
+          markLineData.splice(index, 1)
+        }
+        return v.monthHaltCount
       })
       let option = {
         color: ['#5095f3', '#000f84', '#bbdaf7'],
@@ -151,10 +191,11 @@ export default {
               position: 'insideLeft',
               fontFamily: 'PingFang SC Regular',
               fontSize: 18,
-              offset: [0, -50],
+              offset: [0, -40],
               color: '#333',
               formatter: params => {
-                return '{letter|' + params.name + '}组月累计停机次数 ' + '{number|' + params.value + '}次'
+                return '{letter|' + params.name + '}组月累计停机次数 ' +
+                  '{number|' + (params.dataIndex === 0 ? a : b).monthHaltCount + '}次'
               },
               rich: {
                 letter: {
@@ -169,7 +210,37 @@ export default {
                 }
               }
             },
-            data: this.data.haltCountData.map(v => v.monthHaltCount)
+            markLine: {
+              symbol: 'none',
+              lineStyle: { type: 'solid' },
+              silent: true,
+              label: {
+                position: 'middle',
+                color: '#fff',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 18,
+                verticalAlign: 'middle',
+                formatter: params => {
+                  const { haltCountMonthGoal, monthHaltCount } = params.dataIndex === 0 ? b : a
+                  const value = monthHaltCount - haltCountMonthGoal
+                  if (value === 0) {
+                    return '已触及月目标'
+                  } else if (value > 0) {
+                    return '已超出月目标停机次数{number|' + value + '}次'
+                  }
+                  return ''
+                },
+                rich: {
+                  number: {
+                    fontFamily: 'PingFang SC Regular',
+                    fontSize: 30,
+                    color: '#fff'
+                  }
+                }
+              },
+              data: markLineData
+            },
+            data: monthCount
           },
           {
             name: '日累计',
@@ -188,11 +259,7 @@ export default {
             },
             data: this.data.haltCountData.map(v => v.todayHaltCount),
             markPoint: {
-              symbol: function (data, params) {
-                console.log(data, params)
-                // return 'image://http://s0.hao123img.com/res/img/moe/bilibili-logoo.jpg'
-                return 'arrow'
-              },
+              symbol: 'arrow',
               symbolSize: 15,
               symbolOffset: [0, 20],
               data: markPointData,
@@ -209,12 +276,12 @@ export default {
             label: {
               show: true,
               position: 'insideRight',
-              offset: [0, -50],
+              offset: [0, -40],
               fontFamily: 'PingFang SC Regular',
               fontSize: 18,
               color: '#333',
               formatter: params => {
-                return '月目标停机次数 {number|' + this.data.haltCountData[params.dataIndex].haltCountMonthGoal + '}次'
+                return '月目标停机次数 {number|' + (params.dataIndex === 0 ? b : a).haltCountMonthGoal + '}次'
               },
               rich: {
                 number: {
@@ -224,7 +291,12 @@ export default {
                 }
               }
             },
-            data: this.data.haltCountData.map(v => v.haltCountMonthGoal - v.monthHaltCount - v.todayHaltCount),
+            data: this.data.haltCountData.map(v => {
+              if (v.monthHaltCount >= v.haltCountMonthGoal) {
+                return 0
+              }
+              return v.haltCountMonthGoal - v.monthHaltCount - v.todayHaltCount
+            }),
             markPoint: {
               symbol: 'rect',
               symbolSize: [100, 30],
@@ -236,17 +308,15 @@ export default {
               label: {
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 15,
-                formatter: paramas => {
-                  return '今日已停 ' + paramas.value + '次'
+                formatter: params => {
+                  return '今日已停 ' + (params.dataIndex === 0 ? b : a).todayHaltCount + '次'
                 },
                 offset: [0, 0]
               }
             }
-
           }
         ]
       }
-
       this.$refs.top.draw(option)
     },
     // 总线数据
