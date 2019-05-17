@@ -245,17 +245,19 @@ export default {
       this.$refs.middle.draw(option)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
-        return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value]
-        }
-      })
+      const seriesData = this.data.teamTrendMap[index].trendMap
+      const length = seriesData.length - 1
+      const startValue = seriesData[0].value
+      const endValue = seriesData[length].value
+      const markPointData = [
+        { name: '第一天', value: startValue, xAxis: 0, yAxis: startValue },
+        { name: '最后一天', value: endValue, xAxis: length, yAxis: endValue }
+      ]
       let option = {
         grid: {
-          top: 10,
+          top: 30,
           left: 400 / 4,
-          bottom: 260 / 4
+          bottom: 30
         },
         xAxis: {
           type: 'category',
@@ -265,32 +267,7 @@ export default {
             show: false
           },
           axisLabel: {
-            interval: function (index, val) {
-              return index === 0 || index === seriesData.length - 1
-            },
-            formatter: (params, index) => {
-              if (index === 0) {
-                return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              } else {
-                return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              }
-            },
-            rich: {
-              front: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 80 / 4,
-                align: 'right',
-                width: 800 / 4
-              },
-              end: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 80 / 4,
-                align: 'left',
-                width: 800 / 4
-              }
-            }
+           show: false
           },
           axisLine: {
             show: false
@@ -335,7 +312,7 @@ export default {
             width: 10 / 4
           },
           markLine: {
-            symbol: 'circle',
+            symbol: 'none',
             data: [
               {
                 name: '合理最低原纸利用率：0.1%',
@@ -353,6 +330,30 @@ export default {
 
               }
             ]
+          },
+          markPoint: {
+            symbol: 'rect',
+            symbolSize: [50, 20],
+            symbolOffset: [0, '-80%'],
+            data: markPointData,
+            itemStyle: {
+              color: '#1c97ff',
+              shadowColor: '#b5b5b5',
+              shadowBlur: 5,
+              shadowOffsetX: 1,
+              shadowOffsetY: 3
+            },
+            label: {
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 15,
+              formatter: params => {
+                function formatter (date) {
+                  let monthDay = date.substr(date.indexOf('-') + 1)
+                  return monthDay.replace('-', '/')
+                }
+                return formatter(seriesData[params.dataIndex ? length : 0].date)
+              }
+            }
           }
         }]
       }
