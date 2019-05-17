@@ -38,42 +38,30 @@ export default {
     // 停机次数
     drawTingJiCiShu () {
       this.data.haltCountData = this.data.haltCountData.reverse()
+      // a在下，b在上
       const [a, b] = this.data.haltCountData
       const max = Math.max(a.haltCountMonthGoal, b.haltCountMonthGoal)
       const markPointData = [
         {
           name: '日累计',
           value: b.todayHaltCount,
-          xAxis: b.monthHaltCount >= max ? max : max - b.todayHaltCount,
+          xAxis: b.monthHaltCount >= max ? max : b.monthHaltCount + b.todayHaltCount,
           yAxis: 1
         },
         {
           name: '日累计',
           value: a.todayHaltCount,
-          xAxis: a.monthHaltCount >= max ? max : max - a.todayHaltCount,
+          xAxis: a.monthHaltCount >= max ? max : a.monthHaltCount + a.todayHaltCount,
           yAxis: 0
         }
       ]
-      markPointData.map((v, index) => {
+      markPointData.map(v => {
         if ((v.xAxis - v.value) >= max) {
           v.xAxis -= v.value * 2
         }
       })
-      let markPointRectData = [
-        {
-          name: '日累计',
-          value: b.todayHaltCount,
-          xAxis: b.monthHaltCount >= max ? max : max - b.todayHaltCount,
-          yAxis: 1
-        },
-        {
-          name: '日累计',
-          value: a.todayHaltCount,
-          xAxis: a.monthHaltCount >= max ? max : max - a.todayHaltCount,
-          yAxis: 0
-        }
-      ]
-      markPointRectData.map((v, index) => {
+      let markPointRectData = JSON.parse(JSON.stringify(markPointData))
+      markPointRectData.map(v => {
         if ((v.xAxis - v.value) >= max) {
           v.xAxis -= v.value * 2
         }
@@ -85,6 +73,16 @@ export default {
         }
       })
       let markLineData = [
+        // 下标记线
+        [
+          {
+            x: '15',
+            y: '77.5%',
+            lineStyle: { width: 40, color: '#ff001c' }
+          },
+          { x: 525, y: '77.5%' }
+        ],
+        // 上标记线
         [
           {
             x: '15',
@@ -92,26 +90,18 @@ export default {
             lineStyle: { width: 40, color: '#ff001c' }
           },
           { x: '525', y: '39.3%' }
-        ],
-        [
-          {
-            x: '15',
-            y: '77.5%',
-            lineStyle: { width: 40, color: '#ff001c' }
-          },
-          { x: '525', y: '77.5%' }
         ]
       ]
+      // 是否显示标记线
       let monthCount = this.data.haltCountData.map((v, index) => {
+        // 长度是否为2，如果长度不为2，那么下标只能取0，而取不到1
+        const lengthIs2 = markLineData.length === 2
         if (v.monthHaltCount >= v.haltCountMonthGoal) {
-          if (markLineData.length === 2) {
-            markLineData[index][1].x -= 510 * (index ? a : b).todayHaltCount / max
-          } else {
-            markLineData[0][1].x -= 510 * (index ? a : b).todayHaltCount / max
-          }
+          markLineData[lengthIs2 ? index : 0][1].x -= 510 * (index ? b : a).todayHaltCount / max
           return v.haltCountMonthGoal - v.todayHaltCount
         } else {
-          markLineData.splice(index, 1)
+          // 未超过，不显示标记线
+          markLineData.splice(lengthIs2 ? index : 0, 1)
         }
         return v.monthHaltCount
       })
@@ -221,7 +211,7 @@ export default {
                 fontSize: 18,
                 verticalAlign: 'middle',
                 formatter: params => {
-                  const { haltCountMonthGoal, monthHaltCount } = params.dataIndex === 0 ? b : a
+                  const { haltCountMonthGoal, monthHaltCount } = params.dataIndex === 0 ? a : b
                   const value = monthHaltCount - haltCountMonthGoal
                   if (value === 0) {
                     return '已触及月目标'
@@ -326,18 +316,12 @@ export default {
       const legendData = lineHaltCount.map(v => {
         return {
           name: v.name,
-          icon: 'rect',
-          textStyle: {
-            padding: [0, 0, 0, 28 / 4]
-          }
+          icon: 'rect'
         }
       })
-      const dayTotal = lineHaltCount.find(v => v.name === '日累计停机次数')
-        .value
-      const monthGoal = lineHaltCount.find(v => v.name === '月目标停机次数')
-        .value
-      const monthTotal = lineHaltCount.find(v => v.name === '月累计停机次数')
-        .value
+      const dayTotal = lineHaltCount.find(v => v.name === '日累计停机次数').value
+      const monthGoal = lineHaltCount.find(v => v.name === '月目标停机次数').value
+      const monthTotal = lineHaltCount.find(v => v.name === '月累计停机次数').value
       const seriesData = [
         {
           name: '日累计停机次数',
@@ -368,12 +352,18 @@ export default {
           formatter: name => {
             const index = legendName.indexOf(name)
             const value = lineHaltCount[index].value
-            return name + ': ' + value + '次'
+            return name + '{number| ' + value + '} 次'
           },
           textStyle: {
             fontFamily: 'PingFang SC Regular',
             fontSize: 80 / 4,
-            itemGap: 10 / 4
+            itemGap: 10 / 4,
+            rich: {
+              number: {
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 30
+              }
+            }
           }
         },
         series: [
@@ -403,52 +393,25 @@ export default {
       this.$refs.middle.draw(option)
     },
     drawLine (index = 0) {
-      const seriesData = this.data.teamTrendMap[index].trendMap.map(v => {
-        return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value]
-        }
-      })
+      const seriesData = this.data.teamTrendMap[index].trendMap
+      const length = seriesData.length - 1
+      const startValue = seriesData[0].value
+      const endValue = seriesData[length].value
+      const markPointData = [
+        { name: '第一天', value: startValue, xAxis: 0, yAxis: startValue },
+        { name: '最后一天', value: endValue, xAxis: length, yAxis: endValue }
+      ]
       let option = {
         grid: {
-          top: 20,
-          bottom: 180 / 4
+          top: 30,
+          bottom: 30
         },
         xAxis: {
           type: 'category',
           offset: 40 / 4,
           splitNumber: 1,
           axisLabel: {
-            interval: function (index, val) {
-              return index === 0 || index === seriesData.length - 1
-            },
-            formatter: (params, index) => {
-              if (index === 0) {
-                return (
-                  '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-                )
-              } else {
-                return (
-                  '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-                )
-              }
-            },
-            rich: {
-              front: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 80 / 4,
-                align: 'right',
-                width: 200
-              },
-              end: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 80 / 4,
-                align: 'left',
-                width: 240
-              }
-            }
+            show: false
           },
           axisLine: {
             show: false
@@ -492,6 +455,30 @@ export default {
             },
             lineStyle: {
               width: 10 / 4
+            },
+            markPoint: {
+              symbol: 'rect',
+              symbolSize: [50, 20],
+              symbolOffset: [0, '-80%'],
+              data: markPointData,
+              itemStyle: {
+                color: '#1c97ff',
+                shadowColor: '#b5b5b5',
+                shadowBlur: 5,
+                shadowOffsetX: 1,
+                shadowOffsetY: 3
+              },
+              label: {
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 15,
+                formatter: params => {
+                  function formatter (date) {
+                    let monthDay = date.substr(date.indexOf('-') + 1)
+                    return monthDay.replace('-', '/')
+                  }
+                  return formatter(seriesData[params.dataIndex ? length : 0].date)
+                }
+              }
             }
           }
         ]
