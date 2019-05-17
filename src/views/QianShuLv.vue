@@ -162,19 +162,21 @@ export default {
       // 准时入库率
       const seriesData = this.data.punctualRateTeamTrendMap[index].trendMap.map(v => {
         return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value < 90 ? 85 + (5 / 90) * v.value : v.value]
+          date: v.date,
+          value: v.value < 90 ? 85 + (5 / 90) * v.value : v.value
         }
       })
+      const length = seriesData.length - 1
+      const startValue = seriesData[0].value
+      const endValue = seriesData[length].value
+      const markPointData = [
+        { name: '第一天', value: startValue, xAxis: 0, yAxis: startValue },
+        { name: '最后一天', value: endValue, xAxis: length, yAxis: endValue }
+      ]
       // 欠数率
-      const seriesDataSecond = this.data.ownRateTeamTrendMap[index].trendMap.map(v => {
-        return {
-          date: new Date(v.date).toString(),
-          value: [v.date, v.value]
-        }
-      })
+      const seriesDataSecond = this.data.ownRateTeamTrendMap[index].trendMap
       let option = {
-        color: ['#f45b5b', '#5095f3'],
+        color: ['#000f84', '#5095f3'],
         grid: {
           top: 60,
           bottom: 30,
@@ -207,32 +209,7 @@ export default {
           offset: 10,
           splitNumber: 1,
           axisLabel: {
-            interval: function (index, val) {
-              return index === 0 || index === seriesData.length - 1
-            },
-            formatter: (params, index) => {
-              if (index === 0) {
-                return '{front|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              } else {
-                return '{end|' + this.moment(params).format('YYYY年MM月DD日') + '}'
-              }
-            },
-            rich: {
-              front: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
-                align: 'right',
-                width: 200
-              },
-              end: {
-                color: '#333',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 20,
-                align: 'left',
-                width: 240
-              }
-            }
+            show: false
           },
           axisLine: {
             show: false
@@ -316,7 +293,57 @@ export default {
             },
             lineStyle: {
               width: 2.5
-            }
+            },
+            markPoint: {
+              symbol: 'rect',
+              symbolSize: [50, 20],
+              symbolOffset: [0, '-80%'],
+              data: markPointData,
+              itemStyle: {
+                color: '#1c97ff',
+                shadowColor: '#b5b5b5',
+                shadowBlur: 5,
+                shadowOffsetX: 1,
+                shadowOffsetY: 3
+              },
+              label: {
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 15,
+                formatter: params => {
+                  function formatter (date) {
+                    let monthDay = date.substr(date.indexOf('-') + 1)
+                    return monthDay.replace('-', '/')
+                  }
+                  return formatter(seriesData[params.dataIndex ? length : 0].date)
+                }
+              }
+            },
+            markLine: {
+              symbol: 'none',
+              label: {
+                show: false
+              },
+              data: [
+                {
+                  name: markPointData[0].name,
+                  xAxis: 0,
+                  lineStyle: {
+                    color: '#989898',
+                    width: 1.5,
+                    type: 'dot'
+                  }
+                },
+                {
+                  name: markPointData[1].name,
+                  xAxis: seriesData.length - 1,
+                  lineStyle: {
+                    color: '#989898',
+                    width: 1.5,
+                    type: 'dot'
+                  }
+                }
+              ]
+            },
           }
         ]
       }
