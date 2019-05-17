@@ -40,27 +40,26 @@ export default {
       this.data.haltCountData = this.data.haltCountData.reverse()
       // a在下，b在上
       const [a, b] = this.data.haltCountData
+      // 取最大值，上下两列的最大值都设为这个值
       const max = Math.max(a.haltCountMonthGoal, b.haltCountMonthGoal)
+      // 箭头标记点坐标，当月累计大于月目标时，去最大值，否则乘以相应的比例
       const markPointData = [
         {
           name: '日累计',
           value: b.todayHaltCount,
-          xAxis: b.monthHaltCount >= max ? max : b.monthHaltCount + b.todayHaltCount,
+          xAxis: b.monthHaltCount >= a.haltCountMonthGoal ? max : (b.monthHaltCount + b.todayHaltCount) * (max / b.haltCountMonthGoal),
           yAxis: 1
         },
         {
           name: '日累计',
           value: a.todayHaltCount,
-          xAxis: a.monthHaltCount >= max ? max : a.monthHaltCount + a.todayHaltCount,
+          xAxis: a.monthHaltCount >= a.haltCountMonthGoal ? max : (a.monthHaltCount + a.todayHaltCount) * (max / a.haltCountMonthGoal),
           yAxis: 0
         }
       ]
-      markPointData.map(v => {
-        if ((v.xAxis - v.value) >= max) {
-          v.xAxis -= v.value * 2
-        }
-      })
+      // 提示框标记坐标
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
+      // 提示框左侧和右侧都不能被隐藏
       markPointRectData.map(v => {
         if ((v.xAxis - v.value) >= max) {
           v.xAxis -= v.value * 2
@@ -72,6 +71,7 @@ export default {
           v.xAxis -= max * 0.08
         }
       })
+      // 标记线数据，上下两列
       let markLineData = [
         // 下标记线
         [
@@ -92,13 +92,15 @@ export default {
           { x: '525', y: '39.3%' }
         ]
       ]
-      // 是否显示标记线
+      // 标记线数量，长度
       let monthCount = this.data.haltCountData.map((v, index) => {
         // 长度是否为2，如果长度不为2，那么下标只能取0，而取不到1
         const lengthIs2 = markLineData.length === 2
+        const group = index ? b : a
         if (v.monthHaltCount >= v.haltCountMonthGoal) {
-          markLineData[lengthIs2 ? index : 0][1].x -= 510 * (index ? b : a).todayHaltCount / max
-          return v.haltCountMonthGoal - v.todayHaltCount
+          // 控制红色警告线的长度
+          markLineData[lengthIs2 ? index : 0][1].x -= 510 * group.todayHaltCount / group.haltCountMonthGoal
+          return max - v.todayHaltCount * (max / v.haltCountMonthGoal)
         } else {
           // 未超过，不显示标记线
           markLineData.splice(lengthIs2 ? index : 0, 1)
@@ -247,7 +249,9 @@ export default {
                 color: '#333'
               }
             },
-            data: this.data.haltCountData.map(v => v.todayHaltCount),
+            data: this.data.haltCountData.map(v => {
+              return v.todayHaltCount * (max / v.haltCountMonthGoal)
+            }),
             markPoint: {
               symbol: 'arrow',
               symbolSize: 15,
@@ -271,7 +275,7 @@ export default {
               fontSize: 18,
               color: '#333',
               formatter: params => {
-                return '月目标停机次数 {number|' + (params.dataIndex === 0 ? b : a).haltCountMonthGoal + '}次'
+                return '月目标停机次数 {number|' + (params.dataIndex === 0 ? a : b).haltCountMonthGoal + '}次'
               },
               rich: {
                 number: {
