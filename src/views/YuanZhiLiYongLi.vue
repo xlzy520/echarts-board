@@ -37,148 +37,275 @@ export default {
     }
   },
   methods: {
+    calc (min, max, goal, count) {
+      const diff = max - goal
+      if (diff === 0) {
+        return count
+      }
+      return count + (max - goal) / (max - min)
+    },
     drawBar () {
+      this.data.paperUseRate = this.data.paperUseRate.reverse()
+      const [a, b] = this.data.paperUseRate
+      const min = 98
+      const max = Math.max(a.paperUseRateMonthGoalRate, b.paperUseRateMonthGoalRate)
+      const markPointData = [
+        {
+          name: '日累计',
+          value: b.paperUseRate,
+          xAxis: b.paperUseRateMonthRate >= b.paperUseRateMonthGoalRate ? max : this.calc(min, max, b.paperUseRateMonthGoalRate, b.paperUseRateMonthRate),
+          yAxis: 1
+        },
+        {
+          name: '日累计',
+          value: a.paperUseRate,
+          xAxis: a.paperUseRateMonthRate >= a.paperUseRateMonthGoalRate ? max : this.calc(min, max, a.paperUseRateMonthGoalRate, a.paperUseRateMonthRate),
+          yAxis: 0
+        }
+      ]
+      // 提示框标记坐标
+      let markPointRectData = JSON.parse(JSON.stringify(markPointData))
+      // 提示框左侧和右侧都不能被隐藏
+      markPointRectData.map(v => {
+        if ((v.xAxis - v.value) >= max) {
+          v.xAxis -= v.value * 2
+        }
+        let rate = (v.xAxis - min) / (max - min)
+        let key = 0.0019 // 系数
+        if (rate < 0.2) {
+          v.xAxis += max * key
+        } else if (rate > 0.8) {
+          v.xAxis -= max * key
+        }
+      })
+      // 标记线数据，上下两列
+      let markLineData = [
+        // 下标记线
+        [
+          {
+            x: '15',
+            y: '77.5%',
+            lineStyle: { width: 40, color: '#198cff' }
+          },
+          { x: 525, y: '77.5%' }
+        ],
+        // 上标记线
+        [
+          {
+            x: '15',
+            y: '40.6%',
+            lineStyle: { width: 40, color: '#198cff' }
+          },
+          { x: '525', y: '40.6%' }
+        ]
+      ]
+      // 标记线数量，长度
+      let monthCount = this.data.paperUseRate.map((v, index) => {
+        // 长度是否为2，如果长度不为2，那么下标只能取0，而取不到1
+        const lengthIs2 = markLineData.length === 2
+        if (v.paperUseRateMonthRate >= v.paperUseRateMonthGoalRate) {
+          return min
+        } else {
+          // 未超过，不显示标记线
+          markLineData.splice(lengthIs2 ? index : 0, 1)
+        }
+        let diff = max - v.paperUseRateMonthGoalRate
+        if (diff === 0) {
+          return v.paperUseRateMonthRate
+        }
+        return v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min)
+      })
       let option = {
-        color: ['#000f84', '#5095f3'],
+        color: ['#198cff', '#d0e7ff'],
         title: {
           text: '原纸利用率',
           textStyle: {
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 120 / 4,
-            fontWeight: 'normal'
+            fontFamily: 'PingFang SC Bold',
+            fontSize: 30,
+            fontWeight: 'lighter'
           },
-          left: 48 / 4,
-          top: 40 / 4
+          left: 12,
+          top: 15
         },
         legend: {
-          data: [
-            {
-              name: '月累计完成',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
-            },
-            {
-              name: '月目标',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
-            }
-          ],
-          right: 100 / 4,
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 100 / 4
+          },
+          right: 15,
           top: 66 / 4,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
           itemGap: 76 / 4,
-          textStyle: {
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 100 / 4,
-            itemGap: 10 / 4
-          }
+          data: [
+            {
+              name: '月累计',
+              icon: 'rect'
+            },
+            {
+              name: '月目标',
+              icon: 'rect'
+            }
+          ]
         },
         grid: {
-          top: 320 / 4,
-          left: -20,
-          right: -30,
-          bottom: -30,
+          top: 60,
+          left: 15,
+          right: 15,
+          bottom: -10,
           containLabel: true
         },
         xAxis: {
           show: false,
           type: 'value',
-          min: 97.5,
-          max: 100
+          max: max,
+          min: min
         },
         yAxis: {
           type: 'category',
-          inverse: true,
+          axisLabel: {
+            show: false
+          },
           data: this.data.paperUseRate.map(v => v.name),
+          splitLine: {
+            show: false
+          },
           axisTick: {
             show: false
           },
           axisLine: {
             show: false
-          },
-          axisLabel: {
-            color: '#333',
-            fontFamily: 'PingFang SC Regular',
-            fontSize: 120 / 4,
-            margin: 40 / 4,
-            formatter: (params, index) => {
-              return '{main|' + params + '}' + '\n{sub|' + this.data.paperUseRate[index].paperUseRate.toFixed(2) + '%}'
-            },
-            rich: {
-              main: {
-                align: 'left',
-                fontSize: 120 / 4
-              },
-              sub: {
-                fontSize: 80 / 4
-              }
-            }
-          },
-          splitLine: {
-            show: false
           }
         },
         series: [
           {
-            name: '月累计完成',
+            name: '月累计',
             type: 'bar',
             barWidth: 160 / 4,
-            barGap: '0%',
+            stack: 'count',
             label: {
-              normal: {
-                show: true,
-                position: 'right',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 120 / 4,
-                color: '#333',
-                formatter: (paramas) => {
-                  // 解决小于98%的数值显示
-                  return this.paperUseRate[paramas.dataIndex].paperUseRateMonthRate.toFixed(2) + '%'
+              show: true,
+              position: 'insideLeft',
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 18,
+              offset: [0, -40],
+              color: '#333',
+              formatter: params => {
+                return '{letter|' + params.name + '} 组今日利用率 ' +
+                  '{number|' + (params.dataIndex === 0 ? a : b).paperUseRate.toFixed(2) + '}%'
+              },
+              rich: {
+                letter: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 26
                 },
-                offset: [44 / 4, 0]
+                number: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 30
+                }
               }
             },
-            data: this.data.paperUseRate.map(v => {
-              // 解决小于98%的数值显示
-              if (v.paperUseRateMonthRate < 98) {
-                v.paperUseRateMonthRate = 97.5 + (0.5 / 49 * v.paperUseRateMonthRate)
+            markPoint: {
+              symbol: 'arrow',
+              symbolSize: 15,
+              symbolOffset: [0, 20],
+              itemStyle: {
+                color: '#198cff'
+              },
+              data: markPointData,
+              label: {
+                show: false
               }
-              return v.paperUseRateMonthRate
-            })
+            },
+            markLine: {
+              symbol: 'none',
+              lineStyle: { type: 'solid' },
+              silent: true,
+              label: {
+                position: 'middle',
+                color: '#fff',
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 18,
+                verticalAlign: 'middle',
+                formatter: params => {
+                  const { paperUseRateMonthGoalRate, paperUseRateMonthRate } = params.dataIndex === 0 ? b : a
+                  const value = paperUseRateMonthRate - paperUseRateMonthGoalRate
+                  if (value === 0) {
+                    return '已达成月目标'
+                  } else if (value > 0) {
+                    return '已超过月目标{number|' + value.toFixed(2) + '}%'
+                  }
+                  return ''
+                },
+                rich: {
+                  number: {
+                    fontFamily: 'PingFang SC Regular',
+                    fontSize: 30,
+                    color: '#fff'
+                  }
+                }
+              },
+              data: markLineData
+            },
+            data: monthCount
           },
           {
             name: '月目标',
             type: 'bar',
             barWidth: 160 / 4,
+            stack: 'count',
             label: {
-              normal: {
-                show: true,
-                position: 'right',
-                fontFamily: 'PingFang SC Regular',
-                fontSize: 120 / 4,
-                color: '#333',
-                formatter: (paramas) => {
-                  // 解决小于98%的数值显示
-                  return this.paperUseRate[paramas.dataIndex].paperUseRateMonthGoalRate.toFixed(2) + '%'
-                },
-                offset: [44 / 4, 0]
+              show: true,
+              position: 'insideRight',
+              offset: [0, -40],
+              fontFamily: 'PingFang SC Regular',
+              fontSize: 18,
+              color: '#333',
+              formatter: params => {
+                return '月目标利用率{number|' + (params.dataIndex === 0 ? a : b).paperUseRateMonthGoalRate.toFixed(2) + '}%'
+              },
+              rich: {
+                number: {
+                  fontFamily: 'PingFang SC Regular',
+                  color: '#333',
+                  fontSize: 30
+                }
               }
             },
             data: this.data.paperUseRate.map(v => {
-              // 解决小于98%的数值显示
-              if (v.paperUseRateMonthGoalRate < 98) {
-                v.paperUseRateMonthGoalRate = 97.5 + (0.5 / 49 * v.paperUseRateMonthGoalRate)
+              if (v.paperUseRateMonthRate >= v.paperUseRateMonthGoalRate) {
+                return max
               }
-              return v.paperUseRateMonthGoalRate
-            })
+              let diff = max - v.paperUseRateMonthGoalRate
+              if (diff === 0) {
+                return min + max - v.paperUseRateMonthRate
+              }
+              // 目标值减去最小值的部分之后等于最大值减去最小值
+              return max - (v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min) - min)
+            }),
+            markPoint: {
+              symbol: 'rect',
+              symbolSize: [150, 30],
+              symbolOffset: [0, 45],
+              data: markPointRectData,
+              itemStyle: {
+                color: '#198cff'
+              },
+              label: {
+                fontFamily: 'PingFang SC Regular',
+                fontSize: 15,
+                formatter: params => {
+                  return '月累计利用率 ' + (params.dataIndex === 0 ? b : a).paperUseRateMonthRate.toFixed(2) + '%'
+                },
+                offset: [0, 0]
+              }
+            }
           }
         ]
       }
+      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
@@ -274,7 +401,7 @@ export default {
             show: false
           },
           axisLabel: {
-           show: false
+            show: false
           },
           axisLine: {
             show: false
@@ -370,7 +497,7 @@ export default {
       }
       this.$refs.bottom.draw(option)
     },
-    // 各组客诉率趋势图
+    // 各组利用率趋势图
     getPaperUseRate () {
       return board.getPaperUseRate().then(res => {
         this.data = res.data
