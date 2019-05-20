@@ -96,10 +96,9 @@ export default {
       let monthCount = this.data.haltCountData.map((v, index) => {
         // 长度是否为2，如果长度不为2，那么下标只能取0，而取不到1
         const lengthIs2 = markLineData.length === 2
-        const group = index ? b : a
         if (v.monthHaltCount >= v.haltCountMonthGoal) {
           // 控制红色警告线的长度
-          markLineData[lengthIs2 ? index : 0][1].x -= 510 * group.todayHaltCount / group.haltCountMonthGoal
+          markLineData[lengthIs2 ? index : 0][1].x -= 5.1
           return max - v.todayHaltCount * (max / v.haltCountMonthGoal)
         } else {
           // 未超过，不显示标记线
@@ -378,14 +377,6 @@ export default {
             center: ['25%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
-            label: {
-              normal: {
-                show: false
-              },
-              emphasis: {
-                show: false
-              }
-            },
             labelLine: {
               normal: {
                 show: false
