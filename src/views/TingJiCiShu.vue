@@ -374,6 +374,7 @@ export default {
           {
             name: '总线数据',
             type: 'pie',
+            silent: true,
             center: ['25%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,

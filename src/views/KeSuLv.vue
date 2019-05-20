@@ -471,7 +471,8 @@ export default {
                 lineStyle: {
                   color: '#f78787',
                   width: 5 / 4,
-                  type: 'solid'
+                  type: 'solid',
+                  opacity: 0.5
                 },
                 label: {
                   formatter: () => {

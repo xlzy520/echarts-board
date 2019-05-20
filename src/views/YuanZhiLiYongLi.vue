@@ -345,6 +345,7 @@ export default {
           {
             name: '总线数据',
             type: 'pie',
+            silent: true,
             center: ['25%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
@@ -450,7 +451,8 @@ export default {
                 lineStyle: {
                   color: '#f78787',
                   width: 5 / 4,
-                  type: 'solid'
+                  type: 'solid',
+                  opacity: 0.5
                 },
                 label: {
                   formatter: () => {
