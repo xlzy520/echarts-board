@@ -1,11 +1,12 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 425.5px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 270px"></chart-box>
+    <chart-box ref="middle" id="middle" chartStyle="height: 213px"></chart-box>
     <chart-box ref="bottom" title="各组制程损耗趋势图" id="bottom"
                :header="chartHeader"
                :group-data="data.processLossTeamTrendMap"
                @tabClick="tabClick"
-               chartStyle="height: 408px"></chart-box>
+               chartStyle="height: 350.5px"></chart-box>
   </div>
 </template>
 
@@ -27,8 +28,8 @@ export default {
   },
   methods: {
     drawBar () {
-      let option = {
-        color: ['#000f84', '#5095f3'],
+      const optionTop = {
+        color: ['#000f84'],
         title: {
           text: '制程损耗、维修费用',
           textStyle: {
@@ -43,20 +44,10 @@ export default {
           data: [
             {
               name: '制程损耗',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
-            },
-            {
-              name: '维修费用',
-              icon: 'rect',
-              textStyle: {
-                padding: [0, 0, 0, 28 / 4]
-              }
+              icon: 'rect'
             }
           ],
-          top: 60,
+          top: 80,
           left: 10,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
@@ -67,83 +58,45 @@ export default {
             itemGap: 10 / 4
           }
         },
-        grid: [
-          {
-            width: '75%',
-            top: '30%',
-            bottom: '40%',
-            left: 10,
-            containLabel: true
+        grid: {
+          top: 150,
+          left: 10,
+          bottom: 0,
+          right: '16%',
+          containLabel: true
+        },
+        xAxis: {
+          show: false,
+          type: 'value',
+          max: 1000
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          data: this.data.processLoss.map(v => v.name),
+          axisTick: {
+            show: false
           },
-          {
-            width: '75%',
-            top: '70%',
-            bottom: '0%',
-            left: 10,
-            containLabel: true
-          }
-        ],
-        xAxis: [
-          {
-            show: false,
-            type: 'value',
-            max: 1000
+          axisLine: {
+            show: false
           },
-          {
-            gridIndex: 1,
-            show: false,
-            type: 'value'
-          }
-        ],
-        yAxis: [
-          {
-            type: 'category',
-            inverse: true,
-            data: this.data.processLoss.map(v => v.name),
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 120 / 4,
-              margin: 40 / 4
-            },
-            splitLine: {
-              show: false
-            }
+          axisLabel: {
+            color: '#333',
+            fontFamily: 'PingFang SC Regular',
+            formatter: params => params + '组',
+            fontSize: 120 / 4,
+            margin: 40 / 4
           },
-          {
-            type: 'category',
-            inverse: true,
-            gridIndex: 1,
-            data: this.data.upkeepCost.map(v => v.name),
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              color: '#333',
-              fontFamily: 'PingFang SC Regular',
-              fontSize: 120 / 4,
-              margin: 40 / 4
-            },
-            splitLine: {
-              show: false
-            }
+          splitLine: {
+            show: false
           }
-        ],
+        },
         series: [
           {
             name: '制程损耗',
             type: 'bar',
             barWidth: 40,
-            barGap: '0%',
+            barGap: '160%',
             label: {
               normal: {
                 show: true,
@@ -156,12 +109,71 @@ export default {
               }
             },
             data: this.data.processLoss.map(v => v.todayProcessLoss)
+          }
+        ]
+      }
+      const optionBottom = {
+        color: ['#5095f3'],
+        title: {
+          show: false
+        },
+        legend: {
+          data: [
+            {
+              name: '维修费用',
+              icon: 'rect',
+              textStyle: {
+                padding: [0, 0, 0, 28 / 4]
+              }
+            }
+          ],
+          top: 30,
+          left: 10,
+          itemHeight: 96 / 4,
+          itemWidth: 96 / 4,
+          itemGap: 76 / 4,
+          textStyle: {
+            fontFamily: 'PingFang SC Regular',
+            fontSize: 20,
+            itemGap: 10 / 4
+          }
+        },
+        grid: {
+          top: 100,
+          left: 10,
+          bottom: 0,
+          right: '15%',
+          containLabel: true
+        },
+        xAxis: {
+          show: false,
+          type: 'value'
+        },
+        yAxis: {
+          type: 'category',
+          inverse: true,
+          data: this.data.upkeepCost.map(v => v.name),
+          axisTick: {
+            show: false
           },
+          axisLine: {
+            show: false
+          },
+          axisLabel: {
+            color: '#333',
+            fontFamily: 'PingFang SC Regular',
+            formatter: params => params + '号线',
+            fontSize: 120 / 4,
+            margin: 40 / 4
+          },
+          splitLine: {
+            show: false
+          }
+        },
+        series: [
           {
             name: '维修费用',
             type: 'bar',
-            xAxisIndex: 1,
-            yAxisIndex: 1,
             barWidth: 160 / 4,
             label: {
               normal: {
@@ -178,7 +190,8 @@ export default {
           }
         ]
       }
-      this.$refs.top.draw(option)
+      this.$refs.top.draw(optionTop)
+      this.$refs.middle.draw(optionBottom)
     },
     drawLine (index = 0) {
       const seriesData = this.data.processLossTeamTrendMap[index].trendMap
