@@ -56,7 +56,8 @@ export default {
         xAxis: {
           axisLabel: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 25
+            fontSize: 25,
+            formatter: params => params + '组'
           },
           splitLine: {
             show: false
@@ -181,11 +182,13 @@ export default {
           top: 60,
           bottom: 30,
           left: '2%',
+          right: 0,
           containLabel: true
         },
         legend: {
           top: '0%',
           left: '2%',
+          right: 0,
           itemHeight: 24,
           itemWidth: 24,
           textStyle: {
