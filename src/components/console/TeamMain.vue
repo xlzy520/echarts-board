@@ -45,12 +45,10 @@
                     slot-scope="text, record, index">
             <a-input
               class="table-input"
-              v-if="filterDisabled(record, index, indexColumn)"
               :value="text"
               maxLength="10"
               @change="e => inputChange(e.target.value, record, col)"
             />
-            <div v-else>{{text}}</div>
           </template>
         </a-table>
       </div>
@@ -99,60 +97,19 @@ export default {
           width: '20%',
           dataIndex: 'day',
           align: 'center',
-          scopedSlots: { customRender: 'day' },
-          customCell: (record, index) => {
-            const readOnly = {
-              class: {
-                readOnly: true
-              }
-            }
-            // 不为总线时
-            if (this.activeTab !== 4) {
-              // 有canWrite属性为真
-              if (this.data.teamBoardData[this.activeTab].canWrite) {
-                // 第0145列为只读
-                if ([0, 1, 4, 5].includes(index)) {
-                  return readOnly
-                }
-              } else {
-                // 有canWrite属性为假
-                return readOnly
-              }
-            } else {
-              // 为总线时，小于11的列数为只读
-              if (index < 11) {
-                return readOnly
-              }
-            }
-          }
+          scopedSlots: { customRender: 'day' }
         }, {
           title: '月累计(总数)',
           width: '20%',
           dataIndex: 'month',
           align: 'center',
-          scopedSlots: { customRender: 'month' },
-          customCell: () => {
-            return {
-              class: {
-                readOnly: true
-              }
-            }
-          }
+          scopedSlots: { customRender: 'month' }
         }, {
           title: '月目标',
           width: '20%',
           dataIndex: 'monthGoal',
           align: 'center',
-          scopedSlots: { customRender: 'monthGoal' },
-          customCell: (record, index) => {
-            if (this.activeTab === 4) {
-              return {
-                class: {
-                  readOnly: true
-                }
-              }
-            }
-          }
+          scopedSlots: { customRender: 'monthGoal' }
         }
       ],
       data: {
@@ -294,7 +251,7 @@ export default {
           return [v.workBeginTime, v.workEndTime]
         })
         this.cacheTimeRange = this.range.concat([])
-        this.count()
+        // this.count()
       }).finally(() => {
         this.tableLoading = false
       })
@@ -319,7 +276,7 @@ export default {
           date: this.navDate.format('YYYY-MM-DD')
         }).then(res => {
           this.$message.success(res.msg)
-          // this.getConsoleData(this.navDate)
+          this.getConsoleData(this.navDate)
         })
       } else {
         this.$message.error('请选择班组！')
@@ -343,7 +300,7 @@ export default {
   .console-team {
     width: 55%;
     margin: 40px auto 0;
-    @media screen and (max-width: 1366px){
+    @media screen and (max-width: 1440px){
       width: 80%;
     }
     &-name {
