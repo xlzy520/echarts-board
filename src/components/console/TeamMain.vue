@@ -199,7 +199,7 @@ export default {
     inputChange (value, record, key) {
       if (value === '' || Number(value) >= 0) {
         record[key] = value
-        this.count()
+        // this.count()
       } else {
         this.$message.warning('请输入数字')
       }
@@ -300,7 +300,7 @@ export default {
   .console-team {
     width: 55%;
     margin: 40px auto 0;
-    @media screen and (max-width: 1440px){
+    @media screen and (max-width: 1800px){
       width: 80%;
     }
     &-name {
