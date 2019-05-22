@@ -12,6 +12,7 @@
         suffixIcon=" "
         :defaultValue="moment()"
         :disabledDate="disabledDate"
+        @change="updateDate"
         @openChange="datePanelChange"
         :allowClear="false">
       </a-date-picker>
@@ -20,12 +21,10 @@
 </template>
 
 <script>
-import backStage from '../../api/backStage'
 export default {
   name: 'ConsoleNav',
   data () {
     return {
-      workDays: [],
       dateSpinning: false,
       datePanelStyle: ''
     }
@@ -51,29 +50,12 @@ export default {
         }, 0)
       }
     },
-    isWorkDay (date) {
-      return this.workDays.includes(date.format('YYYY-MM-DD'))
-    },
     updateDate (current) {
-      if (this.isWorkDay(current)) {
-        this.$emit('update-date', current)
-      }
+      this.$emit('update-date', current)
     },
     disabledDate (current) {
       return (current && current > this.moment().endOf('day'))
-    },
-    getWorkDay (date) {
-      backStage.getWorkDay({
-        date: date
-      }).then(res => {
-        this.workDays = res.data.date
-      }).finally(() => {
-        this.dateSpinning = false
-      })
     }
-  },
-  mounted () {
-    this.getWorkDay(this.moment().format('YYYY-MM'))
   }
 }
 </script>

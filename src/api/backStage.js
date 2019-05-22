@@ -27,10 +27,5 @@ export default {
   // 保存班组所有数据
   addBoardData (data) {
     return request.post(`${baseUrl}/addBoardData`, data)
-  },
-  // 获取工作日
-  getWorkDay (data) {
-    return request.post(`${baseUrl}/getWorkDay`, data)
   }
-
 }
