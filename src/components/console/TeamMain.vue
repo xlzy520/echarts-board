@@ -40,9 +40,9 @@
           :pagination="false"
           :rowKey="record => record.name"
           :loading="tableLoading">
-          <template v-for="(col,indexColumn) in ['day', 'month', 'monthGoal']"
+          <template v-for="col in ['day', 'month', 'monthGoal']"
                     :slot="col"
-                    slot-scope="text, record, index">
+                    slot-scope="text, record">
             <a-input
               class="table-input"
               :value="text"
@@ -178,65 +178,19 @@ export default {
         }
       }
     },
-    // 只读和编辑
-    filterDisabled (record, index, indexColumn) {
-      const disabledRows = [3, 4, 6, 7, 8]
-      if (indexColumn === 1) {
-        return false
-      } else if (indexColumn === 0) {
-        if (this.activeTab !== 4) {
-          if (this.data.teamBoardData[this.activeTab].canWrite) {
-            return disabledRows.includes(record.number)
-          }
-        } else {
-          return record.number === 7 && index > 10
-        }
-      } else {
-        return this.activeTab !== 4
-      }
-    },
     // 表格输入框输入规则
     inputChange (value, record, key) {
       if (value === '' || Number(value) >= 0) {
         record[key] = value
-        // this.count()
       } else {
         this.$message.warning('请输入数字')
       }
-    },
-    // 累加ABCD到总线
-    count () {
-      this.data.teamBoardData[4].boardData.map((v, index) => {
-        if (index > 10) {
-          return v
-        }
-        v.day = this.getCount('day', index)
-        v.month = this.getCount('month', index)
-        return v
-      })
     },
     // 切换tab
     tabChange (tabIndex) {
       if (this.data.timeData.length > 0) {
         this.activeTab = tabIndex
       }
-    },
-    // 获取另外四个班组的某个项目的总和
-    getCount (prop, index) {
-      const precision = [2, 0, 3, 2, 2, 2, 2, 2, 2, 0, 0, 1] // 总线从上到下的每行的精度
-      const checkTabs = this.data.teamBoardData.filter(v => v.canWrite === 1 && v.teamName !== '总线')
-      let total = 0
-      checkTabs.map(v => {
-        total += Number(v.boardData[index][prop])
-      })
-      const averageIndex = [0, 2, 3, 4, 5, 6, 7] // 需要计算平均值的列
-      if (checkTabs.length === 0) {
-        return '暂无数据'
-      }
-      if (averageIndex.includes(index)) {
-        total = total / checkTabs.length
-      }
-      return total.toFixed(precision[index])
     },
     // 获取页面所需数据
     getConsoleData (date = this.moment(new Date())) {
@@ -251,7 +205,6 @@ export default {
           return [v.workBeginTime, v.workEndTime]
         })
         this.cacheTimeRange = this.range.concat([])
-        // this.count()
       }).finally(() => {
         this.tableLoading = false
       })
