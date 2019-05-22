@@ -377,6 +377,7 @@ export default {
             center: ['25%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
+            legendHoverLink: false,
             labelLine: {
               normal: {
                 show: false
