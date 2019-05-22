@@ -14,10 +14,6 @@
         :disabledDate="disabledDate"
         @openChange="datePanelChange"
         :allowClear="false">
-        <template slot="dateRender" slot-scope="current, today">
-          <div :class="['ant-calendar-date', {'work-day': isWorkDay(current)}]"
-               @click="updateDate(current)">{{current.format('DD')}}</div>
-        </template>
       </a-date-picker>
     </div>
   </nav>
@@ -64,7 +60,7 @@ export default {
       }
     },
     disabledDate (current) {
-      return (current && current > this.moment().endOf('day')) || !this.isWorkDay(current)
+      return (current && current > this.moment().endOf('day'))
     },
     getWorkDay (date) {
       backStage.getWorkDay({
