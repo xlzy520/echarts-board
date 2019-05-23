@@ -4,7 +4,7 @@ import Console from './views/Console.vue'
 import Dashboard from './views/Dashboard.vue'
 import TingJiCiShu from './views/TingJiCiShu.vue'
 import KeSuLv from './views/KeSuLv.vue'
-import YuanZhiLiYongLi from './views/YuanZhiLiYongLi.vue'
+import YuanZhiLiYongLv from './views/YuanZhiLiYongLv.vue'
 import MenFuXiuBian from './views/MenFuXiuBian.vue'
 import QianShuLv from './views/QianShuLv.vue'
 import Cost from './views/Cost.vue'
@@ -43,7 +43,7 @@ export default new Router({
     {
       path: '/yuanzhi',
       name: 'yuanzhi',
-      component: YuanZhiLiYongLi
+      component: YuanZhiLiYongLv
     },
     {
       path: '/mengfu',
