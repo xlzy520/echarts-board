@@ -73,8 +73,6 @@ export default {
                 width: 26,
                 color: [[268, this.getColorBySpeed(left.speed)]],
                 shadowColor: '#e9e9e9'
-                // shadowOffsetX: 10 / 4
-                // shadowBlur: 50 / 4
               }
             },
             pointer: {

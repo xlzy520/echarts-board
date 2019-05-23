@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 292px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 312px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 270px"
+      chartStyle="height: 250px"
     ></chart-box>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     return {
       data: {},
       chartHeader: {
-        leftTitle: '合理原纸利用率月目标',
+        leftTitle: '合理原纸利用率',
         leftValue: '98',
         leftUnit: '%'
       },
@@ -39,6 +39,9 @@ export default {
   methods: {
     calc (min, max, goal, count) {
       const diff = max - goal
+      if (count === 0) {
+        count = min
+      }
       if (diff === 0) {
         return count
       }
@@ -47,7 +50,7 @@ export default {
     drawBar () {
       this.data.paperUseRate = this.data.paperUseRate.reverse()
       const [a, b] = this.data.paperUseRate
-      const min = 98
+      const min = 95
       const max = Math.max(a.paperUseRateMonthGoalRate, b.paperUseRateMonthGoalRate)
       const markPointData = [
         {
@@ -71,7 +74,7 @@ export default {
           v.xAxis -= v.value * 2
         }
         let rate = (v.xAxis - min) / (max - min)
-        let key = 0.0019 // 系数
+        let key = 0.0065 // 系数
         if (rate < 0.2) {
           v.xAxis += max * key
         } else if (rate > 0.8) {
@@ -84,10 +87,10 @@ export default {
         [
           {
             x: '15',
-            y: '78.9%',
+            y: '80.4%',
             lineStyle: { width: 40, color: '#198cff' }
           },
-          { x: 525, y: '78.9%' }
+          { x: 525, y: '80.4%' }
         ],
         // 上标记线
         [
@@ -110,10 +113,19 @@ export default {
           markLineData.splice(lengthIs2 ? index : 0, 1)
         }
         let diff = max - v.paperUseRateMonthGoalRate
-        if (diff === 0) {
-          return v.paperUseRateMonthRate
+        if (v.paperUseRateMonthRate === 0) {
+          if (diff === 0) {
+            return min
+          } else {
+            return min + (max - v.paperUseRateMonthGoalRate) / (max - min)
+          }
+        } else {
+          if (diff === 0) {
+            return v.paperUseRateMonthRate
+          } else {
+            return v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min)
+          }
         }
-        return v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min)
       })
       let option = {
         color: ['#198cff', '#d0e7ff'],
@@ -191,19 +203,22 @@ export default {
               offset: [0, -40],
               color: '#333',
               formatter: params => {
-                return '{letter|' + params.name + '} 组今日利用率 ' +
+                return '{letter|' + params.name + '}组 今日利用率 ' +
                   '{number|' + (params.dataIndex === 0 ? a : b).paperUseRate.toFixed(2) + '}%'
               },
               rich: {
                 letter: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 26
+                  fontSize: 30,
+                  verticalAlign: 'top'
                 },
                 number: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 30
+                  fontSize: 30,
+                  verticalAlign: 'top',
+                  lineHeight: 36
                 }
               }
             },
@@ -230,7 +245,7 @@ export default {
                 fontSize: 18,
                 verticalAlign: 'middle',
                 formatter: params => {
-                  const { paperUseRateMonthGoalRate, paperUseRateMonthRate } = params.dataIndex === 0 ? b : a
+                  const { paperUseRateMonthGoalRate, paperUseRateMonthRate } = params.dataIndex === 0 ? a : b
                   const value = paperUseRateMonthRate - paperUseRateMonthGoalRate
                   if (value === 0) {
                     return '已达成月目标'
@@ -270,7 +285,9 @@ export default {
                 number: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 30
+                  fontSize: 30,
+                  verticalAlign: 'top',
+                  lineHeight: 36
                 }
               }
             },
@@ -279,11 +296,21 @@ export default {
                 return max
               }
               let diff = max - v.paperUseRateMonthGoalRate
-              if (diff === 0) {
-                return min + max - v.paperUseRateMonthRate
+              // 判断月累计为0的情况，将其改为最小值
+              if (v.paperUseRateMonthRate === 0) {
+                if (diff === 0) {
+                  return max
+                } else {
+                  return max - (max - v.paperUseRateMonthGoalRate) / (max - min)
+                }
+              } else {
+                if (diff === 0) {
+                  return min + max - v.paperUseRateMonthRate
+                } else {
+                  // 目标值减去最小值的部分之后等于最大值减去最小值
+                  return max - (v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min) - min)
+                }
               }
-              // 目标值减去最小值的部分之后等于最大值减去最小值
-              return max - (v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min) - min)
             }),
             markPoint: {
               symbol: 'rect',
@@ -305,6 +332,7 @@ export default {
           }
         ]
       }
+      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
@@ -337,7 +365,7 @@ export default {
         legend: {
           orient: 'vertical',
           data: legendData,
-          left: '45%',
+          left: '42%',
           top: 240 / 4,
           itemHeight: 96 / 4,
           itemWidth: 96 / 4,
@@ -345,12 +373,21 @@ export default {
           formatter: (name) => {
             const index = legendName.indexOf(name)
             const value = this.data.linePaperUseRate[index].value
-            return name + ': ' + value + '%'
+            return name + ':{number| ' + value.toFixed(1) + '}%'
           },
           textStyle: {
             fontFamily: 'PingFang SC Regular',
             fontSize: 80 / 4,
-            itemGap: 10 / 4
+            itemGap: 10 / 4,
+            rich: {
+              number: {
+                fontFamily: 'PingFang SC Regular',
+                color: '#333',
+                fontSize: 30,
+                verticalAlign: 'top',
+                lineHeight: 36
+              }
+            }
           }
         },
         series: [
@@ -358,7 +395,7 @@ export default {
             name: '总线数据',
             type: 'pie',
             silent: true,
-            center: ['25%', '50%'],
+            center: ['21%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
             legendHoverLink: false,

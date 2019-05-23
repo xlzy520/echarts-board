@@ -30,7 +30,7 @@ export default {
     return {
       data: {},
       chartHeader: {
-        leftTitle: '合理客诉率月目标',
+        leftTitle: '合理客诉率',
         leftValue: '0.1',
         leftUnit: '%'
       }
