@@ -185,7 +185,7 @@ export default {
               offset: [0, -40],
               color: '#333',
               formatter: params => {
-                return '{letter|' + params.name + '}组月累计停机次数 ' +
+                return '{letter|' + params.name + '}组 月累计停机次数 ' +
                   '{number|' + (params.dataIndex === 0 ? a : b).monthHaltCount + '}次'
               },
               rich: {
