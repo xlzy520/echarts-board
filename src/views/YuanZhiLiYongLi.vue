@@ -29,8 +29,8 @@ export default {
     return {
       data: {},
       chartHeader: {
-        leftTitle: '原纸利用率月目标',
-        leftValue: '',
+        leftTitle: '合理原纸利用率月目标',
+        leftValue: '98',
         leftUnit: '%'
       },
       paperUseRate: []
@@ -309,8 +309,9 @@ export default {
     },
     // 总线数据
     drawZongXianShuJu () {
-      const legendName = this.data.linePaperUseRate.map(v => v.name)
-      const legendData = this.data.linePaperUseRate.map(v => {
+      const { linePaperUseRate } = this.data
+      const legendName = linePaperUseRate.map(v => v.name)
+      const legendData = linePaperUseRate.map(v => {
         return {
           name: v.name,
           icon: 'rect',
@@ -319,6 +320,18 @@ export default {
           }
         }
       })
+      const currentTotal = linePaperUseRate[0].value
+      const total = linePaperUseRate[1].value
+      const seriesData = [
+        {
+          name: '月累计原纸利用率',
+          value: currentTotal
+        },
+        {
+          'name': '月目标原纸利用率',
+          'value': currentTotal >= total ? 0 : total * (1 - currentTotal / total)
+        }
+      ]
       let option = {
         color: ['#ffb32f', '#0dd64f'],
         legend: {
@@ -367,7 +380,7 @@ export default {
                 show: false
               }
             },
-            data: this.data.linePaperUseRate
+            data: seriesData
           }
         ]
       }
@@ -511,7 +524,6 @@ export default {
       })
     },
     tabClick (index = 0) {
-      this.chartHeader.leftValue = this.data.teamTrendMap[index].paperUseRateMonthGoalRate
       this.drawLine(index)
     },
     timingUpdateData () {
