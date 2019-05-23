@@ -223,17 +223,13 @@ export default {
       allCheck.map((v, index) => {
         this.data.timeData[index].selectTime = this.checkedList.includes(v) ? 1 : 0
       })
-      if (this.checkedList.length > 0) {
-        backStage.addBoardData({
-          ...this.data,
-          date: this.navDate.format('YYYY-MM-DD')
-        }).then(res => {
-          this.$message.success(res.msg)
-          this.getConsoleData(this.navDate)
-        })
-      } else {
-        this.$message.error('请选择班组！')
-      }
+      backStage.addBoardData({
+        ...this.data,
+        date: this.navDate.format('YYYY-MM-DD')
+      }).then(res => {
+        this.$message.success(res.msg)
+        this.getConsoleData(this.navDate)
+      })
     }
   },
   mounted () {
