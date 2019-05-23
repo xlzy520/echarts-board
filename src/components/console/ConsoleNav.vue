@@ -13,7 +13,6 @@
         :defaultValue="moment()"
         :disabledDate="disabledDate"
         @change="updateDate"
-        @openChange="datePanelChange"
         :allowClear="false">
       </a-date-picker>
     </div>
@@ -35,21 +34,21 @@ export default {
       const { style, clientWidth, clientHeight } = datePanelBox
       this.datePanelStyle = style.cssText + `width: ${clientWidth}px;height:${clientHeight}px`
     },
-    datePanelChange (isShow) {
-      if (isShow) {
-        setTimeout(() => {
-          const dateDom = document.querySelector('.ant-calendar-ym-select')
-          dateDom.addEventListener('DOMCharacterDataModified', () => {
-            this.getDatePanelStyle()
-            this.dateSpinning = true
-            const year = document.querySelector('.ant-calendar-year-select').innerText.replace('年', '')
-            let month = document.querySelector('.ant-calendar-month-select').innerText.replace('月', '')
-            month = month < 10 ? '0' + month : month
-            this.getWorkDay(year + '-' + month)
-          })
-        }, 0)
-      }
-    },
+    // datePanelChange (isShow) {
+    //   if (isShow) {
+    //     setTimeout(() => {
+    //       const dateDom = document.querySelector('.ant-calendar-ym-select')
+    //       dateDom.addEventListener('DOMCharacterDataModified', () => {
+    //         this.getDatePanelStyle()
+    //         this.dateSpinning = true
+    //         const year = document.querySelector('.ant-calendar-year-select').innerText.replace('年', '')
+    //         let month = document.querySelector('.ant-calendar-month-select').innerText.replace('月', '')
+    //         month = month < 10 ? '0' + month : month
+    //         this.getWorkDay(year + '-' + month)
+    //       })
+    //     }, 0)
+    //   }
+    // },
     updateDate (current) {
       this.$emit('update-date', current)
     },
