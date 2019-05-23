@@ -76,20 +76,7 @@ export default {
         } else if (rate > 0.8666666666666636) {
           v.xAxis = v.xAxis - (max - min) * 0.128
         }
-        console.log(rate)
-        // if ((v.xAxis - v.value) >= max) {
-        //   v.xAxis -= v.value * 4
-        // }
-        // let rate = (v.xAxis - min) / (v.value - min)
-        // console.log(rate)
-        // let key = 0.001 // 系数
-        // if (rate < 0.2) {
-        //   v.xAxis += 510 * key
-        // } else if (rate > 0.8) {
-        //   v.xAxis -= 510 * key
-        // }
       })
-      console.log(markPointRectData)
       // 标记线数据，上下两列
       let markLineData = [
         // 下标记线
@@ -251,6 +238,8 @@ export default {
                 color: '#fff',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 18,
+                height: 30,
+                lineHeight: 40,
                 verticalAlign: 'middle',
                 formatter: params => {
                   const { paperUseRateMonthGoalRate, paperUseRateMonthRate } = params.dataIndex === 0 ? a : b
@@ -265,8 +254,9 @@ export default {
                 rich: {
                   number: {
                     fontFamily: 'PingFang SC Regular',
-                    fontSize: 30,
-                    color: '#fff'
+                    fontSize: 24,
+                    color: '#fff',
+                    verticalAlign: 'middle'
                   }
                 }
               },
@@ -340,7 +330,6 @@ export default {
           }
         ]
       }
-      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据

@@ -55,14 +55,11 @@ export default {
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
       markPointRectData.map(v => {
-        if ((v.xAxis - v.value) >= max) {
-          v.xAxis -= v.value * 2
-        }
-        let rate = v.xAxis / max
-        if (rate < 0.1) {
-          v.xAxis += max * 0.13
-        } else if (rate > 0.9) {
-          v.xAxis -= max * 0.13
+        const rate = v.xAxis / max
+        if (rate < 0.1333) {
+          v.xAxis = v.xAxis + max * 0.128
+        } else if (rate > 0.8666666666666636) {
+          v.xAxis = v.xAxis - max * 0.128
         }
       })
       // 标记线数据，上下两列
@@ -214,9 +211,21 @@ export default {
                 color: '#fff',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 18,
+                height: 30,
+                lineHeight: 40,
                 verticalAlign: 'middle',
                 formatter: params => {
-                  const { complaintRateMonthGoalRate, complaintRateMonthRate } = params.dataIndex === 0 ? b : a
+                  let index
+                  if (markLineData.length === 1) {
+                    if (markLineData[0][1].y === '80.9%') {
+                      index = 0
+                    } else {
+                      index = 1
+                    }
+                  } else {
+                    index = params.dataIndex
+                  }
+                  const { complaintRateMonthGoalRate, complaintRateMonthRate } = this.data.avgComplaintRate[index]
                   const value = complaintRateMonthRate - complaintRateMonthGoalRate
                   if (value === 0) {
                     return '已触及月目标'
@@ -228,10 +237,10 @@ export default {
                 rich: {
                   number: {
                     fontFamily: 'PingFang SC Regular',
-                    fontSize: 30,
+                    fontSize: 24,
                     color: '#fff',
-                    verticalAlign: 'top',
-                    lineHeight: 36
+                    verticalAlign: 'middle'
+                    // lineHeight: 36
                   }
                 }
               },
@@ -288,6 +297,7 @@ export default {
           }
         ]
       }
+      console.log(monthCount, markLineData)
       this.$refs.top.draw(option)
     },
     // 总线数据

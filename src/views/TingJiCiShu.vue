@@ -3,7 +3,7 @@
     <chart-box
       ref="top"
       id="top"
-      chartStyle="height: 299px"
+      chartStyle="height: 319px"
     ></chart-box>
     <chart-box
       ref="middle"
@@ -18,7 +18,7 @@
       id="bottom"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 280px"
+      chartStyle="height: 260px"
     ></chart-box>
   </div>
 </template>
@@ -47,7 +47,7 @@ export default {
         {
           name: '日累计',
           value: b.todayHaltCount,
-          xAxis: b.monthHaltCount >= a.haltCountMonthGoal ? max : (b.monthHaltCount + b.todayHaltCount) * (max / b.haltCountMonthGoal),
+          xAxis: b.monthHaltCount >= b.haltCountMonthGoal ? max : (b.monthHaltCount + b.todayHaltCount) * (max / b.haltCountMonthGoal),
           yAxis: 1
         },
         {
@@ -57,6 +57,7 @@ export default {
           yAxis: 0
         }
       ]
+      console.log(markPointData)
       // 提示框标记坐标
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
@@ -86,10 +87,10 @@ export default {
         [
           {
             x: '15',
-            y: '39.3%',
+            y: '38.4%',
             lineStyle: { width: 40, color: '#ff001c' }
           },
-          { x: '525', y: '39.3%' }
+          { x: '525', y: '38.4%' }
         ]
       ]
       // 标记线数量，长度
@@ -104,7 +105,7 @@ export default {
           // 未超过，不显示标记线
           markLineData.splice(lengthIs2 ? index : 0, 1)
         }
-        return v.monthHaltCount
+        return (v.monthHaltCount / v.haltCountMonthGoal) * max
       })
       let option = {
         color: ['#5095f3', '#000f84', '#bbdaf7'],
@@ -215,7 +216,7 @@ export default {
                 fontSize: 18,
                 verticalAlign: 'middle',
                 formatter: params => {
-                  const { haltCountMonthGoal, monthHaltCount } = params.dataIndex === 0 ? a : b
+                  const { haltCountMonthGoal, monthHaltCount } = this.data.haltCountData[params.dataIndex]
                   const value = monthHaltCount - haltCountMonthGoal
                   if (value === 0) {
                     return '已触及月目标'
@@ -295,7 +296,7 @@ export default {
               if (v.monthHaltCount >= v.haltCountMonthGoal) {
                 return 0
               }
-              return v.haltCountMonthGoal - v.monthHaltCount - v.todayHaltCount
+              return max - (v.monthHaltCount / v.haltCountMonthGoal) * max - v.todayHaltCount * (max / v.haltCountMonthGoal)
             }),
             markPoint: {
               symbol: 'rect',
