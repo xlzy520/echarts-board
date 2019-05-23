@@ -28,7 +28,8 @@ export default {
         color: ['#000f84', '#5095f3'],
         grid: {
           top: '20%',
-          left: '2%',
+          left: 15,
+          right: 15,
           bottom: '5%',
           containLabel: true
         },
@@ -171,14 +172,14 @@ export default {
         { name: '第一天', value: startValue, xAxis: 0, yAxis: startValue },
         { name: '最后一天', value: endValue, xAxis: length, yAxis: endValue }
       ]
-      console.log(markPointData)
       const seriesDataAvg = this.data.avgWidthTeamTrendMap[index].trendMap
       let option = {
         color: ['#000f84', '#5095f3'],
         grid: {
           top: 60,
+          right: 15,
           bottom: 30,
-          left: '2%',
+          left: 15,
           containLabel: true
         },
         legend: {

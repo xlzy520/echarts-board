@@ -76,19 +76,19 @@ export default {
         [
           {
             x: '15',
-            y: '77.5%',
+            y: '78.9%',
             lineStyle: { width: 40, color: '#ff001c' }
           },
-          { x: 525, y: '77.5%' }
+          { x: 525, y: '78.9%' }
         ],
         // 上标记线
         [
           {
             x: '15',
-            y: '39.3%',
+            y: '40.7%',
             lineStyle: { width: 40, color: '#ff001c' }
           },
-          { x: '525', y: '39.3%' }
+          { x: '525', y: '40.7%' }
         ]
       ]
       // 标记线数量，长度
@@ -140,7 +140,7 @@ export default {
           top: 60,
           left: 15,
           right: 15,
-          bottom: -10,
+          bottom: -23,
           containLabel: true
         },
         xAxis: {
@@ -238,34 +238,6 @@ export default {
             },
             data: monthCount
           },
-          // {
-          //   name: '日累计',
-          //   type: 'bar',
-          //   barWidth: 160 / 4,
-          //   barGap: '0%',
-          //   stack: 'count',
-          //   label: {
-          //     normal: {
-          //       show: false,
-          //       position: 'top',
-          //       fontFamily: 'PingFang SC Regular',
-          //       fontSize: 120 / 4,
-          //       color: '#333'
-          //     }
-          //   },
-          //   data: this.data.avgComplaintRate.map(v => {
-          //     return v.complaintRate * (max / v.complaintRateMonthGoalRate)
-          //   }),
-          //   markPoint: {
-          //     symbol: 'arrow',
-          //     symbolSize: 15,
-          //     symbolOffset: [0, 20],
-          //     data: markPointData,
-          //     label: {
-          //       show: false
-          //     }
-          //   }
-          // },
           {
             name: '月目标',
             type: 'bar',

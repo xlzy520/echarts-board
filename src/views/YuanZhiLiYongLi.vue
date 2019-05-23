@@ -1,6 +1,6 @@
 <template>
   <div class="charts-wrapper">
-    <chart-box ref="top" id="top" chartStyle="height: 272px"></chart-box>
+    <chart-box ref="top" id="top" chartStyle="height: 292px"></chart-box>
     <chart-box
       ref="middle"
       title="总线数据"
@@ -14,7 +14,7 @@
       :header="chartHeader"
       :group-data="data.teamTrendMap"
       @tabClick="tabClick"
-      chartStyle="height: 290px"
+      chartStyle="height: 270px"
     ></chart-box>
   </div>
 </template>
@@ -84,19 +84,19 @@ export default {
         [
           {
             x: '15',
-            y: '77.5%',
+            y: '78.9%',
             lineStyle: { width: 40, color: '#198cff' }
           },
-          { x: 525, y: '77.5%' }
+          { x: 525, y: '78.9%' }
         ],
         // 上标记线
         [
           {
             x: '15',
-            y: '40.6%',
+            y: '41%',
             lineStyle: { width: 40, color: '#198cff' }
           },
-          { x: '525', y: '40.6%' }
+          { x: '525', y: '41%' }
         ]
       ]
       // 标记线数量，长度
@@ -152,7 +152,7 @@ export default {
           top: 60,
           left: 15,
           right: 15,
-          bottom: -10,
+          bottom: -23,
           containLabel: true
         },
         xAxis: {
@@ -305,7 +305,6 @@ export default {
           }
         ]
       }
-      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
