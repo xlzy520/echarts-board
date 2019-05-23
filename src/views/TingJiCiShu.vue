@@ -192,12 +192,15 @@ export default {
                 letter: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 26
+                  fontSize: 30,
+                  verticalAlign: 'top'
                 },
                 number: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 30
+                  fontSize: 30,
+                  verticalAlign: 'top',
+                  lineHeight: 36
                 }
               }
             },
@@ -225,7 +228,9 @@ export default {
                   number: {
                     fontFamily: 'PingFang SC Regular',
                     fontSize: 30,
-                    color: '#fff'
+                    color: '#fff',
+                    verticalAlign: 'top',
+                    lineHeight: 36
                   }
                 }
               },
@@ -280,7 +285,9 @@ export default {
                 number: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 30
+                  fontSize: 30,
+                  verticalAlign: 'top',
+                  lineHeight: 36
                 }
               }
             },
@@ -310,6 +317,7 @@ export default {
           }
         ]
       }
+      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
@@ -336,10 +344,7 @@ export default {
         },
         {
           name: '月目标停机次数',
-          value:
-            monthTotal >= monthGoal
-              ? 0
-              : monthGoal * (1 - monthTotal / monthGoal)
+          value: monthTotal >= monthGoal ? 0 : monthGoal * (1 - monthTotal / monthGoal)
         }
       ]
       let option = {
@@ -378,6 +383,11 @@ export default {
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,
             legendHoverLink: false,
+            label: {
+              normal: {
+                show: false
+              }
+            },
             labelLine: {
               normal: {
                 show: false

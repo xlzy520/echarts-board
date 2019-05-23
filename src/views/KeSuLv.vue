@@ -30,7 +30,7 @@ export default {
     return {
       data: {},
       chartHeader: {
-        leftTitle: '客诉率月目标',
+        leftTitle: '合理客诉率月目标',
         leftValue: '0.1',
         leftUnit: '%'
       }
@@ -42,20 +42,15 @@ export default {
       this.data.avgComplaintRate = this.data.avgComplaintRate.reverse()
       const [a, b] = this.data.avgComplaintRate
       const max = Math.max(a.complaintRateMonthGoalRate, b.complaintRateMonthGoalRate)
-      const markPointData = [
-        {
+      const markPointData = this.data.avgComplaintRate.map((v, index) => {
+        const rate = v.complaintRateMonthRate / v.complaintRateMonthGoalRate || 0
+        return {
           name: '日累计',
-          value: b.complaintRate,
-          xAxis: b.complaintRateMonthRate >= a.complaintRateMonthGoalRate ? max : b.complaintRateMonthRate * (max / b.complaintRateMonthGoalRate),
-          yAxis: 1
-        },
-        {
-          name: '日累计',
-          value: a.complaintRate,
-          xAxis: a.complaintRateMonthRate >= a.complaintRateMonthGoalRate ? max : a.complaintRateMonthRate * (max / a.complaintRateMonthGoalRate),
-          yAxis: 0
+          value: v.complaintRate,
+          xAxis: rate >= 1 ? max : max * rate,
+          yAxis: index
         }
-      ]
+      }).reverse()
       // 提示框标记坐标
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
@@ -76,10 +71,10 @@ export default {
         [
           {
             x: '15',
-            y: '78.9%',
+            y: '80.9%',
             lineStyle: { width: 40, color: '#ff001c' }
           },
-          { x: 525, y: '78.9%' }
+          { x: 525, y: '80.9%' }
         ],
         // 上标记线
         [
@@ -185,12 +180,16 @@ export default {
                 letter: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 26
+                  fontSize: 26,
+                  verticalAlign: 'top',
+                  lineHeight: 26
                 },
                 number: {
                   fontFamily: 'PingFang SC Regular',
                   color: '#333',
-                  fontSize: 30
+                  fontSize: 30,
+                  verticalAlign: 'top',
+                  lineHeight: 36
                 }
               }
             },
@@ -230,7 +229,9 @@ export default {
                   number: {
                     fontFamily: 'PingFang SC Regular',
                     fontSize: 30,
-                    color: '#fff'
+                    color: '#fff',
+                    verticalAlign: 'top',
+                    lineHeight: 36
                   }
                 }
               },
@@ -339,6 +340,7 @@ export default {
           {
             name: '总线数据',
             type: 'pie',
+            silent: true,
             center: ['25%', '50%'],
             radius: [240 / 4, 400 / 4],
             avoidLabelOverlap: false,

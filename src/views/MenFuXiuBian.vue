@@ -57,7 +57,17 @@ export default {
         xAxis: {
           axisLabel: {
             fontFamily: 'PingFang SC Regular',
-            fontSize: 25
+            fontSize: 18,
+            formatter: params => '{letter|' + params + '}组',
+            rich: {
+              letter: {
+                fontFamily: 'PingFang SC Regular',
+                color: '#333',
+                fontSize: 30,
+                verticalAlign: 'top',
+                lineHeight: 36
+              }
+            }
           },
           splitLine: {
             show: false
@@ -306,7 +316,7 @@ export default {
                   name: markPointData[0].name,
                   xAxis: 0,
                   lineStyle: {
-                    color: '#989898',
+                    color: '#b3b3b3',
                     width: 1.5,
                     type: 'dot'
                   }
@@ -315,7 +325,7 @@ export default {
                   name: markPointData[1].name,
                   xAxis: seriesData.length - 1,
                   lineStyle: {
-                    color: '#989898',
+                    color: '#b3b3b3',
                     width: 1.5,
                     type: 'dot'
                   }
