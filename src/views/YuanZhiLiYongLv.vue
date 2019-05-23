@@ -45,7 +45,7 @@ export default {
       if (diff === 0) {
         return count
       }
-      return count + (max - goal) / (max - min)
+      return min + (count - min) / (goal - min) * (max - min)
     },
     drawBar () {
       this.data.paperUseRate = this.data.paperUseRate.reverse()
@@ -70,17 +70,26 @@ export default {
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
       markPointRectData.map(v => {
-        if ((v.xAxis - v.value) >= max) {
-          v.xAxis -= v.value * 2
+        const rate = (v.xAxis - min) / (max - min)
+        if (rate < 0.1333) {
+          v.xAxis = v.xAxis + (max - min) * 0.128
+        } else if (rate > 0.8666666666666636) {
+          v.xAxis = v.xAxis - (max - min) * 0.128
         }
-        let rate = (v.xAxis - min) / (max - min)
-        let key = 0.0065 // 系数
-        if (rate < 0.2) {
-          v.xAxis += max * key
-        } else if (rate > 0.8) {
-          v.xAxis -= max * key
-        }
+        console.log(rate)
+        // if ((v.xAxis - v.value) >= max) {
+        //   v.xAxis -= v.value * 4
+        // }
+        // let rate = (v.xAxis - min) / (v.value - min)
+        // console.log(rate)
+        // let key = 0.001 // 系数
+        // if (rate < 0.2) {
+        //   v.xAxis += 510 * key
+        // } else if (rate > 0.8) {
+        //   v.xAxis -= 510 * key
+        // }
       })
+      console.log(markPointRectData)
       // 标记线数据，上下两列
       let markLineData = [
         // 下标记线
@@ -96,10 +105,10 @@ export default {
         [
           {
             x: '15',
-            y: '41%',
+            y: '40.1%',
             lineStyle: { width: 40, color: '#198cff' }
           },
-          { x: '525', y: '41%' }
+          { x: '525', y: '40.1%' }
         ]
       ]
       // 标记线数量，长度
@@ -116,15 +125,14 @@ export default {
         if (v.paperUseRateMonthRate === 0) {
           if (diff === 0) {
             return min
-          } else {
-            return min + (max - v.paperUseRateMonthGoalRate) / (max - min)
           }
+          return min + (max - v.paperUseRateMonthGoalRate) / (max - min)
         } else {
           if (diff === 0) {
             return v.paperUseRateMonthRate
-          } else {
-            return v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min)
           }
+          // return v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min)
+          return min + (v.paperUseRateMonthRate - min) / (v.paperUseRateMonthGoalRate - min) * (max - min)
         }
       })
       let option = {
@@ -308,7 +316,7 @@ export default {
                   return min + max - v.paperUseRateMonthRate
                 } else {
                   // 目标值减去最小值的部分之后等于最大值减去最小值
-                  return max - (v.paperUseRateMonthRate + (max - v.paperUseRateMonthGoalRate) / (max - min) - min)
+                  return max - ((v.paperUseRateMonthRate - min) / (v.paperUseRateMonthGoalRate - min) * (max - min))
                 }
               }
             }),
