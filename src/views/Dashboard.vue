@@ -16,12 +16,13 @@ import wugui from '../assets/乌龟.png'
 import tu from '../assets/兔子.png'
 import ma from '../assets/马.png'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'Dashboard',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {},
       chartHeader: {
         leftTitle: '平均车速月目标',
         leftValue: '',
@@ -354,32 +355,9 @@ export default {
         return '#5095f3'
       }
     },
-    getSpeedData () {
-      return board.getSpeed().then(res => {
-        this.data = res.data
-        this.drawGauge()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getSpeed().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+    getPageData () {
+      return board.getSpeed()
     }
-  },
-  mounted () {
-    this.getSpeedData()
-    this.timingUpdateData()
   }
 }
 </script>

@@ -22,18 +22,18 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'YuanZhiLiYongLi',
   components: { ChartBox },
+  mixins: [mixins],
   data () {
     return {
-      data: {},
       chartHeader: {
         leftTitle: '合理原纸利用率',
         leftValue: '98',
         leftUnit: '%'
-      },
-      paperUseRate: []
+      }
     }
   },
   methods: {
@@ -333,7 +333,7 @@ export default {
       this.$refs.top.draw(option)
     },
     // 总线数据
-    drawZongXianShuJu () {
+    drawPie () {
       const { linePaperUseRate } = this.data
       const legendName = linePaperUseRate.map(v => v.name)
       const legendData = linePaperUseRate.map(v => {
@@ -547,33 +547,9 @@ export default {
       this.$refs.bottom.draw(option)
     },
     // 各组利用率趋势图
-    getPaperUseRate () {
-      return board.getPaperUseRate().then(res => {
-        this.data = res.data
-        this.paperUseRate = JSON.parse(JSON.stringify(this.data.paperUseRate))
-        this.drawBar()
-        this.drawZongXianShuJu()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getPaperUseRate().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+    getPageData () {
+      return board.getPaperUseRate()
     }
-  },
-  mounted () {
-    this.getPaperUseRate()
-    this.timingUpdateData()
   }
 }
 </script>

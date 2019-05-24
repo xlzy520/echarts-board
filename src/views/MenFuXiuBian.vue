@@ -14,12 +14,14 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'MenFuXiuBian',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {}
+
     }
   },
   methods: {
@@ -357,30 +359,8 @@ export default {
       this.$refs.bottom.draw(option)
     },
     getPageData () {
-      return board.getTrimmingRateAndAvgWidth().then(res => {
-        this.data = res.data
-        this.drawBar()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getTrimmingRateAndAvgWidth().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+      return board.getTrimmingRateAndAvgWidth()
     }
-  },
-  mounted () {
-    this.getPageData()
-    this.timingUpdateData()
   }
 }
 </script>
@@ -389,7 +369,6 @@ export default {
   .group-inside{
     .chart-box-header{
       position: absolute;
-      right: 35px;
       z-index: 200;
     }
     .chart-box-title{

@@ -22,13 +22,13 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
-
+import mixins from '../utils/mixins'
 export default {
   name: 'KeSuLv',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {},
       chartHeader: {
         leftTitle: '合理客诉率',
         leftValue: '0.1',
@@ -38,7 +38,7 @@ export default {
   },
   methods: {
     // 客诉率
-    drawKeSuLv () {
+    drawBar () {
       this.data.avgComplaintRate = this.data.avgComplaintRate.reverse()
       const [a, b] = this.data.avgComplaintRate
       const max = Math.max(a.complaintRateMonthGoalRate, b.complaintRateMonthGoalRate)
@@ -297,11 +297,10 @@ export default {
           }
         ]
       }
-      console.log(monthCount, markLineData)
       this.$refs.top.draw(option)
     },
     // 总线数据
-    drawZongXianShuJu () {
+    drawPie () {
       const { lineComplaintRate } = this.data
       const legendName = lineComplaintRate.map(v => v.name)
       const legendData = lineComplaintRate.map(v => {
@@ -498,31 +497,8 @@ export default {
     },
     // 各组客诉率趋势图
     getPageData () {
-      return board.getCustomComplaintRate().then(res => {
-        this.data = res.data
-        this.drawKeSuLv()
-        this.drawZongXianShuJu()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getCustomComplaintRate().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+      return board.getCustomComplaintRate()
     }
-  },
-  mounted () {
-    this.getPageData()
-    this.timingUpdateData()
   }
 }
 </script>

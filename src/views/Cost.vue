@@ -13,12 +13,13 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'Cost',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {},
       chartHeader: {
         leftTitle: '合理最高制程损耗',
         leftValue: '260',
@@ -289,30 +290,8 @@ export default {
     },
     // 各组客诉率趋势图
     getPageData () {
-      return board.getProcessLossAndCost().then(res => {
-        this.data = res.data
-        this.drawBar()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getProcessLossAndCost().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+      return board.getProcessLossAndCost()
     }
-  },
-  mounted () {
-    this.getPageData()
-    this.timingUpdateData()
   }
 }
 </script>

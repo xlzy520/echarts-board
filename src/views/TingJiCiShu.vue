@@ -26,17 +26,19 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'TingJiCiShu',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {}
+
     }
   },
   methods: {
     // 停机次数
-    drawTingJiCiShu () {
+    drawBar () {
       this.data.haltCountData = this.data.haltCountData.reverse()
       // a在下，b在上
       const [a, b] = this.data.haltCountData
@@ -322,7 +324,7 @@ export default {
       this.$refs.top.draw(option)
     },
     // 总线数据
-    drawZongXianShuJu () {
+    drawPie () {
       const { lineHaltCount } = this.data
       const legendName = lineHaltCount.map(v => v.name)
       const legendData = lineHaltCount.map(v => {
@@ -495,31 +497,8 @@ export default {
     },
     // 各组停机次数趋势图
     getPageData () {
-      return board.getHaltCount().then(res => {
-        this.data = res.data
-        this.drawTingJiCiShu()
-        this.drawZongXianShuJu()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getHaltCount().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+      return board.getHaltCount()
     }
-  },
-  mounted () {
-    this.getPageData()
-    this.timingUpdateData()
   }
 }
 </script>

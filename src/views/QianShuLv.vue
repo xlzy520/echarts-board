@@ -14,12 +14,14 @@
 <script>
 import board from '../api/board'
 import ChartBox from '../components/chart/ChartBox'
+import mixins from '../utils/mixins'
 export default {
   name: 'QianShuLv',
+  mixins: [mixins],
   components: { ChartBox },
   data () {
     return {
-      data: {}
+
     }
   },
   methods: {
@@ -361,30 +363,8 @@ export default {
       this.$refs.bottom.draw(option)
     },
     getPageData () {
-      return board.getOwnRateAndPunctualRate().then(res => {
-        this.data = res.data
-        this.drawBar()
-        this.tabClick()
-        this.$refs.bottom.timer()
-      })
-    },
-    tabClick (index = 0) {
-      this.drawLine(index)
-    },
-    timingUpdateData () {
-      const timer = setInterval(() => {
-        board.getOwnRateAndPunctualRate().then(res => {
-          this.data = res.data
-        })
-      }, this.$timeout)
-      this.$once('hook:beforeDestroy', () => {
-        clearInterval(timer)
-      })
+      return board.getOwnRateAndPunctualRate()
     }
-  },
-  mounted () {
-    this.getPageData()
-    this.timingUpdateData()
   }
 }
 </script>
