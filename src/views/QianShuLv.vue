@@ -87,8 +87,14 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: 6,
-            interval: 2,
+            max: val => {
+              const { max } = val
+              const times = max / 6 // 倍数
+              // 以下面6的倍数值为最大值，可以对齐
+              const maxMap = [1, 2, 3, 5, 10, 20, 30]
+              const resultMax = maxMap.find(v => v > times)
+              return resultMax * 6
+            },
             axisTick: {
               show: false
             },
@@ -235,8 +241,14 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: 6,
-            interval: 2,
+            max: val => {
+              const { max } = val
+              const times = max / 6 // 倍数
+              // 以下面6的倍数值为最大值，可以对齐
+              const maxMap = [1, 2, 3, 5, 10, 20, 30]
+              const resultMax = maxMap.find(v => v > times)
+              return resultMax * 6
+            },
             axisLine: {
               show: false
             },

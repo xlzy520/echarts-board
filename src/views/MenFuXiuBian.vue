@@ -86,8 +86,15 @@ export default {
         yAxis: [
           {
             type: 'value',
-            min: 1.5,
-            interval: 0.5,
+            min: 0,
+            max: val => {
+              const { max } = val
+              const times = max / 5 // 倍数
+              const maxMap = [1, 2, 3, 5, 10, 20, 30]
+              const resultMax = maxMap.find(v => v > times)
+              return resultMax * 5
+            },
+            splitNumber: 5,
             axisTick: {
               show: false
             },
@@ -105,6 +112,7 @@ export default {
           {
             type: 'value',
             min: 0,
+            max: 3000,
             interval: 600,
             axisTick: {
               show: false
@@ -228,9 +236,14 @@ export default {
         yAxis: [
           {
             type: 'value',
-            min: 1.5,
-            max: 3.5,
-            interval: 0.5,
+            min: 0,
+            max: val => {
+              const { max } = val
+              const times = max / 5 // 倍数
+              const maxMap = [1, 2, 3, 5, 10, 20, 30]
+              const resultMax = maxMap.find(v => v > times)
+              return resultMax * 5
+            },
             axisLine: {
               show: false
             },
@@ -254,7 +267,7 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: 2400,
+            max: 3000,
             interval: 600,
             axisLine: {
               show: false
