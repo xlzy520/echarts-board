@@ -33,7 +33,7 @@ export default {
         this.getPageData().then(res => {
           this.data = res.data
           this.draw()
-          this.$message.success('已成功绘图')
+          // this.$message.success('已成功绘图')
         })
       }, this.$timeout)
     }
