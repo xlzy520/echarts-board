@@ -51,7 +51,8 @@ export default {
   },
   data () {
     return {
-      checkTab: 'A'
+      checkTab: 'A',
+      myTimer: null
     }
   },
   methods: {
@@ -65,17 +66,17 @@ export default {
     },
     timer () {
       let i = 1
-      return setInterval(() => {
+      this.myTimer = setInterval(() => {
         this.tabClick(this.groupData[i], i)
         i += 1
         if (i > this.groupData.length - 1) {
           i = 0
         }
-      }, 10000)
+      }, 10 * 1000)
     }
   },
   destroyed () {
-    clearInterval(this.timer())
+    clearInterval(this.myTimer)
   }
 }
 </script>
