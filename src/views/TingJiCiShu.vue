@@ -59,7 +59,6 @@ export default {
           yAxis: 0
         }
       ]
-      console.log(markPointData)
       // 提示框标记坐标
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
@@ -216,6 +215,8 @@ export default {
                 color: '#fff',
                 fontFamily: 'PingFang SC Regular',
                 fontSize: 18,
+                height: 30,
+                lineHeight: 40,
                 verticalAlign: 'middle',
                 formatter: params => {
                   const { haltCountMonthGoal, monthHaltCount } = this.data.haltCountData[params.dataIndex]
@@ -230,10 +231,10 @@ export default {
                 rich: {
                   number: {
                     fontFamily: 'PingFang SC Regular',
-                    fontSize: 30,
+                    fontSize: 27,
                     color: '#fff',
-                    verticalAlign: 'top',
-                    lineHeight: 36
+                    verticalAlign: 'middle',
+                    lineHeight: 27
                   }
                 }
               },
@@ -320,7 +321,6 @@ export default {
           }
         ]
       }
-      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
