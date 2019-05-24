@@ -68,8 +68,7 @@ export default {
         },
         xAxis: {
           show: false,
-          type: 'value',
-          max: 1000
+          type: 'value'
         },
         yAxis: {
           type: 'category',
@@ -225,9 +224,14 @@ export default {
         },
         yAxis: {
           type: 'value',
-          interval: 200,
+          interval: 400,
+          max: (val) => {
+            if (val.max < 1200) {
+              return 1200
+            }
+            return val.max
+          },
           min: 0,
-          max: 1200,
           scale: true,
           axisLine: {
             show: false
