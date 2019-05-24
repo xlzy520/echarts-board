@@ -87,7 +87,6 @@ export default {
           {
             type: 'value',
             min: 1.5,
-            max: 3.5,
             interval: 0.5,
             axisTick: {
               show: false
@@ -106,7 +105,6 @@ export default {
           {
             type: 'value',
             min: 0,
-            max: 2400,
             interval: 600,
             axisTick: {
               show: false
