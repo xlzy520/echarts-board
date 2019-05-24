@@ -26,9 +26,6 @@ export default {
       })
     },
     tabClick (index = 0) {
-      if (this.chartHeader) {
-        this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
-      }
       this.drawLine(index)
     },
     timingUpdateData () {

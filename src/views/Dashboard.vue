@@ -355,6 +355,10 @@ export default {
         return '#5095f3'
       }
     },
+    tabClick (index = 0) {
+      this.chartHeader.leftValue = this.data.teamTrendMap[index].avgSpeedMonthGoal
+      this.drawLine(index)
+    },
     getPageData () {
       return board.getSpeed()
     }
