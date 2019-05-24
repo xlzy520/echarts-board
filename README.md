@@ -1,4 +1,8 @@
 # 数字看板
+
+## mixins混入
+data数据，数据的更新，图表的重绘，定时器销毁，Tab切换都存在`utils/mixins`中
+
 ## 详细需求文档
 https://axhub.im/pro/d50ff4501fad570f
 
