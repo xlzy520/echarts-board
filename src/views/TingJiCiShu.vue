@@ -37,6 +37,12 @@ export default {
     }
   },
   methods: {
+    calc(month, today, goal, max){
+      if (month + today >= goal) {
+        return (month) * (max / goal)
+      }
+      return (month + today) * (max / goal)
+    },
     // 停机次数
     drawBar () {
       this.data.haltCountData = this.data.haltCountData.reverse()
@@ -49,16 +55,19 @@ export default {
         {
           name: '日累计',
           value: b.todayHaltCount,
-          xAxis: b.monthHaltCount >= b.haltCountMonthGoal ? max : (b.monthHaltCount + b.todayHaltCount) * (max / b.haltCountMonthGoal),
+          xAxis: b.monthHaltCount >= b.haltCountMonthGoal ? max :
+            this.calc(b.monthHaltCount, b.todayHaltCount, b.haltCountMonthGoal, max ),
           yAxis: 1
         },
         {
           name: '日累计',
           value: a.todayHaltCount,
-          xAxis: a.monthHaltCount >= a.haltCountMonthGoal ? max : (a.monthHaltCount + a.todayHaltCount) * (max / a.haltCountMonthGoal),
+          xAxis: a.monthHaltCount >= a.haltCountMonthGoal ? max :
+            this.calc(a.monthHaltCount, a.todayHaltCount, a.haltCountMonthGoal, max ),
           yAxis: 0
         }
       ]
+      console.log(markPointData)
       // 提示框标记坐标
       let markPointRectData = JSON.parse(JSON.stringify(markPointData))
       // 提示框左侧和右侧都不能被隐藏
@@ -105,6 +114,9 @@ export default {
         } else {
           // 未超过，不显示标记线
           markLineData.splice(lengthIs2 ? index : 0, 1)
+        }
+        if (v.monthHaltCount + v.todayHaltCount >= v.haltCountMonthGoal) {
+          return ((v.monthHaltCount- v.todayHaltCount)/ v.haltCountMonthGoal) * max
         }
         return (v.monthHaltCount / v.haltCountMonthGoal) * max
       })
@@ -219,7 +231,17 @@ export default {
                 lineHeight: 40,
                 verticalAlign: 'middle',
                 formatter: params => {
-                  const { haltCountMonthGoal, monthHaltCount } = this.data.haltCountData[params.dataIndex]
+                  let index
+                  if (markLineData.length === 1) {
+                    if (markLineData[0][1].y === '77.5%') {
+                      index = 0
+                    } else {
+                      index = 1
+                    }
+                  } else {
+                    index = params.dataIndex
+                  }
+                  const { haltCountMonthGoal, monthHaltCount } = this.data.haltCountData[index]
                   const value = monthHaltCount - haltCountMonthGoal
                   if (value === 0) {
                     return '已触及月目标'
@@ -299,6 +321,9 @@ export default {
               if (v.monthHaltCount >= v.haltCountMonthGoal) {
                 return 0
               }
+              if (v.monthHaltCount + v.todayHaltCount >= v.haltCountMonthGoal) {
+                return max - ((v.monthHaltCount- v.todayHaltCount)/ v.haltCountMonthGoal) * max -  v.todayHaltCount * (max / v.haltCountMonthGoal)
+              }
               return max - (v.monthHaltCount / v.haltCountMonthGoal) * max - v.todayHaltCount * (max / v.haltCountMonthGoal)
             }),
             markPoint: {
@@ -321,6 +346,7 @@ export default {
           }
         ]
       }
+      console.log(option.series)
       this.$refs.top.draw(option)
     },
     // 总线数据
